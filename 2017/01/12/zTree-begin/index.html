@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>zTree_begin | EumJi博客</title>
+  <meta name="description" content="zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。专门适合项目开发，尤其是 树状菜单、树状数据的Web显示、权限管理等等。">
+<meta name="keywords" content="zTree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zTree_begin">
+<meta property="og:url" content="http://blog.eumji025.com/2017/01/12/zTree-begin/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。专门适合项目开发，尤其是 树状菜单、树状数据的Web显示、权限管理等等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-02-26T02:32:51.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zTree_begin">
+<meta name="twitter:description" content="zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。专门适合项目开发，尤其是 树状菜单、树状数据的Web显示、权限管理等等。">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.eumji025.com/2017/01/12/zTree-begin/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="https://avatars3.githubusercontent.com/u/16497167?v=4&amp;s=460" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="fa fa-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="fa fa-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="fa fa-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            
+            <p>您好，您是第<span id="busuanzi_value_site_uv">0</span>位访客</p>
+            
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/database/">database</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/databasse/">databasse</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ehcache/">ehcache</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-MVC/">spring MVC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web服务器/">web服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ajax/">ajax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/">annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dual/">dual</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ehcache/">ehcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/">idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interview/">interview</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/properties/">properties</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shadowsocks/">shadowsocks</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-MVC/">spring MVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springMVC/">springMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/summary/">summary</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vpn/">vpn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wechat/">wechat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zTree/">zTree</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ajax/" style="font-size: 13px;">ajax</a> <a href="/tags/annotation/" style="font-size: 13px;">annotation</a> <a href="/tags/dual/" style="font-size: 13px;">dual</a> <a href="/tags/ehcache/" style="font-size: 13px;">ehcache</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/idea/" style="font-size: 13.33px;">idea</a> <a href="/tags/interview/" style="font-size: 13px;">interview</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/markdown/" style="font-size: 13px;">markdown</a> <a href="/tags/mybatis/" style="font-size: 13.33px;">mybatis</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/properties/" style="font-size: 13px;">properties</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/shadowsocks/" style="font-size: 13px;">shadowsocks</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/spring-MVC/" style="font-size: 13px;">spring MVC</a> <a href="/tags/spring-boot/" style="font-size: 13.67px;">spring-boot</a> <a href="/tags/springMVC/" style="font-size: 13px;">springMVC</a> <a href="/tags/sql/" style="font-size: 13px;">sql</a> <a href="/tags/summary/" style="font-size: 13px;">summary</a> <a href="/tags/target/" style="font-size: 13px;">target</a> <a href="/tags/tomcat/" style="font-size: 13px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 13px;">ubuntu</a> <a href="/tags/vpn/" style="font-size: 13px;">vpn</a> <a href="/tags/web/" style="font-size: 13px;">web</a> <a href="/tags/wechat/" style="font-size: 13px;">wechat</a> <a href="/tags/zTree/" style="font-size: 13px;">zTree</a> <a href="/tags/写作/" style="font-size: 13px;">写作</a> <a href="/tags/数据库/" style="font-size: 13px;">数据库</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/databasse/">databasse</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/09/19/dual-introduce/" class="title">oracle中dual表介绍</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-09-19T14:11:18.136Z" itemprop="datePublished">2017-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/03/26/springboot-indexPage/" class="title">spring-boot跳转页面</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-03-26T00:04:54.000Z" itemprop="datePublished">2017-03-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/26/spring-boot-customport/" class="title">spring-boot-customport</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-26T12:19:56.000Z" itemprop="datePublished">2017-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/26/spring-boot-helloworld/" class="title">spring-boot-helloworld</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-26T02:32:34.000Z" itemprop="datePublished">2017-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/其他/">其他</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/19/redis-use/" class="title">redis应用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-19T11:04:52.000Z" itemprop="datePublished">2017-02-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-zTree-begin" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      zTree_begin
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2017/01/12/zTree-begin/" class="article-date">
+	  <time datetime="2017-01-12T14:49:53.000Z" itemprop="datePublished">2017-01-12</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/zTree/">zTree</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="fa fa-eye" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			阅读<span id="busuanzi_value_page_pv">0</span>次
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2017/01/12/zTree-begin/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 985(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。<br>支持静态 和 Ajax 异步加载节点数据.<br>在开发中我们常需要用到树状的展示.</p>
+<h3 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a>下载地址</h3><p><a href="https://github.com/zTree/zTree_v3" target="_blank" rel="external">zTree</a></p>
+<h2 id="静态zTree开发流程"><a href="#静态zTree开发流程" class="headerlink" title="静态zTree开发流程"></a>静态zTree开发流程</h2><h3 id="引入资源"><a href="#引入资源" class="headerlink" title="引入资源"></a>引入资源</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"../../../css/zTreeStyle/zTreeStyle.css"</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"../../../js/jquery-1.4.4.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"../../../js/jquery.ztree.core.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="html元素"><a href="#html元素" class="headerlink" title="html元素"></a>html元素</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"treeDemo"</span> <span class="attr">class</span>=<span class="string">"ztree"</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="JS方式一-简单json数据格式"><a href="#JS方式一-简单json数据格式" class="headerlink" title="JS方式一-简单json数据格式"></a>JS方式一-简单json数据格式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">&lt;SCRIPT type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">		&lt;!--</div><div class="line">		<span class="keyword">var</span> setting = &#123;</div><div class="line">			data: &#123;</div><div class="line">				simpleData: &#123;</div><div class="line">					enable: <span class="literal">true</span></div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		<span class="keyword">var</span> zNodes =[</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">1</span>, <span class="attr">pId</span>:<span class="number">0</span>, <span class="attr">name</span>:<span class="string">"父节点1 - 展开"</span>, <span class="attr">open</span>:<span class="literal">true</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">11</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点11 - 折叠"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">111</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点111"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">112</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点112"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">113</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点113"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">114</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点114"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">12</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点12 - 折叠"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">121</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点121"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">122</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点122"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">123</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点123"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">124</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点124"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">13</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点13 - 没有子节点"</span>, <span class="attr">isParent</span>:<span class="literal">true</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">2</span>, <span class="attr">pId</span>:<span class="number">0</span>, <span class="attr">name</span>:<span class="string">"父节点2 - 折叠"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">21</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点21 - 展开"</span>, <span class="attr">open</span>:<span class="literal">true</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">211</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点211"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">212</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点212"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">213</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点213"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">214</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点214"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">22</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点22 - 折叠"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">221</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点221"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">222</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点222"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">223</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点223"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">224</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点224"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">23</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点23 - 折叠"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">231</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点231"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">232</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点232"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">233</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点233"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">234</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点234"</span>&#125;,</div><div class="line">			&#123; <span class="attr">id</span>:<span class="number">3</span>, <span class="attr">pId</span>:<span class="number">0</span>, <span class="attr">name</span>:<span class="string">"父节点3 - 没有子节点"</span>, <span class="attr">isParent</span>:<span class="literal">true</span>&#125;</div><div class="line">		];</div><div class="line"></div><div class="line">		$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			$.fn.zTree.init($(<span class="string">"#treeDemo"</span>), setting, zNodes);</div><div class="line">		&#125;);</div><div class="line">		<span class="comment">//--&gt;</span></div><div class="line">	&lt;<span class="regexp">/SCRIPT&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="JS方式二-标准json数据格式"><a href="#JS方式二-标准json数据格式" class="headerlink" title="JS方式二-标准json数据格式"></a>JS方式二-标准json数据格式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">&lt;SCRIPT type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">		&lt;!--</div><div class="line">		<span class="keyword">var</span> setting = &#123;	&#125;;</div><div class="line"></div><div class="line">		<span class="keyword">var</span> zNodes =[</div><div class="line">			&#123; <span class="attr">name</span>:<span class="string">"父节点1 - 展开"</span>, <span class="attr">open</span>:<span class="literal">true</span>,</div><div class="line">				children: [</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点11 - 折叠"</span>,</div><div class="line">						children: [</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点111"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点112"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点113"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点114"</span>&#125;</div><div class="line">						]&#125;,</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点12 - 折叠"</span>,</div><div class="line">						children: [</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点121"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点122"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点123"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点124"</span>&#125;</div><div class="line">						]&#125;,</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点13 - 没有子节点"</span>, <span class="attr">isParent</span>:<span class="literal">true</span>&#125;</div><div class="line">				]&#125;,</div><div class="line">			&#123; <span class="attr">name</span>:<span class="string">"父节点2 - 折叠"</span>,</div><div class="line">				children: [</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点21 - 展开"</span>, <span class="attr">open</span>:<span class="literal">true</span>,</div><div class="line">						children: [</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点211"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点212"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点213"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点214"</span>&#125;</div><div class="line">						]&#125;,</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点22 - 折叠"</span>,</div><div class="line">						children: [</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点221"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点222"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点223"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点224"</span>&#125;</div><div class="line">						]&#125;,</div><div class="line">					&#123; <span class="attr">name</span>:<span class="string">"父节点23 - 折叠"</span>,</div><div class="line">						children: [</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点231"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点232"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点233"</span>&#125;,</div><div class="line">							&#123; <span class="attr">name</span>:<span class="string">"叶子节点234"</span>&#125;</div><div class="line">						]&#125;</div><div class="line">				]&#125;,</div><div class="line">			&#123; <span class="attr">name</span>:<span class="string">"父节点3 - 没有子节点"</span>, <span class="attr">isParent</span>:<span class="literal">true</span>&#125;</div><div class="line"></div><div class="line">		];</div><div class="line"></div><div class="line">		$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			$.fn.zTree.init($(<span class="string">"#treeDemo"</span>), setting, zNodes);</div><div class="line">		&#125;);</div><div class="line">		<span class="comment">//--&gt;</span></div><div class="line">	&lt;<span class="regexp">/SCRIPT&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="异步zTree加载"><a href="#异步zTree加载" class="headerlink" title="异步zTree加载"></a>异步zTree加载</h2><p>前面的配置相同,在此不再阐述.主要是js不同.</p>
+<h3 id="异步JS"><a href="#异步JS" class="headerlink" title="异步JS"></a>异步JS</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> setting = &#123;</div><div class="line">	<span class="comment">//可勾选</span></div><div class="line">	check: &#123;</div><div class="line">			enable: <span class="literal">true</span></div><div class="line">		&#125;,</div><div class="line">	data : &#123;</div><div class="line">		simpleData : &#123;</div><div class="line">			enable : <span class="literal">true</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">initTree</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> payFreq = $(<span class="string">"#payFreq"</span>).val();</div><div class="line">		<span class="keyword">var</span> fyType = $(<span class="string">'#fyType'</span>).val();</div><div class="line">		<span class="keyword">var</span> setHzType = $(<span class="string">'#setHzType'</span>).val();</div><div class="line">	</div><div class="line">		$.ajax(&#123;</div><div class="line">			url : <span class="string">"/demo/initTree"</span>,</div><div class="line">			data : &#123;<span class="attr">payFreq</span>:payFreq,</div><div class="line">					fyType:fyType,</div><div class="line">					setHzType:setHzType</div><div class="line">			&#125;,</div><div class="line">			success: <span class="function"><span class="keyword">function</span>(<span class="params">object</span>)</span>&#123;</div><div class="line">				<span class="keyword">var</span> nodes = <span class="string">""</span>;</div><div class="line">				<span class="comment">//拼接simple格式的json字符串</span></div><div class="line">				$.each(object.data, <span class="function"><span class="keyword">function</span>(<span class="params">i,item</span>) </span>&#123;</div><div class="line">				  nodes+=<span class="string">"&#123;id:'"</span>+item.id+<span class="string">"', pId:'"</span>+item.pid+<span class="string">"', name:'"</span>+item.name+<span class="string">"', isParent:'"</span>+item.isParent+<span class="string">"'&#125;,"</span>;</div><div class="line">			   &#125;);</div><div class="line">			   <span class="keyword">var</span> zNodes = <span class="string">"["</span>+nodes+<span class="string">"]"</span>;</div><div class="line">			   <span class="keyword">var</span> json = <span class="built_in">eval</span>(<span class="string">'('</span> + zNodes + <span class="string">')'</span>);  </div><div class="line">			   <span class="comment">//console.log(json);</span></div><div class="line">			   zTreeInit(json);</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	</div><div class="line">	&#125;</div><div class="line">	<span class="comment">/* 初始化树 */</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">zTreeInit</span>(<span class="params">json</span>) </span>&#123;</div><div class="line">		$.fn.zTree.init($(<span class="string">"#treeDemo"</span>), setting, json);</div><div class="line">		<span class="keyword">var</span> zTree = $.fn.zTree.getZTreeObj(<span class="string">"treeDemo"</span>);</div><div class="line">		<span class="comment">//全部展开</span></div><div class="line">		zTree.expandAll(<span class="literal">true</span>);</div><div class="line">		<span class="comment">//Y代表勾选时,N代表取消勾选 p代表父节点,s代表字节点</span></div><div class="line">		setting.check.chkboxType = &#123; <span class="string">"Y"</span> : <span class="string">"ps"</span>, <span class="string">"N"</span> : <span class="string">"ps"</span> &#125;;</div><div class="line">	</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="java代码"><a href="#java代码" class="headerlink" title="java代码"></a>java代码</h2><h3 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"initTree"</span>)</div><div class="line">	<span class="meta">@ResponseBody</span></div><div class="line">	<span class="function"><span class="keyword">public</span> DataMessage <span class="title">initTree</span><span class="params">(String setHzType,String payFreq,String fyType)</span></span>&#123;</div><div class="line">		params.put(<span class="string">"setHzType"</span>, setHzType);</div><div class="line">		params.put(<span class="string">"fyType"</span>, fyType);</div><div class="line">		params.put(<span class="string">"fkmattr_xt"</span>, fkmattr_xt);</div><div class="line">		<span class="comment">//获取treeinfo列表</span></div><div class="line">		List&lt;TreeInfo&gt; treeInfos =  feeTransferService.initTree(params);</div><div class="line">		<span class="keyword">return</span> DataMessage.successData(treeInfos);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h3 id="tree实体类"><a href="#tree实体类" class="headerlink" title="tree实体类"></a>tree实体类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeInfo</span> </span>&#123;</div><div class="line">	</div><div class="line">	<span class="keyword">private</span> String id;</div><div class="line">	<span class="keyword">private</span> String pid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String isParent;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>更多实例可以参看<a href="http://www.treejs.cn/v3/main.php#_zTreeInfo" target="_blank" rel="external">zTree中文文档</a><br>或参见zTree <a href="https://github.com/zTree/zTree_v3" target="_blank" rel="external">GitHub</a><br>里面更多的示例和说明.</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>与君共勉!</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.eumji025.com/2017/01/12/zTree-begin/" title="zTree_begin" target="_blank" rel="external">http://blog.eumji025.com/2017/01/12/zTree-begin/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://avatars3.githubusercontent.com/u/16497167?v=4&amp;s=460" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       
+    <div id="uyan_frame"></div>
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2017/01/14/redis-one/" title="初识redis"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2017/01/11/annotation/" title="web开发常用注解">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="fa fa-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="fa fa-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="fa fa-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        
+            <p>您好，您是第<span id="busuanzi_value_site_uv">0</span>位访客</p>
+            
+
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+<script defer src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+    
+        
+    
+    <script defer type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=[object Object]"></script>
+
+
+    
+    
+
+
+
+</body>
+</html>

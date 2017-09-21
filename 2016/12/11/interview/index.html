@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>面试心得 | EumJi博客</title>
+  <meta name="description" content="谈一谈个人的实习面试经历">
+<meta name="keywords" content="interview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试心得">
+<meta property="og:url" content="http://blog.eumji025.com/2016/12/11/interview/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="谈一谈个人的实习面试经历">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-02-26T02:32:51.211Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试心得">
+<meta name="twitter:description" content="谈一谈个人的实习面试经历">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.eumji025.com/2016/12/11/interview/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="https://avatars3.githubusercontent.com/u/16497167?v=4&amp;s=460" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="fa fa-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="fa fa-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="fa fa-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            
+            <p>您好，您是第<span id="busuanzi_value_site_uv">0</span>位访客</p>
+            
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/database/">database</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/databasse/">databasse</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ehcache/">ehcache</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-MVC/">spring MVC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web服务器/">web服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ajax/">ajax</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/">annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dual/">dual</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ehcache/">ehcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/">idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interview/">interview</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/properties/">properties</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shadowsocks/">shadowsocks</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-MVC/">spring MVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springMVC/">springMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/summary/">summary</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vpn/">vpn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wechat/">wechat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zTree/">zTree</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ajax/" style="font-size: 13px;">ajax</a> <a href="/tags/annotation/" style="font-size: 13px;">annotation</a> <a href="/tags/dual/" style="font-size: 13px;">dual</a> <a href="/tags/ehcache/" style="font-size: 13px;">ehcache</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/idea/" style="font-size: 13.33px;">idea</a> <a href="/tags/interview/" style="font-size: 13px;">interview</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/markdown/" style="font-size: 13px;">markdown</a> <a href="/tags/mybatis/" style="font-size: 13.33px;">mybatis</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/properties/" style="font-size: 13px;">properties</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/shadowsocks/" style="font-size: 13px;">shadowsocks</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/spring-MVC/" style="font-size: 13px;">spring MVC</a> <a href="/tags/spring-boot/" style="font-size: 13.67px;">spring-boot</a> <a href="/tags/springMVC/" style="font-size: 13px;">springMVC</a> <a href="/tags/sql/" style="font-size: 13px;">sql</a> <a href="/tags/summary/" style="font-size: 13px;">summary</a> <a href="/tags/target/" style="font-size: 13px;">target</a> <a href="/tags/tomcat/" style="font-size: 13px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 13px;">ubuntu</a> <a href="/tags/vpn/" style="font-size: 13px;">vpn</a> <a href="/tags/web/" style="font-size: 13px;">web</a> <a href="/tags/wechat/" style="font-size: 13px;">wechat</a> <a href="/tags/zTree/" style="font-size: 13px;">zTree</a> <a href="/tags/写作/" style="font-size: 13px;">写作</a> <a href="/tags/数据库/" style="font-size: 13px;">数据库</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/databasse/">databasse</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/09/19/dual-introduce/" class="title">oracle中dual表介绍</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-09-19T14:11:18.136Z" itemprop="datePublished">2017-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/03/26/springboot-indexPage/" class="title">spring-boot跳转页面</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-03-26T00:04:54.000Z" itemprop="datePublished">2017-03-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/26/spring-boot-customport/" class="title">spring-boot-customport</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-26T12:19:56.000Z" itemprop="datePublished">2017-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/spring/">spring</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/26/spring-boot-helloworld/" class="title">spring-boot-helloworld</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-26T02:32:34.000Z" itemprop="datePublished">2017-02-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/其他/">其他</a>
+              </p>
+              <p class="item-title">
+                <a href="/2017/02/19/redis-use/" class="title">redis应用场景</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2017-02-19T11:04:52.000Z" itemprop="datePublished">2017-02-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-interview" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      面试心得
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2016/12/11/interview/" class="article-date">
+	  <time datetime="2016-12-11T12:52:12.000Z" itemprop="datePublished">2016-12-11</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/其他/">其他</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/interview/">interview</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="fa fa-eye" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			阅读<span id="busuanzi_value_page_pv">0</span>次
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2016/12/11/interview/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,675(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="谈一谈我的面试经历"><a href="#谈一谈我的面试经历" class="headerlink" title="谈一谈我的面试经历"></a>谈一谈我的面试经历</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><blockquote>
+<p>时间: 2016.11.28日开始</p>
+<p>这是一个非常尴尬的时期.因为校招基本都结束了,当时自己也没准备校招.直接准备社招的.</p>
+</blockquote>
+<h3 id="状况"><a href="#状况" class="headerlink" title="状况"></a>状况</h3><h3 id="1-3天"><a href="#1-3天" class="headerlink" title="1-3天"></a>1-3天</h3><blockquote>
+<p>毫无收获,基本面试的都是些培训机构.偶尔有一两家想让你去转型做其他的实习工作.</p>
+</blockquote>
+<h3 id="第4天"><a href="#第4天" class="headerlink" title="第4天"></a>第4天</h3><blockquote>
+<p>迎来我第一次比较正规的面试.</p>
+<p>PS.不是想敷衍了事的公司.确实招人</p>
+<p>这家公司也是我现在就职的公司.是一个创业公司.</p>
+<p>当天我面试的表现并不好.因为第一次比较正规面试.问的问题和前面几天面试公司的难度不在一个档次.回答的不是很好.而且知识面很广.</p>
+</blockquote>
+<h3 id="第五天-周六"><a href="#第五天-周六" class="headerlink" title="第五天(周六)"></a>第五天(周六)</h3><blockquote>
+<p>还是去面试了.非常恼火的面试.</p>
+<p>第一家说经理不在,直接叫我等笔试.然后就没有然后了.</p>
+<p>第二家 做摄影相关的公司.</p>
+<p>问了我怎么解决重复点击按钮的提交问题.</p>
+<p>然后还问了如何实现10天内免登陆.</p>
+<p>或许我回答的不够完善,也没有复试.</p>
+</blockquote>
+<h3 id="第六天-星期天放假"><a href="#第六天-星期天放假" class="headerlink" title="第六天(星期天放假)"></a>第六天(星期天放假)</h3><blockquote>
+<p>总结了前几天面试的经验.转换投简历的地方.</p>
+<p>大家应该都知道培训公司这么一说,深圳的培训公司都是有套路的.先是放出一些工资高要求低的岗位.</p>
+<p>然后电话通知你面试.你问是不是要实习前先培训,他说他们有直招的,达到要求就能上岗.</p>
+<p>你去过之后就给你说你没经历,公司不可能话大价钱去培养你的.花式让你培训.</p>
+</blockquote>
+<h3 id="第七天"><a href="#第七天" class="headerlink" title="第七天"></a>第七天</h3><blockquote>
+<p>参加一个复试.</p>
+<p>依旧是技术面.这天主要问的是关于计算机网络相关问题.根本不知道怎么回答.其他的内容基本没什么新东西.</p>
+</blockquote>
+<h3 id="8-9天"><a href="#8-9天" class="headerlink" title="8-9天"></a>8-9天</h3><blockquote>
+<p>由于个人情况,未参加面试</p>
+</blockquote>
+<h3 id="第十天"><a href="#第十天" class="headerlink" title="第十天"></a>第十天</h3><blockquote>
+<p>上午面试了一家公司.感觉还可以.面试官很和气.问了一些问题还指点了一下我.叫我等复试.</p>
+<p>然后面试完,接到第四天哪家公司的offer.虽然周期很长,但是很开心,而且在我回答不是很好的情况下还选择了我.非常的开心.</p>
+<p>中午时候,貌似是我上午面试的公司把我推荐给了另外一个公司.然后跟我滔滔不绝的通话半天,邀请我面试.时间问题一直没去.</p>
+<p>下午的时候面试一家做电商网站的公司.</p>
+<p>已经有了A或者B轮融资的公司,首先笔试,然后是第一个面试官.是一个非常好的面试官,由于几天经验的积累,觉得我很不错,但是他不推荐我留在公司(ps.他认为去大公司能学到更多的东西.也描述了他自己的经历.当年就是有家公司录用他他就直接去了.).他说,我的水平肯定能有机会留在公司,但还是希望找自己兴趣点的大公司实习.</p>
+<p>第二轮是他们的经理.跟我较劲.一个劲的问个不停.然后一顿BB之后,他说去和人事谈一下,然后回来跟我说(你不是很优秀,我在你身上找不到闪光点.反正说了一大堆),最后介绍了一下薪资,然后说他还要再面几个人.叫我等通知.</p>
+<p>这是我面试最久的一次,快三个小时.口干舌燥.</p>
+</blockquote>
+<h3 id="第11天"><a href="#第11天" class="headerlink" title="第11天"></a>第11天</h3><blockquote>
+<p>上午面了一家医疗类的科技公司.是经理面试我的.一个劲的问我内部实现原理.感受到了打击.还问了一些数据结构的问题.</p>
+<p>虽然肯定过不了,也感受到了自己的很多问题.自己是真的菜.</p>
+<p>下午面了一家物业公司.先有hr对公司做整体的介绍.随后进行笔试和技术面.</p>
+<p>第一轮面试官比较和善.跟我谈笑风生.对我比较满意.问我的问题基本都回答的OK.</p>
+<p>第二轮面试官是经理.也是个洒脱的人,问了一些基本情况,没有问什么职业规划.然后很干脆的叫我等通知.</p>
+<p>下午面试的人大约有20来个,我题乱做的就是想早点面完回去.我面完的时候是4:30.</p>
+<p>我也不知道他们要面到什么时候.</p>
+</blockquote>
+<h3 id="第一份实习"><a href="#第一份实习" class="headerlink" title="第一份实习"></a>第一份实习</h3><blockquote>
+<p>第一份实习的虽然和自己的目标有区别,但是公司还不错,非常上进有潜力的公司.</p>
+<p>只工作了6天,主要是以为公司比较偏向只能硬件(嵌入式和单片机方面),安排我学的东西太杂了,感觉自己跟公司的发展方向不太一致,选择了离职.</p>
+<p>PS. 有嵌入式单片机学的不错或者对微信硬件或者微信公众号有深入了解的可以联系我(可以推荐).没有实力就算了,公司肯定是不招闲人的.创业的关键时期.</p>
+</blockquote>
+<h2 id="重新开始"><a href="#重新开始" class="headerlink" title="重新开始"></a>重新开始</h2><h3 id="第一天"><a href="#第一天" class="headerlink" title="第一天"></a>第一天</h3><blockquote>
+<p>参加前面公司的复试</p>
+<p>比较有缘分,非常感谢HR.</p>
+<p>聊的主要是一些主观上的东西,和自己所学的知识没有太大必然的联系.</p>
+<p>我觉得主要是看一个人的品质和一个人的可塑造型.目的就是了解更多生活上的东西.</p>
+</blockquote>
+<h3 id="第二天"><a href="#第二天" class="headerlink" title="第二天"></a>第二天</h3><blockquote>
+<p>慧点科技的实习生面试.(笔试+面试)</p>
+<p>面试官非常的和蔼友善,做了一套题,非常基础非常细节.有部分我确实忘了.太久没有练习.</p>
+<p>还有就是很多关于oracle数据的题(只会MySQL,按照MySQL的语法写的).</p>
+<p>面试的时候主要介绍了公司要驻现场开发,经常出差.知识点问的不是太多.只是大概的了解一下.</p>
+<p>应该是驻现场开发的要求跟我不太符合(不包吃住,还有可能在深圳各个地区进行现场开发,对我居住的地方不太友好).</p>
+</blockquote>
+<h3 id="第四天"><a href="#第四天" class="headerlink" title="第四天"></a>第四天</h3><blockquote>
+<p>点将众成的实习生(笔试+面试+面试)</p>
+<p>先做了一套题,选择题(单选+多选)很多不是很会,考的偏向于实际运用.</p>
+<p>简单题部分还好,有关数据库和前端优化问题不是很会.数据库也是关于oracle的.</p>
+<p>第一轮面试,考察了基本的前端知识和linux知识.提及到SVN,maven.</p>
+<p>第二轮面试也比较简单,主要是双方合作相关的事情.没太多技术交流.</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>成功都是建立在有准备之上的.</p>
+<p>准备越充分成功几率越大.</p>
+<p>选择好的招聘网站很重要.</p>
+<blockquote>
+<p>实习推荐网站</p>
+<ul>
+<li>拉钩网</li>
+</ul>
+<ul>
+<li>实习僧</li>
+</ul>
+<ul>
+<li>boss直聘</li>
+</ul>
+<p>不推荐网站</p>
+<ul>
+<li>智联</li>
+<li>前程无忧</li>
+<li>58同城</li>
+<li>这些都是实习生的噩梦.太多培训机构,就算你没投简历,也会给你打电话叫面试.是最骚的.当然也不是绝对的没有招实习的公司,只是要找起来比较费时间和精力.</li>
+</ul>
+</blockquote>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>深圳培训机构名单</p>
+<p><a href="https://github.com/eumji025/TI" target="_blank" rel="external">戳这里</a></p>
+<h3 id="个人面试题集"><a href="#个人面试题集" class="headerlink" title="个人面试题集"></a>个人面试题集</h3><ul>
+<li>实现多线程的几种方式(3种)</li>
+<li>http请求方式(<a href="http://blog.sina.com.cn/s/blog_8211f08a0102ve2a.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_8211f08a0102ve2a.html</a>)</li>
+<li>http特点</li>
+<li>servlet中常用对象及主要方法</li>
+<li>集合类部分(list set map都有考到)</li>
+<li>object类中常用方法</li>
+<li>equals和hashcode</li>
+<li>重载和重写的区别</li>
+<li>向上转型和向下转型的区别</li>
+<li>接口和抽象类的区别</li>
+<li>接口回调的含义</li>
+<li>工厂模式的介绍和优缺点</li>
+<li>代理模式和动态代理的介绍</li>
+<li>java的主要特征</li>
+<li>java动态绑定原理</li>
+<li>java动态代理的实现</li>
+<li>创建线程的方式</li>
+<li>线程的几种状态</li>
+<li>线程中sleep方法和wait方法的区别</li>
+<li>写一个死锁.</li>
+<li>写一个方法展示当前文件夹的目录结构</li>
+<li>抽象类和接口的区别</li>
+<li>jdbc的创建步骤</li>
+<li>开启一个事务的方法</li>
+<li>事务的概念</li>
+<li>谈一谈对回滚的理解</li>
+<li>spring mvc的常用注解</li>
+<li>spring mvc如何接受json格式数据</li>
+<li>spring mvc工作流程</li>
+<li>web项目文件加载步骤</li>
+<li>spring的核心部分</li>
+<li>spring的aop实现原理</li>
+<li>spring ioc实现原理</li>
+<li>spring 怎么管理事务</li>
+<li>mybatis中#和$的却别</li>
+<li>如何防止sql注入</li>
+<li>mybatis的缓存机制</li>
+<li>mybatis如何实现一对多映射</li>
+<li>arraylist和linkedlist的实现原理和区别</li>
+<li>hashmap,hashtable和hashset的区别</li>
+<li>set是如何保证唯一的(内部实现机制)</li>
+<li>如何用集合类实现queue</li>
+<li>String stringbuilder stringbuffer三者的区别(有可能问内部实现机制)</li>
+<li>给一种设计模式让你介绍这个设计模式</li>
+<li>基本数据类型和引用类型相关</li>
+<li>jsp的九大内置对象</li>
+<li>final finally finalize的区别</li>
+</ul>
+<blockquote>
+<p>更深层次</p>
+<p>或许会问类加载机制等java虚拟机相关的</p>
+<p>或许会问一些前端的东西</p>
+<p>或许会问多线程lock锁</p>
+<p>或许会问并发</p>
+<p>或许会问tomcat相关的知识点</p>
+<p>或许会问数据库的优化问题</p>
+<p>或许会问算法</p>
+<p>或许会问操作系统</p>
+<p>或许会问linux操作系统</p>
+</blockquote>
+<h3 id="收集的几篇面试文章"><a href="#收集的几篇面试文章" class="headerlink" title="收集的几篇面试文章"></a>收集的几篇面试文章</h3><ul>
+<li><a href="http://www.jianshu.com/p/1990eb1f66eb" target="_blank" rel="external">Java面试知识点总结</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzI2OTQxMTM4OQ==&amp;mid=2247484286&amp;idx=1&amp;sn=e5843fb79d8a36ab063699b5fb9a0711&amp;chksm=eae1f62cdd967f3a576396f8402581326b835b8327ed5f20f23896fcd22c2115e77863b4115b#rd" target="_blank" rel="external">2016年未，腾讯，百度，华为，搜狗和滴滴面试题汇总</a></li>
+<li><a href="http://www.jianshu.com/p/bd1bfc0c34b8" target="_blank" rel="external">java面试题整理</a></li>
+<li><a href="http://www.jianshu.com/p/754c7daf49a8" target="_blank" rel="external">不费洪荒之力JAVA面试成功_2016最新版</a></li>
+<li><a href="http://www.jianshu.com/p/bec0ac77c767" target="_blank" rel="external">ava面试题总结从基础特性到MySQL数据库到多线程到框架</a></li>
+<li><a href="http://www.jianshu.com/p/4abad0261cd2" target="_blank" rel="external">Java面试一定会遇到的56个面试题</a></li>
+<li><a href="https://github.com/markyun/My-blog/blob/master/Front-end-Developer-Questions/Questions-and-Answers/README.md" target="_blank" rel="external">前端开发面试题</a></li>
+</ul>
+<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><blockquote>
+<p>很多东西没来得及记录.个人的精力有限.欢迎补充,可以留言或者联系我(email: eumji025@gmail.com)</p>
+<p>总之说明一个问题.我们需要把基础掌握的更加透彻.不仅要会用,更要懂实现原理.</p>
+<p>不仅要用轮子,更要学会造轮子.</p>
+</blockquote>
+<h3 id="面试准备问题"><a href="#面试准备问题" class="headerlink" title="面试准备问题"></a>面试准备问题</h3><blockquote>
+<p>尽早准备,最好参加8-10月的校招,不要只关注与本校的校招,</p>
+<p>当然如果没抓住其他校招的机会,学校的校招也不要放弃,不管你想不想去,学习点经验总是好的.</p>
+<p>最后社招的同学们也不要气馁,在面试中总结和成长.相信一定可以找到一份好工作的.</p>
+</blockquote>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>与君共勉!</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.eumji025.com/2016/12/11/interview/" title="面试心得" target="_blank" rel="external">http://blog.eumji025.com/2016/12/11/interview/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://avatars3.githubusercontent.com/u/16497167?v=4&amp;s=460" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       
+    <div id="uyan_frame"></div>
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2016/12/24/summary/" title="2016自我总结"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2016/11/21/Idea-Maven项目的创建和部署/" title="Idea-Maven项目的创建和部署">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="fa fa-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="fa fa-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="fa fa-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        
+            <p>您好，您是第<span id="busuanzi_value_site_uv">0</span>位访客</p>
+            
+
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+<script defer src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+    
+        
+    
+    <script defer type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=[object Object]"></script>
+
+
+    
+    
+
+
+
+</body>
+</html>
