@@ -142,7 +142,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: monospace,monospace;
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
   font-size: 1em;
 }
 
@@ -5705,6 +5705,15 @@ body.no-sidebar .sidebar {
   color: #999;
   font-size: 0.85em;
 }
+.archive-list .archive-list-item{
+  list-style: none;
+  text-indent: 1em;
+  padding: 7px 5px;
+  border-bottom: 1px solid #DADFE1;
+  border-top: 1px solid #FFFFFF;
+  overflow: hidden;
+}
+
 
 .category-list-count:before,
 .tag-list-count:before,
@@ -5728,15 +5737,31 @@ body.no-sidebar .sidebar {
 .archive-list li:before,
 .tag-list li:before {
   color: #ccc;
-  content: "▪";
   font-size: 12px;
   margin-right: 6px;
   -webkit-transition: 0.2s ease;
   transition: 0.2s ease;
 }
 
+.category-list li {
+  list-style: none;
+  text-indent: 1em;
+  padding: 7px 5px;
+  border-bottom: 1px solid #DADFE1;
+  border-top: 1px solid #FFFFFF;
+  overflow: hidden;
+}
+
 .recent-post-list li + li {
   margin-top: 10px;
+}
+.recent-post-list li {
+  list-style: none;
+  text-indent: 1em;
+  padding: 2px 5px;
+  border-bottom: 1px solid #DADFE1;
+  border-top: 1px solid #FFFFFF;
+  overflow: hidden;
 }
 
 .sidebar-toc.collapse {
