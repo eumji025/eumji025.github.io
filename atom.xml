@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.eumji025.com/"/>
-  <updated>2017-02-26T02:32:51.211Z</updated>
+  <updated>2017-12-31T16:13:50.445Z</updated>
   <id>http://blog.eumji025.com/</id>
   
   <author>
@@ -17,10 +17,30 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>2018-target</title>
+    <link href="http://blog.eumji025.com/2018/01/01/2018-target/"/>
+    <id>http://blog.eumji025.com/2018/01/01/2018-target/</id>
+    <published>2017-12-31T16:08:47.000Z</published>
+    <updated>2017-12-31T16:13:50.445Z</updated>
+    
+    <summary type="html">
+    
+      2018年自我简单规划,后续慢慢完善.
+    
+    </summary>
+    
+      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
+    
+    
+      <category term="target" scheme="http://blog.eumji025.com/tags/target/"/>
+    
+  </entry>
+  
+  <entry>
     <title>oracle中dual表介绍</title>
-    <link href="http://blog.eumji025.com/2017/09/19/dual-introduce/"/>
-    <id>http://blog.eumji025.com/2017/09/19/dual-introduce/</id>
-    <published>2017-09-19T14:11:18.136Z</published>
+    <link href="http://blog.eumji025.com/2018/01/01/dual-introduce/"/>
+    <id>http://blog.eumji025.com/2018/01/01/dual-introduce/</id>
+    <published>2017-12-31T16:08:14.547Z</published>
     <updated>2017-02-26T02:32:51.211Z</updated>
     
     <summary type="html">
@@ -399,28 +419,6 @@
     
     
       <category term="java" scheme="http://blog.eumji025.com/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>推荐的markdown编辑器</title>
-    <link href="http://blog.eumji025.com/2016/11/05/%E6%8E%A8%E8%8D%90%E7%9A%84markdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    <id>http://blog.eumji025.com/2016/11/05/推荐的markdown编辑器/</id>
-    <published>2016-11-05T01:26:54.000Z</published>
-    <updated>2017-02-26T02:32:51.217Z</updated>
-    
-    <summary type="html">
-    
-      优雅的markdown编辑器
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="markdown" scheme="http://blog.eumji025.com/tags/markdown/"/>
-    
-      <category term="写作" scheme="http://blog.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
     
   </entry>
   
