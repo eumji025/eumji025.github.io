@@ -197,14 +197,16 @@
 
     
   <url>
-    <loc>http://www.eumji025.com/2017/01/18/checkstyle/</loc>
+    <loc>http://www.eumji025.com/2017/01/11/annotation/</loc>
     <lastmod>2017-02-26T02:32:51.210Z</lastmod>
     <data>
         <display>
-        <title>checksty配置</title>
-        <pubTime>2017-01-18T14:39:13.000Z</pubTime>
+        <title>web开发常用注解</title>
+        <pubTime>2017-01-11T15:14:31.000Z</pubTime>
         
-        <tag>properties</tag>
+        <tag>annotation</tag>
+         
+        <tag>java</tag>
          
          
            
@@ -217,16 +219,14 @@
 
     
   <url>
-    <loc>http://www.eumji025.com/2017/01/11/annotation/</loc>
+    <loc>http://www.eumji025.com/2017/01/18/checkstyle/</loc>
     <lastmod>2017-02-26T02:32:51.210Z</lastmod>
     <data>
         <display>
-        <title>web开发常用注解</title>
-        <pubTime>2017-01-11T15:14:31.000Z</pubTime>
+        <title>checksty配置</title>
+        <pubTime>2017-01-18T14:39:13.000Z</pubTime>
         
-        <tag>annotation</tag>
-         
-        <tag>java</tag>
+        <tag>properties</tag>
          
          
            

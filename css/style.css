@@ -5974,6 +5974,12 @@ body.okayNav-loaded {
 
 .okayNav {
   position: relative;
+  width: 100%;
+  position: relative;
+  height: 42px;
+  background: #fafafa;
+  line-height: 40px;
+  overflow: hidden;
 }
 
 .okayNav:before,
@@ -5999,12 +6005,15 @@ body.okayNav-loaded {
   float: left;
   padding-left: 0;
 }
-
+/*稍作样式修改*/
 .okayNav ul li {
   display: inline-block;
   margin-left: 15px;
-}
 
+}
+.okayNav ul li a {
+  padding: 2px 8px;
+}
 .okayNav ul li:first-child {
   margin-left: 0;
 }
@@ -6016,11 +6025,14 @@ body.okayNav-loaded {
 
 .okayNav a.active {
   color: #0a6ebd;
+  border: 1px solid #e0d9d9;
 }
 
 .okayNav__nav--visible {
   overflow: hidden;
   white-space: nowrap;
+  background-color: #F8F8F8;
+  border-bottom: 1px solid #E7E7E7!important;
 }
 
 .okayNav__nav--visible li {
@@ -6030,6 +6042,7 @@ body.okayNav-loaded {
 
 .okayNav__nav--visible li:first-child {
   margin-left: 0;
+
 }
 
 .okayNav__nav--visible a {
