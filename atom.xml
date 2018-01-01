@@ -37,28 +37,6 @@
   </entry>
   
   <entry>
-    <title>oracle中dual表介绍</title>
-    <link href="http://blog.eumji025.com/2018/01/01/dual-introduce/"/>
-    <id>http://blog.eumji025.com/2018/01/01/dual-introduce/</id>
-    <published>2017-12-31T16:08:14.547Z</published>
-    <updated>2017-02-26T02:32:51.211Z</updated>
-    
-    <summary type="html">
-    
-      dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。
-    
-    </summary>
-    
-      <category term="databasse" scheme="http://blog.eumji025.com/categories/databasse/"/>
-    
-    
-      <category term="dual" scheme="http://blog.eumji025.com/tags/dual/"/>
-    
-      <category term="oracle" scheme="http://blog.eumji025.com/tags/oracle/"/>
-    
-  </entry>
-  
-  <entry>
     <title>spring-boot跳转页面</title>
     <link href="http://blog.eumji025.com/2017/03/26/springboot-indexPage/"/>
     <id>http://blog.eumji025.com/2017/03/26/springboot-indexPage/</id>
@@ -119,66 +97,6 @@
   </entry>
   
   <entry>
-    <title>redis应用场景</title>
-    <link href="http://blog.eumji025.com/2017/02/19/redis-use/"/>
-    <id>http://blog.eumji025.com/2017/02/19/redis-use/</id>
-    <published>2017-02-19T11:04:52.000Z</published>
-    <updated>2017-02-26T02:32:51.213Z</updated>
-    
-    <summary type="html">
-    
-      redis的常用应用场景.
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="redis" scheme="http://blog.eumji025.com/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ｒｅｄｉｓ服务器配置</title>
-    <link href="http://blog.eumji025.com/2017/02/10/redis-set/"/>
-    <id>http://blog.eumji025.com/2017/02/10/redis-set/</id>
-    <published>2017-02-10T12:20:15.000Z</published>
-    <updated>2017-02-26T02:32:51.213Z</updated>
-    
-    <summary type="html">
-    
-      redis配置远程连接
-    
-    </summary>
-    
-      <category term="redis" scheme="http://blog.eumji025.com/categories/redis/"/>
-    
-    
-      <category term="redis" scheme="http://blog.eumji025.com/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>union</title>
-    <link href="http://blog.eumji025.com/2017/02/09/union/"/>
-    <id>http://blog.eumji025.com/2017/02/09/union/</id>
-    <published>2017-02-09T14:13:25.000Z</published>
-    <updated>2017-02-26T02:32:51.216Z</updated>
-    
-    <summary type="html">
-    
-      UNION 操作符用于合并两个或多个 SELECT 语句的结果集。
-    
-    </summary>
-    
-      <category term="database" scheme="http://blog.eumji025.com/categories/database/"/>
-    
-    
-      <category term="sql" scheme="http://blog.eumji025.com/tags/sql/"/>
-    
-  </entry>
-  
-  <entry>
     <title>checksty配置</title>
     <link href="http://blog.eumji025.com/2017/01/18/checkstyle/"/>
     <id>http://blog.eumji025.com/2017/01/18/checkstyle/</id>
@@ -195,66 +113,6 @@
     
     
       <category term="properties" scheme="http://blog.eumji025.com/tags/properties/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>redis配置文件介绍</title>
-    <link href="http://blog.eumji025.com/2017/01/15/redis-conf/"/>
-    <id>http://blog.eumji025.com/2017/01/15/redis-conf/</id>
-    <published>2017-01-15T05:13:47.000Z</published>
-    <updated>2017-02-26T02:32:51.213Z</updated>
-    
-    <summary type="html">
-    
-      本文主要介绍redis的配置文件.
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="redis" scheme="http://blog.eumji025.com/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>初识redis</title>
-    <link href="http://blog.eumji025.com/2017/01/14/redis-one/"/>
-    <id>http://blog.eumji025.com/2017/01/14/redis-one/</id>
-    <published>2017-01-14T13:54:56.000Z</published>
-    <updated>2017-02-26T02:32:51.213Z</updated>
-    
-    <summary type="html">
-    
-      redis是一种非关系型数据库,采用key-value的方式存储数据,可存储的格式包括:String,list,set,zset,hash.Redis 是一个高性能的key-value数据库。 redis的出现，很大程度补偿了memcached这类key/value存储的不足，在部 分场合可以对关系数据库起到很好的补充作用。它提供了Java，C/C++，C#，PHP，JavaScript，Perl，Object-C，Python，Ruby，Erlang等客户端，使用很方便
-    
-    </summary>
-    
-      <category term="database" scheme="http://blog.eumji025.com/categories/database/"/>
-    
-    
-      <category term="redis" scheme="http://blog.eumji025.com/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>zTree_begin</title>
-    <link href="http://blog.eumji025.com/2017/01/12/zTree-begin/"/>
-    <id>http://blog.eumji025.com/2017/01/12/zTree-begin/</id>
-    <published>2017-01-12T14:49:53.000Z</published>
-    <updated>2017-02-26T02:32:51.217Z</updated>
-    
-    <summary type="html">
-    
-      zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。专门适合项目开发，尤其是 树状菜单、树状数据的Web显示、权限管理等等。
-    
-    </summary>
-    
-      <category term="js" scheme="http://blog.eumji025.com/categories/js/"/>
-    
-    
-      <category term="zTree" scheme="http://blog.eumji025.com/tags/zTree/"/>
     
   </entry>
   
@@ -281,91 +139,11 @@
   </entry>
   
   <entry>
-    <title>浅谈微信小程序</title>
-    <link href="http://blog.eumji025.com/2017/01/09/wechat-talk/"/>
-    <id>http://blog.eumji025.com/2017/01/09/wechat-talk/</id>
-    <published>2017-01-09T15:10:39.000Z</published>
-    <updated>2017-02-26T02:32:51.217Z</updated>
-    
-    <summary type="html">
-    
-      微信小程序，简称CX，是一种不需要下载安装即可使用的应用，它实现了应用“触手可及”的梦想，用户扫一扫或搜一下即可打开应用。
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="wechat" scheme="http://blog.eumji025.com/tags/wechat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>展望2017</title>
-    <link href="http://blog.eumji025.com/2017/01/01/NewYear/"/>
-    <id>http://blog.eumji025.com/2017/01/01/NewYear/</id>
-    <published>2017-01-01T01:38:34.000Z</published>
-    <updated>2017-02-26T02:32:51.209Z</updated>
-    
-    <summary type="html">
-    
-      2017年自我简单规划,后续慢慢完善.
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="target" scheme="http://blog.eumji025.com/tags/target/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>2016自我总结</title>
-    <link href="http://blog.eumji025.com/2016/12/24/summary/"/>
-    <id>http://blog.eumji025.com/2016/12/24/summary/</id>
-    <published>2016-12-24T07:17:32.000Z</published>
-    <updated>2017-02-26T02:32:51.216Z</updated>
-    
-    <summary type="html">
-    
-      2016年即将结束,进行一下个人的梳理.
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="summary" scheme="http://blog.eumji025.com/tags/summary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>面试心得</title>
-    <link href="http://blog.eumji025.com/2016/12/11/interview/"/>
-    <id>http://blog.eumji025.com/2016/12/11/interview/</id>
-    <published>2016-12-11T12:52:12.000Z</published>
-    <updated>2017-02-26T02:32:51.211Z</updated>
-    
-    <summary type="html">
-    
-      谈一谈个人的实习面试经历
-    
-    </summary>
-    
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="interview" scheme="http://blog.eumji025.com/tags/interview/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Idea-Maven项目的创建和部署</title>
     <link href="http://blog.eumji025.com/2016/11/21/Idea-Maven%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E9%83%A8%E7%BD%B2/"/>
     <id>http://blog.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/</id>
     <published>2016-11-21T12:12:40.000Z</published>
-    <updated>2017-02-26T02:32:51.209Z</updated>
+    <updated>2018-01-01T09:01:56.947Z</updated>
     
     <summary type="html">
     
@@ -373,52 +151,74 @@
     
     </summary>
     
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="工具专栏" scheme="http://blog.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="idea" scheme="http://blog.eumji025.com/tags/idea/"/>
+      <category term="Intellij Idea" scheme="http://blog.eumji025.com/tags/Intellij-Idea/"/>
     
   </entry>
   
   <entry>
-    <title>springmvc-ajax-jquery 异步校验登录</title>
-    <link href="http://blog.eumji025.com/2016/11/21/springmvc-ajax-jquery-%E5%BC%82%E6%AD%A5%E6%A0%A1%E9%AA%8C%E7%99%BB%E5%BD%95/"/>
-    <id>http://blog.eumji025.com/2016/11/21/springmvc-ajax-jquery-异步校验登录/</id>
-    <published>2016-11-21T11:40:12.000Z</published>
+    <title>推荐的markdown编辑器</title>
+    <link href="http://blog.eumji025.com/2016/11/05/%E6%8E%A8%E8%8D%90%E7%9A%84markdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    <id>http://blog.eumji025.com/2016/11/05/推荐的markdown编辑器/</id>
+    <published>2016-11-05T01:26:54.000Z</published>
+    <updated>2017-02-26T02:32:51.217Z</updated>
+    
+    <summary type="html">
+    
+      优雅的markdown编辑器
+    
+    </summary>
+    
+      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
+    
+    
+      <category term="markdown" scheme="http://blog.eumji025.com/tags/markdown/"/>
+    
+      <category term="写作" scheme="http://blog.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>springMVC 几种页面跳转方式</title>
+    <link href="http://blog.eumji025.com/2016/10/28/springMVC-%E5%87%A0%E7%A7%8D%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E6%96%B9%E5%BC%8F/"/>
+    <id>http://blog.eumji025.com/2016/10/28/springMVC-几种页面跳转方式/</id>
+    <published>2016-10-28T04:45:00.000Z</published>
     <updated>2017-02-26T02:32:51.215Z</updated>
     
     <summary type="html">
     
-      异步登陆校验是现在主流的验证方式。必须掌握的技能。
+      Spring MVC属于SpringFrameWork的后续产品，已经融合在Spring Web Flow里面。Spring 框架提供了构建 Web 应用程序的全功能 MVC 模块。使用 Spring 可插入的 MVC 架构，从而在使用Spring进行WEB开发时，可以选择使用Spring的SpringMVC框架或集成其他MVC开发框架，如Struts1，Struts2等。
     
     </summary>
     
-      <category term="spring" scheme="http://blog.eumji025.com/categories/spring/"/>
+      <category term="spring MVC" scheme="http://blog.eumji025.com/categories/spring-MVC/"/>
     
     
-      <category term="spring" scheme="http://blog.eumji025.com/tags/spring/"/>
-    
-      <category term="ajax" scheme="http://blog.eumji025.com/tags/ajax/"/>
+      <category term="spring MVC" scheme="http://blog.eumji025.com/tags/spring-MVC/"/>
     
   </entry>
   
   <entry>
-    <title>@autowired和@Resource的区别</title>
-    <link href="http://blog.eumji025.com/2016/11/21/autowired%E5%92%8C-Resource%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>http://blog.eumji025.com/2016/11/21/autowired和-Resource的区别/</id>
-    <published>2016-11-21T11:36:39.000Z</published>
-    <updated>2017-02-26T02:32:51.210Z</updated>
+    <title>使用idea开发srpingMVC第一个Demo</title>
+    <link href="http://blog.eumji025.com/2016/10/28/%E4%BD%BF%E7%94%A8idea%E5%BC%80%E5%8F%91srpingMVC%E7%AC%AC%E4%B8%80%E4%B8%AADemo/"/>
+    <id>http://blog.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/</id>
+    <published>2016-10-28T04:24:48.000Z</published>
+    <updated>2018-01-01T09:18:37.171Z</updated>
     
     <summary type="html">
     
-      使用@autowired和@Resource都是通过注解实现自动装配bean，本文介绍两种机制的不同之处。
+      JetBrains是一家捷克的软件开发公司，该公司位于捷克的布拉格，并在俄国的圣彼得堡及美国麻州波士顿都设有办公室，该公司最为人所熟知的产品是Java编程语言开发撰写时所用的集成开发环境：IntelliJ IDEA。
     
     </summary>
     
-      <category term="java" scheme="http://blog.eumji025.com/categories/java/"/>
+      <category term="spring MVC" scheme="http://blog.eumji025.com/categories/spring-MVC/"/>
     
     
-      <category term="java" scheme="http://blog.eumji025.com/tags/java/"/>
+      <category term="springMVC" scheme="http://blog.eumji025.com/tags/springMVC/"/>
+    
+      <category term="idea" scheme="http://blog.eumji025.com/tags/idea/"/>
     
   </entry>
   
