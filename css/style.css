@@ -5617,6 +5617,10 @@ body.no-sidebar .sidebar {
 .main .page-header {
   margin-top: 0;
 }
+/*自己调整的间距*/
+.content.article-list {
+  padding: 2px 20px;
+}
 
 .main .article-list article {
   border-bottom: 1px solid #f6f6f6;
@@ -5629,6 +5633,10 @@ body.no-sidebar .sidebar {
 .main .article-meta {
   font-size: 13px;
   color: #999;
+  padding-top: 8px;
+}
+.main .article-pull {
+  float: left !important;
 }
 
 .main .article-meta a {
@@ -8412,6 +8420,7 @@ body.okayNav-loaded {
     max-height: 200px;
   }
 }
+/*修改sidebar背景色 ========begin*/
 .widget-body {
     background-color: #ffffff;
     /*border: 1px solid #e4dcdc;*/
@@ -8428,4 +8437,9 @@ body.okayNav-loaded {
 }
 .widget-body.tagcloud {
   background-color: #e6e9ea;
+}
+/*修改sidebar背景色=========end*/
+/*阅读按钮的样式*/
+.post-permalink {
+    text-align: right;
 }
