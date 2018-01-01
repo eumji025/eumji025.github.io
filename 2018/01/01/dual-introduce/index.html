@@ -16,17 +16,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2016 | EumJi博客</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://www.eumji025.com/archives/2016/index.html">
+  <title>oracle中dual表介绍 | EumJi博客</title>
+  <meta name="description" content="dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。">
+<meta name="keywords" content="dual,oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oracle中dual表介绍">
+<meta property="og:url" content="http://www.eumji025.com/2018/01/01/dual-introduce/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-01T10:14:54.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="oracle中dual表介绍">
+<meta name="twitter:description" content="dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/archives/2016/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/2018/01/01/dual-introduce/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -344,78 +349,146 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2016</h1>
-	      <p class="text-muted">共 4 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-dual-introduce" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      oracle中dual表介绍
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2016" aria-expanded="true">
-              <i class="fa fa-calendar-plus-o text-active"></i><i class="fa fa-calendar-minus-o text"></i>
-              2016
-            </a>
-            <!-- <a href="/archives/2016" class="archive-year">2016</a> -->
-          </h3>
-        </div>
-        <div id="collapse2016" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2016">
-        <div class="panel-body">
-          <div class="collection">
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/01/01/dual-introduce/" class="article-date">
+	  <time datetime="2018-01-01T10:14:54.107Z" itemprop="datePublished">2018-01-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/databasse/">databasse</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/dual/">dual</a>, <a class="article-tag-link" href="/tags/oracle/">oracle</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/01/01/dual-introduce/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 148(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h1 id="oracle-dual表"><a href="#oracle-dual表" class="headerlink" title="oracle dual表"></a>oracle dual表</h1><p>dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。</p>
+<h2 id="dual-用途"><a href="#dual-用途" class="headerlink" title="dual 用途"></a>dual 用途</h2><h3 id="充当伪列。"><a href="#充当伪列。" class="headerlink" title="充当伪列。"></a>充当伪列。</h3><p>在批量插入中常使用这种方式。</p>
+<pre><code>insert into user(name,age)
+select &apos;zhangsan&apos;,18 from dual
+select &apos;lisi&apos;,29 from dual
+</code></pre><h3 id="调用系统函数"><a href="#调用系统函数" class="headerlink" title="调用系统函数"></a>调用系统函数</h3><p>获取系统时间。</p>
+<pre><code>select to_char(sysdate,&apos;yyyy-mm-dd hh24:mi:ss&apos;) from dual
+</code></pre><p>更多场景可以自己测试。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>最近在使用批量插入数据时接触到dual表，发现是非常有用的一张表，值得我们去学习使用。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
     
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/01/01/dual-introduce/" title="oracle中dual表介绍" target="_blank" rel="external">http://www.eumji025.com/2018/01/01/dual-introduce/</a>
+    </li>
     
-<a href="/2016/11/21/Idea-Maven项目的创建和部署/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-11-21T12:12:40.000Z" itemprop="datePublished">2016-11-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Idea-Maven项目的创建和部署
-</a>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/01/01/dual-introduce/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
 
 
   
-    
-    
-    
-<a href="/2016/11/05/推荐的markdown编辑器/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-11-05T01:26:54.000Z" itemprop="datePublished">2016-11-05</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 推荐的markdown编辑器
-</a>
+</div>
 
-
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
+  <ul class="pager pull-left">
     
     
+    <li class="next">
+      <a href="/2018/01/01/2018-target/" title="展望2018">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
     
-<a href="/2016/10/28/springMVC-几种页面跳转方式/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-10-28T04:45:00.000Z" itemprop="datePublished">2016-10-28</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> springMVC 几种页面跳转方式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2016/10/28/使用idea开发srpingMVC第一个Demo/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-10-28T04:24:48.000Z" itemprop="datePublished">2016-10-28</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 使用idea开发srpingMVC第一个Demo
-</a>
-
-
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	 	
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -475,6 +548,8 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
     
+    
+        
     
     
 

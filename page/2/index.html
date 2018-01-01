@@ -16,17 +16,17 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2016 | EumJi博客</title>
+  <title>EumJi博客</title>
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://www.eumji025.com/archives/2016/index.html">
+<meta property="og:url" content="http://www.eumji025.com/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/archives/2016/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/page/2/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -342,80 +342,159 @@
 </aside>
 
   
+  <main class="main" role="main">
   
-<main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2016</h1>
-	      <p class="text-muted">共 4 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
   
+    <div class="content">
+  <article id="post-使用idea开发srpingMVC第一个Demo" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/28/使用idea开发srpingMVC第一个Demo/">使用idea开发srpingMVC第一个Demo</a>
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2016/10/28/使用idea开发srpingMVC第一个Demo/" class="article-date">
+	  <time datetime="2016-10-28T04:24:48.000Z" itemprop="datePublished">2016-10-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/spring-MVC/">spring MVC</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/idea/">idea</a>, <a class="article-tag-link" href="/tags/springMVC/">springMVC</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2016/10/28/使用idea开发srpingMVC第一个Demo/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,094(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <p>#主要目的是熟悉intellij的web项目操作和springMVC的基本概念,纯属个人学习的笔记,有写的不当的地方欢迎指正</p>
+<p>###操作环境说明<br>操作系统： win10<br>ide版本： 2017.1.5</p>
+<h2 id="开发过程"><a href="#开发过程" class="headerlink" title="开发过程"></a>开发过程</h2><p>本文原始的版本是在个人学习写的，所以很多东西写的不够详细。<br>本次重新归纳总结，下面开始具体操作：</p>
+<h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><p>创建一个empty project<br>File -&gt; new -&gt; project -&gt; empty project</p>
+<p>###创建module<br>说明一下，在实际开发中我们喜欢一个项目一个project，但是学习之中，为了方便来回切换，所以我们每一个demo都写成module的形式。</p>
+<p>创建 module(在此之前需要创建entity project)<br>在新版本中，会提示你是下载勾选的mvc的依赖。</p>
+<p><img src="http://img.blog.csdn.net/20170713154600278?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后填写module名 点击确认 module创建完毕（作者因为乱码的关系 ￥代表 /）<br><img src="http://img.blog.csdn.net/20170713155247042?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="结构预览并修改配置"><a href="#结构预览并修改配置" class="headerlink" title="结构预览并修改配置"></a>结构预览并修改配置</h3><p><img src="http://img.blog.csdn.net/20170713155233922?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>在module的web-WEB-INF下新建 classes和lib文件夹（新版本中的lib在根目录下）<br><img src="http://img.blog.csdn.net/20160428091619157" alt="这里写图片描述"></p>
+<p>1.IDEA默认是不会像eclipse那样在web-inf下生成lib文件夹和classes文件夹的的，需要我们手动的创建，并将我们根目录下的lib目录下的内容复制到web-inf/lib文件夹内。<br>并且还需要进行额外配置。<br> 点击file-&gt;Project Struture 修改Modules下的paths 修改完毕点击OK（主要是为了跟ecilpse结构相似，也可以不改）</p>
+<p><img src="http://img.blog.csdn.net/20170713155644935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>2.然后点击dependencis - &gt; 绿色的+ -&gt; 选择第一项，选择刚才我们在WEB-INF下创建的lib文件夹，和eclipse的导包一个性质。<br><img src="http://img.blog.csdn.net/20170713155816017?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>3.回到主界面，配置tomcat 点击run-&gt;edit configurations‘<br><img src="http://img.blog.csdn.net/20170713160205268?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanN1XzkyMDc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>点绿色的十字图标 创建tomcat并配置<br><img src="http://img.blog.csdn.net/20160428092151895" alt="这里写图片描述"></p>
+<p>选择自己的tomcat位置<br><img src="http://img.blog.csdn.net/20160428092321510" alt="这里写图片描述"><br>点击deployment  -&gt; 绿色+号 -&gt; 选择我们的项目<br><img src="http://img.blog.csdn.net/20160428092720116" alt="这里写图片描述"></p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><ol>
+<li>web,xml 不需要进行修改，有默认的就行了。</li>
+</ol>
+<ol>
+<li>修改dispatcjer-servlet.xml</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       xmlns:context=<span class="string">"http://www.springframework.org/schema/context"</span></span><br><span class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">"</span></span><br><span class="line"><span class="string">        http://www.springframework.org/schema/beans</span></span><br><span class="line"><span class="string">        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd</span></span><br><span class="line"><span class="string">        http://www.springframework.org/schema/context</span></span><br><span class="line"><span class="string">        http://www.springframework.org/schema/context/spring-context-3.0.xsd"</span>&gt;</span><br><span class="line">    &lt;!--对应src下的报名，需要自己新建--&gt;</span><br><span class="line">    &lt;context:component-scan base-<span class="keyword">package</span>=<span class="string">"com.eumji.mvc"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span>&gt;</span><br><span class="line">        &lt;property name=<span class="string">"prefix"</span>&gt;</span><br><span class="line">            &lt;!-- 这个配置是配置JSP页面的位置，按照你自己的配置来配 --&gt;</span><br><span class="line">            &lt;!--jsp文件夹需要自己手动创建--&gt;</span><br><span class="line">            &lt;value&gt;/WEB-INF/jsp/&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">"suffix"</span>&gt;</span><br><span class="line">            &lt;value&gt;.jsp&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+<p>3.在jsp目录下新建hello.jsp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;hello mvc&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">$&#123;msg &#125;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>4.在src中编写controller类<br>需要和dispatcher-servlet.xml配置的路径一致<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">public class HelloController &#123;</span><br><span class="line"> @RequestMapping(value=&quot;/hello&quot;,method = RequestMethod.GET)</span><br><span class="line">    public String printWelcome(ModelMap model) &#123;</span><br><span class="line">        model.addAttribute(&quot;msg&quot;, &quot;Spring 3 MVC Hello World&quot;);</span><br><span class="line">        return &quot;hello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>5.点击右上角的绿色三角形进行运行，最后进行测试<br><img src="http://img.blog.csdn.net/20160428122533735" alt="这里写图片描述"></p>
+<p>第一个小demo到此结束！</p>
+<h3 id="最后说几句"><a href="#最后说几句" class="headerlink" title="最后说几句"></a>最后说几句</h3><p>Intellij IDEA和eclipse的使用有很大的不同，本文只是带领着使用IDEA进行web项目的创建和测试。并没有对spring MVC框架本身的内容进行过多的讲解。<br>IDEA创建普通的web 项目确实比较麻烦，使用maven的方式更佳。</p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>还是补充一下创建maven项目的姿势</p>
+<p><img src="http://img.blog.csdn.net/20160712171832599" alt="这里写图片描述"></p>
+<h3 id="创建maven-module"><a href="#创建maven-module" class="headerlink" title="创建maven module"></a>创建maven module</h3><p> <strong>1.点击+号创建</strong><br><img src="http://img.blog.csdn.net/20160712172014881" alt="这里写图片描述"><br> <strong>2.选择maven webapp</strong><br><img src="http://img.blog.csdn.net/20160712172141694" alt="这里写图片描述"><br><strong>3输入groupId和ArtifactId</strong><br><img src="http://img.blog.csdn.net/20160712172411102" alt="这里写图片描述"><br><strong>4.陪著maven相关信息。</strong><br><img src="http://img.blog.csdn.net/20160712172451602" alt="这里写图片描述"><br>最好是设置一下maven的setting文件,无论是自带的还是自己配置的maven,修改一下maven的镜像地址.<br>在maven的settings.xml 文件里配置mirrors的子节点，添加如下mirror</p>
+<pre><code>&lt;mirror&gt;
+    &lt;id&gt;nexus-aliyun&lt;/id&gt;
+    &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;
+    &lt;name&gt;Nexus aliyun&lt;/name&gt;
+    &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public&lt;/url&gt;
+&lt;/mirror&gt;
+</code></pre><p><strong>5.文件夹名称,创建完成.</strong><br><strong>6.加载</strong><br> 等待一段时间，maven自动加载web项目相关的配置</p>
+<p><strong>7 .修改pom文件</strong><br>注意添加packaging<br><strong>8 修改项目配置</strong><br><img src="http://img.blog.csdn.net/20160712173018792" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20160712173308598" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20160712173035984" alt="这里写图片描述"></p>
+<p> <strong>maven-tomcat插件配置</strong><br><img src="http://img.blog.csdn.net/20160712173506163" alt="这里写图片描述"><br> <strong>发布</strong><br>右键项目 run maven-maven-tomcat即可</p>
+<p><strong>spring boot</strong><br>特别推荐一下使用spring boot,对新手非常友好,而且可以使用spring initialize生成项目,并且不需要配置tomcat.</p>
+<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p><a href="https://github.com/eumji025/my-demo/tree/master/hello-mvc" target="_blank" rel="noopener">https://github.com/eumji025/my-demo/tree/master/hello-mvc</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/" title="使用idea开发srpingMVC第一个Demo" target="_blank" rel="external">http://www.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+</div>
+
+
+  
+
   
     
-    
-      
-      
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2016" aria-expanded="true">
-              <i class="fa fa-calendar-plus-o text-active"></i><i class="fa fa-calendar-minus-o text"></i>
-              2016
-            </a>
-            <!-- <a href="/archives/2016" class="archive-year">2016</a> -->
-          </h3>
+    <nav class="bar bar-footer clearfix" data-stick-bottom>
+        <div class="bar-inner">
+        <div class="pager pull-left">
+            
+            <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i> 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+            
+            <a class="next disabled" href="javascript:;">下一页 <i class="fa fa-angle-right"></i></a>
+            
         </div>
-        <div id="collapse2016" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2016">
-        <div class="panel-body">
-          <div class="collection">
+        </div>
+        <div class="total-article bar-right">Page 2 of 2</div>
+    </nav>
     
-    
-<a href="/2016/11/21/Idea-Maven项目的创建和部署/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-11-21T12:12:40.000Z" itemprop="datePublished">2016-11-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Idea-Maven项目的创建和部署
-</a>
-
-
-  
-    
-    
-    
-<a href="/2016/11/05/推荐的markdown编辑器/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-11-05T01:26:54.000Z" itemprop="datePublished">2016-11-05</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 推荐的markdown编辑器
-</a>
-
-
-  
-    
-    
-    
-<a href="/2016/10/28/springMVC-几种页面跳转方式/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-10-28T04:45:00.000Z" itemprop="datePublished">2016-10-28</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> springMVC 几种页面跳转方式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2016/10/28/使用idea开发srpingMVC第一个Demo/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2016-10-28T04:24:48.000Z" itemprop="datePublished">2016-10-28</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 使用idea开发srpingMVC第一个Demo
-</a>
-
-
-  
-  
-    </div></div></div></section>
-  
-
-	    </div>
-  	</article>
-  	 	
+ 
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">

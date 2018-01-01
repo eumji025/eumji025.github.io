@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://blog.eumji025.com/"/>
-  <updated>2017-12-31T16:19:09.144Z</updated>
-  <id>http://blog.eumji025.com/</id>
+  <link href="http://www.eumji025.com/"/>
+  <updated>2018-01-01T10:14:54.107Z</updated>
+  <id>http://www.eumji025.com/</id>
   
   <author>
     <name>John Doe</name>
@@ -17,11 +17,33 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>oracle中dual表介绍</title>
+    <link href="http://www.eumji025.com/2018/01/01/dual-introduce/"/>
+    <id>http://www.eumji025.com/2018/01/01/dual-introduce/</id>
+    <published>2018-01-01T10:14:54.107Z</published>
+    <updated>2018-01-01T10:14:54.107Z</updated>
+    
+    <summary type="html">
+    
+      dual表是oracle提供的最小表，只有一行一列，具有一些 特殊用途。善用dual表能为开发带来极大的便利。
+    
+    </summary>
+    
+      <category term="databasse" scheme="http://www.eumji025.com/categories/databasse/"/>
+    
+    
+      <category term="dual" scheme="http://www.eumji025.com/tags/dual/"/>
+    
+      <category term="oracle" scheme="http://www.eumji025.com/tags/oracle/"/>
+    
+  </entry>
+  
+  <entry>
     <title>展望2018</title>
-    <link href="http://blog.eumji025.com/2018/01/01/2018-target/"/>
-    <id>http://blog.eumji025.com/2018/01/01/2018-target/</id>
+    <link href="http://www.eumji025.com/2018/01/01/2018-target/"/>
+    <id>http://www.eumji025.com/2018/01/01/2018-target/</id>
     <published>2017-12-31T16:08:47.000Z</published>
-    <updated>2017-12-31T16:19:09.144Z</updated>
+    <updated>2018-01-01T10:14:54.051Z</updated>
     
     <summary type="html">
     
@@ -29,17 +51,17 @@
     
     </summary>
     
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="http://www.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="target" scheme="http://blog.eumji025.com/tags/target/"/>
+      <category term="target" scheme="http://www.eumji025.com/tags/target/"/>
     
   </entry>
   
   <entry>
     <title>spring-boot跳转页面</title>
-    <link href="http://blog.eumji025.com/2017/03/26/springboot-indexPage/"/>
-    <id>http://blog.eumji025.com/2017/03/26/springboot-indexPage/</id>
+    <link href="http://www.eumji025.com/2017/03/26/springboot-indexPage/"/>
+    <id>http://www.eumji025.com/2017/03/26/springboot-indexPage/</id>
     <published>2017-03-26T00:04:54.000Z</published>
     <updated>2017-03-26T00:40:31.212Z</updated>
     
@@ -49,17 +71,17 @@
     
     </summary>
     
-      <category term="spring" scheme="http://blog.eumji025.com/categories/spring/"/>
+      <category term="spring" scheme="http://www.eumji025.com/categories/spring/"/>
     
     
-      <category term="spring-boot" scheme="http://blog.eumji025.com/tags/spring-boot/"/>
+      <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
     
   </entry>
   
   <entry>
     <title>spring-boot-customport</title>
-    <link href="http://blog.eumji025.com/2017/02/26/spring-boot-customport/"/>
-    <id>http://blog.eumji025.com/2017/02/26/spring-boot-customport/</id>
+    <link href="http://www.eumji025.com/2017/02/26/spring-boot-customport/"/>
+    <id>http://www.eumji025.com/2017/02/26/spring-boot-customport/</id>
     <published>2017-02-26T12:19:56.000Z</published>
     <updated>2017-02-26T12:36:21.704Z</updated>
     
@@ -69,17 +91,17 @@
     
     </summary>
     
-      <category term="spring" scheme="http://blog.eumji025.com/categories/spring/"/>
+      <category term="spring" scheme="http://www.eumji025.com/categories/spring/"/>
     
     
-      <category term="spring-boot" scheme="http://blog.eumji025.com/tags/spring-boot/"/>
+      <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
     
   </entry>
   
   <entry>
     <title>spring-boot-helloworld</title>
-    <link href="http://blog.eumji025.com/2017/02/26/spring-boot-helloworld/"/>
-    <id>http://blog.eumji025.com/2017/02/26/spring-boot-helloworld/</id>
+    <link href="http://www.eumji025.com/2017/02/26/spring-boot-helloworld/"/>
+    <id>http://www.eumji025.com/2017/02/26/spring-boot-helloworld/</id>
     <published>2017-02-26T02:32:34.000Z</published>
     <updated>2017-02-26T02:57:36.123Z</updated>
     
@@ -89,17 +111,17 @@
     
     </summary>
     
-      <category term="spring" scheme="http://blog.eumji025.com/categories/spring/"/>
+      <category term="spring" scheme="http://www.eumji025.com/categories/spring/"/>
     
     
-      <category term="spring-boot" scheme="http://blog.eumji025.com/tags/spring-boot/"/>
+      <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
     
   </entry>
   
   <entry>
     <title>checksty配置</title>
-    <link href="http://blog.eumji025.com/2017/01/18/checkstyle/"/>
-    <id>http://blog.eumji025.com/2017/01/18/checkstyle/</id>
+    <link href="http://www.eumji025.com/2017/01/18/checkstyle/"/>
+    <id>http://www.eumji025.com/2017/01/18/checkstyle/</id>
     <published>2017-01-18T14:39:13.000Z</published>
     <updated>2017-02-26T02:32:51.210Z</updated>
     
@@ -109,17 +131,17 @@
     
     </summary>
     
-      <category term="java" scheme="http://blog.eumji025.com/categories/java/"/>
+      <category term="java" scheme="http://www.eumji025.com/categories/java/"/>
     
     
-      <category term="properties" scheme="http://blog.eumji025.com/tags/properties/"/>
+      <category term="properties" scheme="http://www.eumji025.com/tags/properties/"/>
     
   </entry>
   
   <entry>
     <title>web开发常用注解</title>
-    <link href="http://blog.eumji025.com/2017/01/11/annotation/"/>
-    <id>http://blog.eumji025.com/2017/01/11/annotation/</id>
+    <link href="http://www.eumji025.com/2017/01/11/annotation/"/>
+    <id>http://www.eumji025.com/2017/01/11/annotation/</id>
     <published>2017-01-11T15:14:31.000Z</published>
     <updated>2017-02-26T02:32:51.210Z</updated>
     
@@ -129,21 +151,21 @@
     
     </summary>
     
-      <category term="java" scheme="http://blog.eumji025.com/categories/java/"/>
+      <category term="java" scheme="http://www.eumji025.com/categories/java/"/>
     
     
-      <category term="annotation" scheme="http://blog.eumji025.com/tags/annotation/"/>
+      <category term="annotation" scheme="http://www.eumji025.com/tags/annotation/"/>
     
-      <category term="java" scheme="http://blog.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>Idea-Maven项目的创建和部署</title>
-    <link href="http://blog.eumji025.com/2016/11/21/Idea-Maven%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E9%83%A8%E7%BD%B2/"/>
-    <id>http://blog.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/</id>
+    <link href="http://www.eumji025.com/2016/11/21/Idea-Maven%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E9%83%A8%E7%BD%B2/"/>
+    <id>http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/</id>
     <published>2016-11-21T12:12:40.000Z</published>
-    <updated>2018-01-01T09:01:56.947Z</updated>
+    <updated>2018-01-01T10:14:54.099Z</updated>
     
     <summary type="html">
     
@@ -151,17 +173,17 @@
     
     </summary>
     
-      <category term="工具专栏" scheme="http://blog.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
+      <category term="工具专栏" scheme="http://www.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Intellij Idea" scheme="http://blog.eumji025.com/tags/Intellij-Idea/"/>
+      <category term="Intellij Idea" scheme="http://www.eumji025.com/tags/Intellij-Idea/"/>
     
   </entry>
   
   <entry>
     <title>推荐的markdown编辑器</title>
-    <link href="http://blog.eumji025.com/2016/11/05/%E6%8E%A8%E8%8D%90%E7%9A%84markdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    <id>http://blog.eumji025.com/2016/11/05/推荐的markdown编辑器/</id>
+    <link href="http://www.eumji025.com/2016/11/05/%E6%8E%A8%E8%8D%90%E7%9A%84markdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    <id>http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/</id>
     <published>2016-11-05T01:26:54.000Z</published>
     <updated>2017-02-26T02:32:51.217Z</updated>
     
@@ -171,19 +193,19 @@
     
     </summary>
     
-      <category term="其他" scheme="http://blog.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="http://www.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="markdown" scheme="http://blog.eumji025.com/tags/markdown/"/>
+      <category term="markdown" scheme="http://www.eumji025.com/tags/markdown/"/>
     
-      <category term="写作" scheme="http://blog.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
+      <category term="写作" scheme="http://www.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
     
   </entry>
   
   <entry>
     <title>springMVC 几种页面跳转方式</title>
-    <link href="http://blog.eumji025.com/2016/10/28/springMVC-%E5%87%A0%E7%A7%8D%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E6%96%B9%E5%BC%8F/"/>
-    <id>http://blog.eumji025.com/2016/10/28/springMVC-几种页面跳转方式/</id>
+    <link href="http://www.eumji025.com/2016/10/28/springMVC-%E5%87%A0%E7%A7%8D%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E6%96%B9%E5%BC%8F/"/>
+    <id>http://www.eumji025.com/2016/10/28/springMVC-几种页面跳转方式/</id>
     <published>2016-10-28T04:45:00.000Z</published>
     <updated>2017-02-26T02:32:51.215Z</updated>
     
@@ -193,17 +215,17 @@
     
     </summary>
     
-      <category term="spring MVC" scheme="http://blog.eumji025.com/categories/spring-MVC/"/>
+      <category term="spring MVC" scheme="http://www.eumji025.com/categories/spring-MVC/"/>
     
     
-      <category term="spring MVC" scheme="http://blog.eumji025.com/tags/spring-MVC/"/>
+      <category term="spring MVC" scheme="http://www.eumji025.com/tags/spring-MVC/"/>
     
   </entry>
   
   <entry>
     <title>使用idea开发srpingMVC第一个Demo</title>
-    <link href="http://blog.eumji025.com/2016/10/28/%E4%BD%BF%E7%94%A8idea%E5%BC%80%E5%8F%91srpingMVC%E7%AC%AC%E4%B8%80%E4%B8%AADemo/"/>
-    <id>http://blog.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/</id>
+    <link href="http://www.eumji025.com/2016/10/28/%E4%BD%BF%E7%94%A8idea%E5%BC%80%E5%8F%91srpingMVC%E7%AC%AC%E4%B8%80%E4%B8%AADemo/"/>
+    <id>http://www.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/</id>
     <published>2016-10-28T04:24:48.000Z</published>
     <updated>2018-01-01T09:18:37.171Z</updated>
     
@@ -213,12 +235,12 @@
     
     </summary>
     
-      <category term="spring MVC" scheme="http://blog.eumji025.com/categories/spring-MVC/"/>
+      <category term="spring MVC" scheme="http://www.eumji025.com/categories/spring-MVC/"/>
     
     
-      <category term="springMVC" scheme="http://blog.eumji025.com/tags/springMVC/"/>
+      <category term="springMVC" scheme="http://www.eumji025.com/tags/springMVC/"/>
     
-      <category term="idea" scheme="http://blog.eumji025.com/tags/idea/"/>
+      <category term="idea" scheme="http://www.eumji025.com/tags/idea/"/>
     
   </entry>
   
