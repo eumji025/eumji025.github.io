@@ -5333,7 +5333,7 @@ pre code {
 }
 
 .sidebar {
-  background-color: #e6e9ea;
+  background-color: #f5f6f7;
 }
 
 .sidebar .slimContent {
@@ -5773,9 +5773,9 @@ body.no-sidebar .sidebar {
   border-top: 1px solid #FFFFFF;
   overflow: hidden;
 }
-
+/*开启toc*/
 .sidebar-toc.collapse {
-  display: none !important;
+  /*display: none !important;*/
 }
 
 .sidebar-toc.in {
