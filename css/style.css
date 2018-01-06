@@ -5554,7 +5554,10 @@ body.no-sidebar .sidebar {
 .bar .bar-inner:after {
   clear: both;
 }
-
+.bar .bar-left {
+  margin: 10px 0;
+  float: left;
+}
 .bar .bar-right {
   margin: 10px 0;
   float: right;
