@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-01-06T07:25:18.494Z</updated>
+  <updated>2018-01-12T05:39:49.756Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -17,15 +17,33 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>go-learn-material</title>
+    <link href="http://www.eumji025.com/2018/01/12/go-learn-material/"/>
+    <id>http://www.eumji025.com/2018/01/12/go-learn-material/</id>
+    <published>2018-01-12T05:36:18.000Z</published>
+    <updated>2018-01-12T05:39:49.756Z</updated>
+    
+    <summary type="html">
+    
+      本文主要介绍一些go语言学习的相关资料,希望在学习的路上减轻大家的负担,本文是一片装在文章,看到写的非常的充实,就申请转载了）
+    
+    </summary>
+    
+    
+      <category term="golang" scheme="http://www.eumji025.com/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HashMap源码分析</title>
     <link href="http://www.eumji025.com/2018/01/06/hashmap-analysis/"/>
     <id>http://www.eumji025.com/2018/01/06/hashmap-analysis/</id>
     <published>2018-01-06T03:06:50.000Z</published>
-    <updated>2018-01-06T07:25:18.494Z</updated>
+    <updated>2018-01-06T12:42:42.372Z</updated>
     
     <summary type="html">
     
-      hashmap是基于hash表的map的实现,使用key-value形式存储键值对，并允许使用 null 值和 null 键,但是key只能有一个为null. Map不保证映射的顺序，其内部是根据hash值去模运算去排列的。hashmap内部使用entry数组作为存储的介质.所以，如果迭代性能很重要，则不要将初始容量设置得太高（或将加载因子设置得太低）
+      hashmap是基于hash表的map的实现,使用key-value形式存储键值对，并允许使用 null 值和 null 键,但是key只能有一个为null. Map不保证映射的顺序，其内部是根据hash值去模运算去排列的。hashmap内部使用entry数组作为存储的介质.）
     
     </summary>
     
