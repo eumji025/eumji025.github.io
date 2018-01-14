@@ -1201,9 +1201,10 @@ fieldset[disabled] a.btn {
 }
 
 .btn-default {
+
   color: #333;
-  background-color: #fff;
-  border-color: #ccc;
+  background-color: #e6e6e6;
+  border-color: #adadad;
 }
 
 .btn-default:focus,
@@ -1214,9 +1215,9 @@ fieldset[disabled] a.btn {
 }
 
 .btn-default:hover {
-  color: #333;
-  background-color: #e6e6e6;
-  border-color: #adadad;
+  color: #f0f9f2;
+  background-color: #19c082;
+  border-color: #ccc;
 }
 
 .btn-default:active,
@@ -5653,7 +5654,17 @@ body.no-sidebar .sidebar {
 }
 
 .main .article-list article {
-  border-bottom: 1px solid #f6f6f6;
+  /*border-bottom: 1px solid #f6f6f6;*/
+  padding-bottom: 20px;
+  padding-left: 30px;
+  box-shadow: 4px 4px 18px rgba(0,0,0,0.46);
+  padding-right: 30px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+.main .article-list article h1 {
+  padding-top: 10px;
 }
 
 .main .article-list article:last-child {
@@ -8487,7 +8498,7 @@ body.okayNav-loaded {
     overflow: hidden;
 }
 .widget-body.tagcloud {
-  background-color: #e6e9ea;
+  /*background-color: #e6e9ea;*/
 }
 /*修改sidebar背景色=========end*/
 /*阅读按钮的样式*/
