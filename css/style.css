@@ -5909,6 +5909,11 @@ body.no-sidebar .sidebar {
   margin-bottom: 20px;
 }
 
+.article-description p {
+    margin: 0 0 1.234em;
+    font-size: 16px;
+}
+
 /**
  * collection
  */
@@ -5934,7 +5939,8 @@ body.no-sidebar .sidebar {
 }
 
 .article-list .article-title {
-  font-size: 18px;
+  font-size: 21px;
+  color: #33a55e;
 }
 
 .article-toc .toc-title {
