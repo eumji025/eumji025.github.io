@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-01-12T06:09:19.312Z</updated>
+  <updated>2018-01-18T13:59:35.617Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>AbstractQueuedSynchronizer-analysis</title>
+    <link href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
+    <id>http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
+    <published>2018-01-18T13:56:36.000Z</published>
+    <updated>2018-01-18T13:59:35.617Z</updated>
+    
+    <summary type="html">
+    
+      AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态的大多数同步器的一个有用基础。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>Go 初学者成长之路</title>
@@ -268,9 +288,9 @@
       <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
-    
       <category term="Intellij Idea" scheme="http://www.eumji025.com/tags/Intellij-Idea/"/>
+    
+      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
     
   </entry>
   
