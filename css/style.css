@@ -250,13 +250,13 @@ th {
 }
 
 .markdown-body table thead tr th,.markdown-body table thead tr td,.markdown-body table tbody tr th,.markdown-body table tbody tr td {
-    border: 1px solid #d6d6d6;
-    padding: 6px 13px;
+    /*border: 1px solid #d6d6d6;*/
+    /*padding: 6px 10px;*/
     font-size: 14px;
 
     line-height: 22px;
     word-break: break-all;
-    border: 1px solid #ddd
+    /*border: 1px solid #ddd*/
 }
 
 .markdown-body table thead tr td {

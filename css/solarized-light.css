@@ -34,7 +34,7 @@
 .markdown-body .highlight {
   background: #f8f8f8;
   margin: 15px 0;
-  padding: 15px 20px;
+  padding: 40px 12px 10px 10px;
   border-style: solid;
   border-color: #eef1f8;
   border-width: 1px 0;
@@ -76,13 +76,13 @@
   padding: 0;
 }*/
 .markdown-body table {
-    width: 100%;
+    /*width: 100%;
     margin: 0 24px 24px 24px;
     max-width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     border: 1px solid #ddd;
-    background-color: #fff
+    background-color: #fff*/
 }
 
 .markdown-body table thead tr th,.markdown-body table thead tr td {
