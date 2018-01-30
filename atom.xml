@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-01-21T11:30:37.452Z</updated>
+  <updated>2018-01-28T05:28:34.639Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -21,11 +21,11 @@
     <link href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
     <id>http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
     <published>2018-01-18T13:56:36.000Z</published>
-    <updated>2018-01-21T11:30:37.452Z</updated>
+    <updated>2018-01-28T05:28:34.639Z</updated>
     
     <summary type="html">
     
-      AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态的大多数同步器的一个有用基础。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
+      AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
     
     </summary>
     

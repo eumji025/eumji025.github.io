@@ -5653,6 +5653,12 @@ body.no-sidebar .sidebar {
   padding: 2px 20px;
 }
 
+@media {
+  .content.article-list {
+    padding: 2px 0px;
+  }
+}
+
 .main .article-list article {
   /*border-bottom: 1px solid #f6f6f6;*/
   padding-bottom: 20px;
