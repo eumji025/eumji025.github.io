@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-01-28T05:28:34.639Z</updated>
+  <updated>2018-02-01T00:44:26.771Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>不得不懂的线程池 - ThreadPoolExecutor</title>
+    <link href="http://www.eumji025.com/2018/02/01/threadPool-analysis/"/>
+    <id>http://www.eumji025.com/2018/02/01/threadPool-analysis/</id>
+    <published>2018-02-01T00:41:37.000Z</published>
+    <updated>2018-02-01T00:44:26.771Z</updated>
+    
+    <summary type="html">
+    
+      线程池的诞生于JDK1.5，主要的目的是解决我们在使用线程的时候通常都是重复的创建和销毁，为了让线程能够得到复用，避免我们重复的创建和销毁，提高我们的效率，降低内存的开销。
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>AbstractQueuedSynchronizer源码分析</title>
