@@ -287,7 +287,7 @@ html {
 
 body {
   font-family: "PingHei","PingFang SC",Helvetica Neue,"Work Sans","Hiragino Sans GB","Microsoft YaHei",SimSun,sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.42857;
   color: #333333;
   background-color: #fff;
@@ -5250,7 +5250,7 @@ pre,
   margin: 10px 0;
   padding: 15px 10px;
   overflow: auto;
-  font-size: 13px;
+  font-size: 15px;
   color: #4d4d4c;
   line-height: 1.5;
 }
@@ -6012,8 +6012,23 @@ body.no-sidebar .sidebar {
 
 .markdown-body ul,
 .markdown-body ol {
-  padding-left: 0;
+  /*padding-left: 0;*/
   margin-left: 10px;
+}
+
+.markdown-body ol li{
+  /*padding-left: 0;*/
+  display: flow-root;
+}
+
+.markdown-body ol li:before {
+  list-style: none;
+  content: '\f006';
+  font-family: 'FontAwesome';
+  float: left;
+  line-height: 1.5;
+  margin-left: -1.5em;
+  color: #34b335;
 }
 
 /*
