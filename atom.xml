@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-05T10:20:08.091Z</updated>
+  <updated>2018-02-06T12:05:53.594Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -17,16 +17,22 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://www.eumji025.com/2018/02/05/futureTask-analysis/"/>
-    <id>http://www.eumji025.com/2018/02/05/futureTask-analysis/</id>
-    <published>2018-02-05T10:20:08.091Z</published>
-    <updated>2018-02-05T10:20:08.091Z</updated>
+    <title>动态代理及Proxy源码分析</title>
+    <link href="http://www.eumji025.com/2018/02/06/futureTask-analysis/"/>
+    <id>http://www.eumji025.com/2018/02/06/futureTask-analysis/</id>
+    <published>2018-02-06T05:23:46.000Z</published>
+    <updated>2018-02-06T12:05:53.594Z</updated>
     
     <summary type="html">
     
+      FutureTask是一种支持取消的异步任务包装类，也就是说FutureTask执行的时候不立即返回结果，自己可以通过异步调用get方法获取结果，也可以中途调用cancel方法取消任务。而且必须要知道的就是FutureTask只是任务的包装类，并不是真正的任务类
+    
     </summary>
     
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
     
   </entry>
   

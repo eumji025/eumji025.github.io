@@ -4,15 +4,20 @@
 
     
   <url>
-    <loc>http://www.eumji025.com/2018/02/05/futureTask-analysis/</loc>
-    <lastmod>2018-02-05T10:20:08.091Z</lastmod>
+    <loc>http://www.eumji025.com/2018/02/06/futureTask-analysis/</loc>
+    <lastmod>2018-02-06T12:05:53.594Z</lastmod>
     <data>
         <display>
-        <title></title>
-        <pubTime>2018-02-05T10:20:08.091Z</pubTime>
+        <title>动态代理及Proxy源码分析</title>
+        <pubTime>2018-02-06T05:23:46.000Z</pubTime>
         
+        <tag>java</tag>
+         
          
            
+             
+              <breadCrumb title="Java基础" url="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+          
         </display>
     </data>
     </url>
