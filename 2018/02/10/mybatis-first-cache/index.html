@@ -18,18 +18,19 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>EumJi博客</title>
-  <meta name="description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+  <title>你不一定知道的mybatis缓存坑 | EumJi博客</title>
+  <meta name="description" content="本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="你不一定知道的mybatis缓存坑">
 <meta property="og:url" content="http://www.eumji025.com/2018/02/10/mybatis-first-cache/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+<meta property="og:description" content="本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-10T15:32:27.607Z">
+<meta property="og:updated_time" content="2018-02-10T15:33:57.103Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+<meta name="twitter:title" content="你不一定知道的mybatis缓存坑">
+<meta name="twitter:description" content="本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
   <link rel="canonical" href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/index.html">
@@ -242,7 +243,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
  -->
@@ -279,10 +280,10 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/02/10/mybatis-first-cache/" class="title">(no title)</a>
+                <a href="/2018/02/10/mybatis-first-cache/" class="title">你不一定知道的mybatis缓存坑</a>
               </p>
               <p class="item-date">
-                <time datetime="2018-02-10T15:32:27.607Z" itemprop="datePublished">2018-02-10</time>
+                <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
               </p>
             </div>
           </li>
@@ -366,22 +367,35 @@
     
     <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      你不一定知道的mybatis缓存坑
+    </h1>
+  
+
+      
       <div class="article-meta">
         <span class="article-date">
     <i class="fa fa-calendar-check-o"></i>
 	<a href="/2018/02/10/mybatis-first-cache/" class="article-date">
-	  <time datetime="2018-02-10T15:32:27.607Z" itemprop="datePublished">2018-02-10</time>
+	  <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
 	</a>
 </span>
         
         
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/java/">java</a>
+  </span>
+
 
         
 
         <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/02/10/mybatis-first-cache/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,716(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,631(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
@@ -393,12 +407,7 @@
     </div>
     <div class="article-entry markdown-body" itemprop="articleBody">
       
-        <hr>
-<p>title: 你不一定知道的mybatis缓存坑<br>date: 2018-02-10 23:30:30</p>
-<ul>
-<li>java<br>categorys: Java基础<br>description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2></li>
-</ul>
-<p>之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候是会进行缓存的，那时候没有具体分析，今天刚好看到讨论缓存的问题，于是也自己重新实验分析了一下，到此总结一波。</p>
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候是会进行缓存的，那时候没有具体分析，今天刚好看到讨论缓存的问题，于是也自己重新实验分析了一下，到此总结一波。</p>
 <p>同时我相信大家也都知道mybatis有一级和二级缓存，一级缓存是针对SqlSession的，也就是每一个SqlSession都会有自己的一级缓存。二级缓存则是针对此次服务的。</p>
 <h2 id="小案例"><a href="#小案例" class="headerlink" title="小案例"></a>小案例</h2><p>首先来一个一级缓存的案例来实验一下，本文中使用了spring boot + mybatis的方式，这个环境很容易搭建，我们就不一一介绍了，直接上执行的测试代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sqlsessionDemo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession();<span class="comment">//defaultSqlSession</span></span><br><span class="line">    DateMapper mapper = sqlSession.getMapper(DateMapper.class);</span><br><span class="line">    UserInfo user = mapper.getUser(<span class="number">1</span>);</span><br><span class="line">    UserInfo user2 = mapper.getUser(<span class="number">1</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -462,7 +471,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/" title="" target="_blank" rel="external">http://www.eumji025.com/2018/02/10/mybatis-first-cache/</a>
+      <a href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/" title="你不一定知道的mybatis缓存坑" target="_blank" rel="external">http://www.eumji025.com/2018/02/10/mybatis-first-cache/</a>
     </li>
     
     <li class="post-copyright-license">
