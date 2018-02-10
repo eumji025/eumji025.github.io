@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>EumJi博客</title>
+  <meta name="description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.eumji025.com/2018/02/10/mybatis-first-cache/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-10T15:32:27.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="title: 你不一定知道的mybatis缓存坑date: 2018-02-10 23:30:30  javacategorys: Java基础description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”简介  之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/person.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于hexo-theme-pure主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。本人停用个人所做的博客是因为，使用服务器速度太慢了，近期也很忙没时间打理。以后有时间在进行重新使用。现在暂时用hexo静态博客。 <br><br> 本人目前从事于Java Web方向，也不是什么厉害角色，很多事情都是凭借着兴趣来做的。
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.67px;">Intellij Idea</a> <a href="/tags/Spring-MVC/" style="font-size: 14.67px;">Spring MVC</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/spring-boot/" style="font-size: 15.33px;">spring-boot</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/10/mybatis-first-cache/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-10T15:32:27.607Z" itemprop="datePublished">2018-02-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/06/futureTask-analysis/" class="title">FutureTask源码实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-06T05:23:46.000Z" itemprop="datePublished">2018-02-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/01/threadPool-analysis/" class="title">不得不懂的线程池 - ThreadPoolExecutor</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-01T00:41:37.000Z" itemprop="datePublished">2018-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/01/18/AbstractQueuedSynchronizer-analysis/" class="title">AbstractQueuedSynchronizer源码分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-01-18T13:56:36.000Z" itemprop="datePublished">2018-01-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/01/12/go-learn-material/" class="title">Go 初学者成长之路</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-01-12T05:36:18.000Z" itemprop="datePublished">2018-01-12</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小案例"><span class="toc-number">2.</span> <span class="toc-text">小案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">3.</span> <span class="toc-text">解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BaseExecutor执行"><span class="toc-number">3.1.</span> <span class="toc-text">BaseExecutor执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库查询"><span class="toc-number">3.2.</span> <span class="toc-text">数据库查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flushCache测试"><span class="toc-number">3.3.</span> <span class="toc-text">flushCache测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#localCacheScope测试"><span class="toc-number">3.4.</span> <span class="toc-text">localCacheScope测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#但是需要知道的"><span class="toc-number">4.</span> <span class="toc-text">但是需要知道的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mybatis-first-cache" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/02/10/mybatis-first-cache/" class="article-date">
+	  <time datetime="2018-02-10T15:32:27.607Z" itemprop="datePublished">2018-02-10</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/02/10/mybatis-first-cache/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,716(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <hr>
+<p>title: 你不一定知道的mybatis缓存坑<br>date: 2018-02-10 23:30:30</p>
+<ul>
+<li>java<br>categorys: Java基础<br>description: “本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会”<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2></li>
+</ul>
+<p>之前在做mybatis的源码总体预览的时候就发现mybatis在执行sql的时候是会进行缓存的，那时候没有具体分析，今天刚好看到讨论缓存的问题，于是也自己重新实验分析了一下，到此总结一波。</p>
+<p>同时我相信大家也都知道mybatis有一级和二级缓存，一级缓存是针对SqlSession的，也就是每一个SqlSession都会有自己的一级缓存。二级缓存则是针对此次服务的。</p>
+<h2 id="小案例"><a href="#小案例" class="headerlink" title="小案例"></a>小案例</h2><p>首先来一个一级缓存的案例来实验一下，本文中使用了spring boot + mybatis的方式，这个环境很容易搭建，我们就不一一介绍了，直接上执行的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sqlsessionDemo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession();<span class="comment">//defaultSqlSession</span></span><br><span class="line">    DateMapper mapper = sqlSession.getMapper(DateMapper.class);</span><br><span class="line">    UserInfo user = mapper.getUser(<span class="number">1</span>);</span><br><span class="line">    UserInfo user2 = mapper.getUser(<span class="number">1</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们不需要配置缓存，因为一级缓存默认是开启的，此时我们执行这个junit测试方法，可以想象一下结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">28</span>:<span class="number">12.072</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt;  Preparing: select * from user_info where id = ?</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">28</span>:<span class="number">12.088</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt; Parameters: <span class="number">1</span>(Integer)</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">28</span>:<span class="number">12.096</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| &lt;==      Total: <span class="number">1</span></span><br><span class="line">UserInfo&#123;id=<span class="number">1</span>, name=<span class="string">'zhangsan'</span>, birthday=<span class="number">1994</span>-<span class="number">06</span>-<span class="number">18</span>T12:<span class="number">12</span>:<span class="number">12</span>, age=<span class="number">18</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>从日志中就可以看出，只查询了一次数据库。产生这样的原因肯定是因为缓存生效了。因为一个他们处于同一个sqlSession中。</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>现在我们从源码的执行上看一下具体是怎么回事。</p>
+<h3 id="BaseExecutor执行"><a href="#BaseExecutor执行" class="headerlink" title="BaseExecutor执行"></a>BaseExecutor执行</h3><p>以查询方法为例，首先看一下BaseExecutor代码上的实现（默认添加的情况下，sqlSession会将executor设置为SimpleExecutor，是BaseExecutor的实现类，目前的代码只涉及到BaseExecutor，所以此处就直接将的是BaseExecutor类的query方法）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    ErrorContext.instance().resource(ms.getResource()).activity(<span class="string">"executing a query"</span>).object(ms.getId());</span><br><span class="line">    <span class="keyword">if</span> (closed) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> ExecutorException(<span class="string">"Executor was closed."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (queryStack == <span class="number">0</span> &amp;&amp; ms.isFlushCacheRequired()) &#123; <span class="comment">//如果配置了flushCacheRequired，则情况缓存</span></span><br><span class="line">      clearLocalCache();</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;E&gt; list;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      queryStack++;</span><br><span class="line">      list = resultHandler == <span class="keyword">null</span> ? (List&lt;E&gt;) localCache.getObject(key) : <span class="keyword">null</span>; <span class="comment">//查询缓存</span></span><br><span class="line">      <span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123; <span class="comment">//存在就直接拿</span></span><br><span class="line">        handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123; <span class="comment">//不存在则从数据库中拿</span></span><br><span class="line">        list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      queryStack--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (queryStack == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">for</span> (DeferredLoad deferredLoad : deferredLoads) &#123;</span><br><span class="line">        deferredLoad.load();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// issue #601</span></span><br><span class="line">      deferredLoads.clear(); <span class="comment">//假如LocalCacheScope处于STATEMENT，则清空缓存</span></span><br><span class="line">      <span class="keyword">if</span> (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) &#123;</span><br><span class="line">        <span class="comment">// issue #482</span></span><br><span class="line">        clearLocalCache();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>本方法的逻辑其实很简单，主要包括一下几点</p>
+<p>1.判断是否配置了flushCache，如果配置了就需要每次都清空缓存（这个配置位于mapper的具体语句中）。</p>
+<p>2.如果没开启，则判断是否缓存中存在结果，如存在直接获取，不存在直接从数据库中获取，并保存到数据库。</p>
+<p>3.最后判断LocalCacheScope的状态确定是否需要清空缓存（mybatis的配置文件中）。</p>
+<h3 id="数据库查询"><a href="#数据库查询" class="headerlink" title="数据库查询"></a>数据库查询</h3><p>然后我们看一下是如何从数据库中获取的情况，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">queryFromDatabase</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">  List&lt;E&gt; list;</span><br><span class="line">  localCache.putObject(key, EXECUTION_PLACEHOLDER); <span class="comment">//占位</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql); <span class="comment">//后续暂时就不关注了</span></span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    localCache.removeObject(key); <span class="comment">//移除占位</span></span><br><span class="line">  &#125;</span><br><span class="line">  localCache.putObject(key, list); <span class="comment">//缓存列表</span></span><br><span class="line">  <span class="keyword">if</span> (ms.getStatementType() == StatementType.CALLABLE) &#123; <span class="comment">//这里我们不关心，没用到callable</span></span><br><span class="line">    localOutputParameterCache.putObject(key, parameter);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出整体上还是很简单的，接下来我们验证上面另外两种情况下，缓存是否是真的被清除。</p>
+<h3 id="flushCache测试"><a href="#flushCache测试" class="headerlink" title="flushCache测试"></a>flushCache测试</h3><p>首先测试在mapper中加入flushCache参数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"getUser"</span> flushCache=<span class="string">"true"</span> resultType=<span class="string">"userinfo"</span>&gt;</span><br><span class="line">    select * from user_info where id = #&#123;id&#125;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<p>再次执行我们的测试方法，查看结果如下，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.504</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt;  Preparing: select * from user_info where id = ?</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.519</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt; Parameters: <span class="number">1</span>(Integer)</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.528</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| &lt;==      Total: <span class="number">1</span></span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.528</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt;  Preparing: select * from user_info where id = ?</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.529</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| ==&gt; Parameters: <span class="number">1</span>(Integer)</span><br><span class="line"><span class="number">2018</span>-<span class="number">02</span>-<span class="number">08</span> <span class="number">21</span>:<span class="number">50</span>:<span class="number">18.529</span> |-DEBUG [main] com.eumji.date.mapper.DateMapper.getUser [<span class="number">159</span>] -| &lt;==      Total: <span class="number">1</span></span><br><span class="line">  UserInfo&#123;id=<span class="number">1</span>, name=<span class="string">'zhangsan'</span>, birthday=<span class="number">1994</span>-<span class="number">06</span>-<span class="number">18</span>T12:<span class="number">12</span>:<span class="number">12</span>, age=<span class="number">18</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出缓存确实失效了，查询了两次。</p>
+<h3 id="localCacheScope测试"><a href="#localCacheScope测试" class="headerlink" title="localCacheScope测试"></a>localCacheScope测试</h3><p>然后我们测试另外一种方式，在mybatis-conf.xml的配置文件中加入如下语句</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;setting name=<span class="string">"localCacheScope"</span> value=<span class="string">"STATEMENT"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>结果就会和上面的一样，都会让缓存失效，说明两次请求不是同一个statement。具体可以在simpleExecutor中看出。（因为默认配置下是使用simpleExecutor）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">doQuery</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">  Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    Configuration configuration = ms.getConfiguration();</span><br><span class="line">    StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql); <span class="comment">//打开一个statement</span></span><br><span class="line">    stmt = prepareStatement(handler, ms.getStatementLog());</span><br><span class="line">    <span class="keyword">return</span> handler.&lt;E&gt;query(stmt, resultHandler);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    closeStatement(stmt); <span class="comment">//关闭</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每次语句执行都是会新创建一个statement的，所以都验证了上面的观点是正确的。</p>
+<h2 id="但是需要知道的"><a href="#但是需要知道的" class="headerlink" title="但是需要知道的"></a>但是需要知道的</h2><p>但是我们通常情况下我们都是不会用上面的方式来操作mybatis的，因为我们会和spring结合使用。那么我们通常的使用套路则会如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> DateMapper dateMapper;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> UserInfo <span class="title">getUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">    UserInfo userInfo = dateMapper.getUser(id);</span><br><span class="line">    UserInfo userInfo2 = dateMapper.getUser(id);</span><br><span class="line">    <span class="keyword">return</span> userInfo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么猜一下，这样的语句在最初的什么都不配置的情况下会查询几次呢？</p>
+<p>恭喜您，答案就是<strong>2次</strong>。</p>
+<p>不吹不黑，至于为什么是这样呢，刚开始我也觉得不可思议，为什么呢，看起来我们好像是在同一个SqlSession中，但是残酷的事实告诉我不是。。。（我自己开始也忘记了这么回事，哈哈）</p>
+<p>具体为什么?我们一起看一看，spring是怎么注入mapper信息的，这里我们就需要使用到MapperRegistry.addMapper方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">addMapper</span><span class="params">(Class&lt;T&gt; type)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (type.isInterface()) &#123;</span><br><span class="line">      <span class="keyword">if</span> (hasMapper(type)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Type "</span> + type + <span class="string">" is already known to the MapperRegistry."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">boolean</span> loadCompleted = <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        knownMappers.put(type, <span class="keyword">new</span> MapperProxyFactory&lt;T&gt;(type));</span><br><span class="line">        MapperAnnotationBuilder parser = <span class="keyword">new</span> MapperAnnotationBuilder(config, type);</span><br><span class="line">        parser.parse();</span><br><span class="line">        loadCompleted = <span class="keyword">true</span>;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!loadCompleted) &#123;</span><br><span class="line">          knownMappers.remove(type);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>从上述可以看到，addMapper是以class为key，MapperProxyFactory为value记录mapper工厂，而获取mapper则是通过同类中的另外一个方法getMapper。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getMapper</span><span class="params">(Class&lt;T&gt; type, SqlSession sqlSession)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> MapperProxyFactory&lt;T&gt; mapperProxyFactory = (MapperProxyFactory&lt;T&gt;) knownMappers.get(type); <span class="comment">//通过key获取factory</span></span><br><span class="line">  <span class="keyword">if</span> (mapperProxyFactory == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Type "</span> + type + <span class="string">" is not known to the MapperRegistry."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> mapperProxyFactory.newInstance(sqlSession); <span class="comment">//然后构造代理类</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Error getting mapper instance. Cause: "</span> + e, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getMapper方法通过之前设置的工厂类构造出mapperProxy对象。这里的SqlSession指的是SqlSessionTemplate。并且SqlSessionTemplate初始化的时候还构造了一个sqlSessionProxy代理类指向SqlSessionInterceptor。记住这个类后面有用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SqlSessionTemplate</span><span class="params">(SqlSessionFactory sqlSessionFactory, ExecutorType executorType,</span></span></span><br><span class="line"><span class="function"><span class="params">      PersistenceExceptionTranslator exceptionTranslator)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    notNull(sqlSessionFactory, <span class="string">"Property 'sqlSessionFactory' is required"</span>);</span><br><span class="line">    notNull(executorType, <span class="string">"Property 'executorType' is required"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.sqlSessionFactory = sqlSessionFactory;</span><br><span class="line">    <span class="keyword">this</span>.executorType = executorType;</span><br><span class="line">    <span class="keyword">this</span>.exceptionTranslator = exceptionTranslator;</span><br><span class="line">    <span class="keyword">this</span>.sqlSessionProxy = (SqlSession) newProxyInstance(</span><br><span class="line">        SqlSessionFactory.class.getClassLoader(),</span><br><span class="line">        <span class="keyword">new</span> Class[] &#123; SqlSession.class &#125;,</span><br><span class="line">        <span class="keyword">new</span> SqlSessionInterceptor());</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>至于为什么会加载SqlSessionTemplate，这个问题还需要研究spring的加载过程，这里不细讲了。</p>
+<p>我们接着看具体的MapperProxy初始化方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">newInstance</span><span class="params">(SqlSession sqlSession)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> MapperProxy&lt;T&gt; mapperProxy = <span class="keyword">new</span> MapperProxy&lt;T&gt;(sqlSession, mapperInterface, methodCache);</span><br><span class="line">  <span class="keyword">return</span> newInstance(mapperProxy);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MapperProxy</span><span class="params">(SqlSession sqlSession, Class&lt;T&gt; mapperInterface, Map&lt;Method, MapperMethod&gt; methodCache)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.sqlSession = sqlSession; <span class="comment">//所以这里的sqlSession是SqlSessionTemplate</span></span><br><span class="line">  <span class="keyword">this</span>.mapperInterface = mapperInterface;</span><br><span class="line">  <span class="keyword">this</span>.methodCache = methodCache;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里我们应该明白了mybatis中mapper代理类的初始化过程了，说这么多就是为了这个SqlSessionTemplate的实例化。</p>
+<p>那我们接着看具体的执行过程，因为被代理，所以所有的调用通过都会通过mapperProxy的invoke方法执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">final</span> MapperMethod mapperMethod = cachedMapperMethod(method);</span><br><span class="line">    <span class="keyword">return</span> mapperMethod.execute(sqlSession, args);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//根据mapper的方法类型选择合适的执行方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">execute</span><span class="params">(SqlSession sqlSession, Object[] args)</span> </span>&#123;</span><br><span class="line">    Object result;</span><br><span class="line">    <span class="keyword">switch</span> (command.getType()) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> SELECT:</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">          Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">          result = sqlSession.selectOne(command.getName(), param);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>此处省略了很多代码，然根据我们在mapper.xml配置的方法选择合适的语句进行执行，因为我们这里是查询一条，所以应该是执行selectOne方法，但需要注意这里的sqlSession.selectOne是sqlSessionTemplate.selectOne方法，接着看在sqlSessionTemplate中干了什么。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">selectOne</span><span class="params">(String statement, Object parameter)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sqlSessionProxy.&lt;T&gt; selectOne(statement, parameter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处出现了上面我们让记住的sqlSessionProxy，我们上文中提到是指向SqlSessionInterceptor类，所以接下来会到达SqlSessionTemplate内的内部类SqlSessionInterceptor的invoke方法中，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    SqlSession sqlSession = getSqlSession(</span><br><span class="line">        SqlSessionTemplate.<span class="keyword">this</span>.sqlSessionFactory,</span><br><span class="line">        SqlSessionTemplate.<span class="keyword">this</span>.executorType,</span><br><span class="line">        SqlSessionTemplate.<span class="keyword">this</span>.exceptionTranslator);</span><br><span class="line">    Object result = method.invoke(sqlSession, args); <span class="comment">//执行方法</span></span><br><span class="line">     ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSqlSession</span><span class="params">(SqlSessionFactory sessionFactory, ExecutorType executorType, PersistenceExceptionTranslator exceptionTranslator)</span> </span>&#123;</span><br><span class="line">    ....</span><br><span class="line">    session = sessionFactory.openSession(executorType);</span><br><span class="line"></span><br><span class="line">    registerSessionHolder(sessionFactory, executorType, exceptionTranslator, session);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> session;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>我们从这里就可以看到这里就会新打开了一个sqlSession，而后面的执行逻辑其实都是通过生成的sqlSession去执行的，所以根本不可能在同一个sqlSession中，也自然使得缓存失效。</p>
+<p>当然我们这里省略了很多的逻辑哈，想更加深入的了解还是需要自己去看代码。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文本来打算一级缓存和二级缓存一起讲，但是为了篇幅精简一些所以到此为止。通过本文的分析也算是对于mybatis一级缓存有了更为深刻的理解。</p>
+<p>反正个人之前确实没太注意和spring整合的mybatis内部实现，借此机会好好验证了一下自己的想法以及回忆起了mybatis的更多知识点。工作中确实忽略或遗忘了其实现的原理。</p>
+<p>当然mybatis中还有很多知识点值得去关注，也许我们平时不一定能用到，但是弄懂了肯定会事半功倍。</p>
+<p>本文纯属个人的一些见解，如有存在纰漏和表示不当的地方，欢迎指正</p>
+<p>与君共勉！！！！</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/" title="" target="_blank" rel="external">http://www.eumji025.com/2018/02/10/mybatis-first-cache/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/02/10/mybatis-first-cache/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/02/06/futureTask-analysis/" title="FutureTask源码实现">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>
