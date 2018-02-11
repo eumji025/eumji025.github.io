@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-11T12:00:26.516Z</updated>
+  <updated>2018-02-11T12:10:57.971Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -21,12 +21,11 @@
     <link href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/"/>
     <id>http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</id>
     <published>2018-02-11T11:58:18.000Z</published>
-    <updated>2018-02-11T12:00:26.516Z</updated>
+    <updated>2018-02-11T12:10:57.971Z</updated>
     
     <summary type="html">
     
-      为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock.
-lock改善了很多同步上的性能问题,而且有非常灵活的API
+      为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API
     
     </summary>
     
