@@ -337,9 +337,12 @@ pre .xml .cdata {
 {
     color:#4094c7
 }
-.markdown-body figure,.markdown-body pre,.markdown-body code,.markdown-body tr,.markdown-body table,.markdown-body tbody,.markdown-body table td
+.markdown-body figure,.markdown-body pre,.markdown-body tr,.markdown-body table,.markdown-body tbody,.markdown-body table td
 {
     background-color:#f8f8f8;
+}
+.markdown-body code {
+  background-color:#dff6f9;
 }
 .night-mode figure,.night-mode pre,.night-mode code,.night-mode blockquote,.night-mode tr,.night-mode table,.night-mode tbody,.night-mode table td
 {

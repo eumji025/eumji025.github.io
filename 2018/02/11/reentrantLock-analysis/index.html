@@ -18,19 +18,19 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>reentrantLock-analysis | EumJi博客</title>
+  <title>独占锁ReentrantLock分析 | EumJi博客</title>
   <meta name="description" content="为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="reentrantLock-analysis">
+<meta property="og:title" content="独占锁ReentrantLock分析">
 <meta property="og:url" content="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/2018/1/9%E9%80%89%E5%8C%BA_007.png">
-<meta property="og:updated_time" content="2018-02-11T11:59:16.964Z">
+<meta property="og:updated_time" content="2018-02-11T12:00:26.516Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="reentrantLock-analysis">
+<meta name="twitter:title" content="独占锁ReentrantLock分析">
 <meta name="twitter:description" content="为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API">
 <meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/2018/1/9%E9%80%89%E5%8C%BA_007.png">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
@@ -282,7 +282,7 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/02/11/reentrantLock-analysis/" class="title">reentrantLock-analysis</a>
+                <a href="/2018/02/11/reentrantLock-analysis/" class="title">独占锁ReentrantLock分析</a>
               </p>
               <p class="item-date">
                 <time datetime="2018-02-11T11:58:18.000Z" itemprop="datePublished">2018-02-11</time>
@@ -372,7 +372,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      reentrantLock-analysis
+      独占锁ReentrantLock分析
     </h1>
   
 
@@ -478,7 +478,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/" title="reentrantLock-analysis" target="_blank" rel="external">http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</a>
+      <a href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/" title="独占锁ReentrantLock分析" target="_blank" rel="external">http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</a>
     </li>
     
     <li class="post-copyright-license">
