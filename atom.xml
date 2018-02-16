@@ -53,17 +53,19 @@
   </entry>
   
   <entry>
-    <title>你不一定知道的mybatis缓存坑</title>
+    <title>深入理解Mybatis一级缓存</title>
     <link href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/"/>
     <id>http://www.eumji025.com/2018/02/10/mybatis-first-cache/</id>
     <published>2018-02-10T15:30:30.000Z</published>
-    <updated>2018-02-16T03:30:54.567Z</updated>
+    <updated>2018-02-16T03:35:54.465Z</updated>
     
     <summary type="html">
     
       本文主要通过实例的方式解决自己心中对于mybatis一级缓存得疑惑，也通过源码追踪的方式最终验证这些问题产生的原因，非常的值得我们去领会
     
     </summary>
+    
+      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
       <category term="Mybatis缓存" scheme="http://www.eumji025.com/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
@@ -153,13 +155,15 @@
     <link href="http://www.eumji025.com/2018/01/06/hashmap-analysis/"/>
     <id>http://www.eumji025.com/2018/01/06/hashmap-analysis/</id>
     <published>2018-01-06T03:06:50.000Z</published>
-    <updated>2018-01-21T11:29:56.441Z</updated>
+    <updated>2018-02-16T03:35:15.774Z</updated>
     
     <summary type="html">
     
       HashMap是基于hash表的map的实现,使用key-value形式存储键值对，并允许使用 null 值和 null 键,但是key只能有一个为null. Map不保证映射的顺序，其内部是根据hash值去模运算去排列的。HashMap内部使用entry数组作为存储的介质.）
     
     </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
       <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
