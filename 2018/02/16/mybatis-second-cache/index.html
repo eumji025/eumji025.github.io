@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>mybatis-second-cache | EumJi博客</title>
+  <meta name="description" content="本文同一个实例展示mybatis集成redis做二级缓存，并从源码的解读解析了整个流程，了解其工作原理">
+<meta name="keywords" content="Mybatis缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mybatis-second-cache">
+<meta property="og:url" content="http://www.eumji025.com/2018/02/16/mybatis-second-cache/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文同一个实例展示mybatis集成redis做二级缓存，并从源码的解读解析了整个流程，了解其工作原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.eumji025.com/18-2-14/71496990.jpg">
+<meta property="og:updated_time" content="2018-02-16T03:32:01.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mybatis-second-cache">
+<meta name="twitter:description" content="本文同一个实例展示mybatis集成redis做二级缓存，并从源码的解读解析了整个流程，了解其工作原理">
+<meta name="twitter:image" content="http://image.eumji025.com/18-2-14/71496990.jpg">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/02/16/mybatis-second-cache/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/person.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于hexo-theme-pure主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。本人停用个人所做的博客是因为，使用服务器速度太慢了，近期也很忙没时间打理。以后有时间在进行重新使用。现在暂时用hexo静态博客。 <br><br> 本人目前从事于Java Web方向，也不是什么厉害角色，很多事情都是凭借着兴趣来做的。
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.67px;">Intellij Idea</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.67px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 14.67px;">Spring MVC</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/spring-boot/" style="font-size: 15.33px;">spring-boot</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/16/mybatis-second-cache/" class="title">mybatis-second-cache</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-16T03:29:18.000Z" itemprop="datePublished">2018-02-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/11/reentrantLock-analysis/" class="title">独占锁ReentrantLock分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-11T11:58:18.000Z" itemprop="datePublished">2018-02-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/10/mybatis-first-cache/" class="title">你不一定知道的mybatis缓存坑</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/06/futureTask-analysis/" class="title">FutureTask源码实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-06T05:23:46.000Z" itemprop="datePublished">2018-02-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/01/threadPool-analysis/" class="title">不得不懂的线程池 - ThreadPoolExecutor</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-01T00:41:37.000Z" itemprop="datePublished">2018-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义缓存"><span class="toc-number">2.</span> <span class="toc-text">自定义缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存初始化"><span class="toc-number">2.1.</span> <span class="toc-text">缓存初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用缓存"><span class="toc-number">2.2.</span> <span class="toc-text">使用缓存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">4.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mybatis-second-cache" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mybatis-second-cache
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/02/16/mybatis-second-cache/" class="article-date">
+	  <time datetime="2018-02-16T03:29:18.000Z" itemprop="datePublished">2018-02-16</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Mybatis缓存/">Mybatis缓存</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/02/16/mybatis-second-cache/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,582(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上次通过个人的案例也分析了mybatis一级缓存的实现，今天趁热打铁来看一下mybatis二级缓存的实现原理。</p>
+<p>我们都知道mybatis的二级缓存是以mapper为单位。</p>
+<p>只需要在mapper.xml中加入如下代码，就可以开启二级缓存。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;cache eviction=<span class="string">"FIFO"</span> flushInterval=<span class="string">"60000"</span> size=<span class="string">"512"</span> readOnly=<span class="string">"true"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>cache的相关信息在这里说一下</p>
+<ul>
+<li>映射语句文件中的所有 select 语句将会被缓存。</li>
+<li>映射语句文件中的所有 insert,update 和 delete 语句会刷新缓存。</li>
+<li>缓存方式使用eviction属性设置，默认使用 Least Recently Used(LRU,最近最少使用的)算法来收回。</li>
+<li>flushInterval属性表示缓存时间，默认缓存不会以任何时间顺序来刷新。</li>
+<li>size属性表示缓存的个数。</li>
+<li>readOnly设为true意味着对象检索不是共享的,而且可以安全地被调用者修改,而不干扰其他调用者或线程所做的潜在修改。</li>
+</ul>
+<p>这里再说一下回收的策略</p>
+<ul>
+<li><code>LRU</code> – 最近最少使用的:移除最长时间不被使用的对象。</li>
+<li><code>FIFO</code> – 先进先出:按对象进入缓存的顺序来移除它们。</li>
+<li><code>SOFT</code> – 软引用:移除基于垃圾回收器状态和软引用规则的对象。</li>
+<li><code>WEAK</code> – 弱引用:更积极地移除基于垃圾收集器状态和弱引用规则的对象。</li>
+</ul>
+<p>默认是LRU。</p>
+<h2 id="自定义缓存"><a href="#自定义缓存" class="headerlink" title="自定义缓存"></a>自定义缓存</h2><p>当然我们现有的缓存做的事情是有限的，如果有额外的需要可以选择自定义缓存。在自定义的缓存类中接入第三方缓存框架如ehcache，redis等。</p>
+<p>此处就以redis作为缓存载体，写一个简单的demo。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisRedisCache</span> <span class="keyword">implements</span> <span class="title">Cache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(MybatisRedisCache.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> RedisTemplate&lt;Object,Object&gt; redisTemplate;</span><br><span class="line">    <span class="keyword">private</span> String cacheId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReadWriteLock readWriteLock = <span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MybatisRedisCache</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">        cacheId = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cacheId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putObject</span><span class="params">(Object key, Object value)</span> </span>&#123;</span><br><span class="line">        redisTemplate.opsForValue().set(key, value);</span><br><span class="line">        logger.info(<span class="string">"save key[&#123;&#125;],value[&#123;&#125;] into redis success"</span>,key,value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (redisTemplate == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MybatisRedisCache.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (redisTemplate == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    redisTemplate = SpringUtil.getBean(<span class="string">"redisTemplate"</span>, RedisTemplate.class);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Object value = redisTemplate.opsForValue().get(key);</span><br><span class="line">        logger.info(<span class="string">"get key[&#123;&#125;] cache from redis is:[&#123;&#125;]"</span>,key,value);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">removeObject</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        Object value = redisTemplate.opsForValue().get(key);</span><br><span class="line">        redisTemplate.delete(key);</span><br><span class="line">        logger.info(<span class="string">"remove key[&#123;&#125;] cache from redis success"</span>,key);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">            redisConnection.flushDb();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"ok"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  redisTemplate.execute((RedisCallback&lt;Integer&gt;) redisConnection -&gt; Math.toIntExact(redisConnection.dbSize()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ReadWriteLock <span class="title">getReadWriteLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> readWriteLock;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里是无法直接使用redisTemplate的，因为没法初始化，spring的上下文还问构建完成，所以我们只能选择进行懒加载。顺便说一下这里还要构造一个springUtil专门用来通过上下文和class等信息获取bean的方法，比较简单就不做展示了。</p>
+<p>我们只需要在设置cache标签的时候指定type就可以了，就如下图所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;cache type=<span class="string">"com.eumji.mybatis.MybatisRedisCache"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>到此我们的实验到这里就算完了。</p>
+<h3 id="缓存初始化"><a href="#缓存初始化" class="headerlink" title="缓存初始化"></a>缓存初始化</h3><p>但是我们还是不知道我们的cache是怎么被初始化的，而且还是带参数的构造函数。我们就需要通过debug找一下。</p>
+<p><img src="http://image.eumji025.com/18-2-14/71496990.jpg" alt=""></p>
+<p>我相信熟悉流程的朋友应该都知道这里是通过在扫描mapper.xml时，如果发现有cache标签则进行初始化。所以此处我们就直接看cacheElement方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">cacheElement</span><span class="params">(XNode context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (context != <span class="keyword">null</span>) &#123;</span><br><span class="line">    String type = context.getStringAttribute(<span class="string">"type"</span>, <span class="string">"PERPETUAL"</span>);</span><br><span class="line">    Class&lt;? extends Cache&gt; typeClass = typeAliasRegistry.resolveAlias(type);</span><br><span class="line">    String eviction = context.getStringAttribute(<span class="string">"eviction"</span>, <span class="string">"LRU"</span>);</span><br><span class="line">    Class&lt;? extends Cache&gt; evictionClass = typeAliasRegistry.resolveAlias(eviction);</span><br><span class="line">    Long flushInterval = context.getLongAttribute(<span class="string">"flushInterval"</span>);</span><br><span class="line">    Integer size = context.getIntAttribute(<span class="string">"size"</span>);</span><br><span class="line">    <span class="keyword">boolean</span> readWrite = !context.getBooleanAttribute(<span class="string">"readOnly"</span>, <span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">boolean</span> blocking = context.getBooleanAttribute(<span class="string">"blocking"</span>, <span class="keyword">false</span>);</span><br><span class="line">    Properties props = context.getChildrenAsProperties();</span><br><span class="line">    builderAssistant.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们也可以看出来这里就是加载一些cache的属性，这里都给定了默认值。默认的缓存是PerpetualCache。</p>
+<p>我们接着向下面看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Cache <span class="title">useNewCache</span><span class="params">(Class&lt;? extends Cache&gt; typeClass,Class&lt;? extends Cache&gt; evictionClass,Long flushInterval,Integer size,<span class="keyword">boolean</span> readWrite,<span class="keyword">boolean</span> blocking,Properties props)</span> </span>&#123;</span><br><span class="line">  Cache cache = <span class="keyword">new</span> CacheBuilder(currentNamespace)</span><br><span class="line">      .implementation(valueOrDefault(typeClass, PerpetualCache.class))</span><br><span class="line">      .addDecorator(valueOrDefault(evictionClass, LruCache.class))</span><br><span class="line">      .clearInterval(flushInterval)</span><br><span class="line">      .size(size)</span><br><span class="line">      .readWrite(readWrite)</span><br><span class="line">      .blocking(blocking)</span><br><span class="line">      .properties(props)</span><br><span class="line">      .build(); <span class="comment">//构建cache</span></span><br><span class="line">  configuration.addCache(cache); <span class="comment">//将缓存对象添加到configuration</span></span><br><span class="line">  currentCache = cache; <span class="comment">//所以这里指向的是loggingcache</span></span><br><span class="line">  <span class="keyword">return</span> cache;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上文中可以清楚的看出，这里使用了builder模式（网上五花八门的翻译）。前面这些就是设置参数，所以重点还是build方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Cache <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  setDefaultImplementations();</span><br><span class="line">  Cache cache = newBaseCacheInstance(implementation, id);</span><br><span class="line">  setCacheProperties(cache);</span><br><span class="line">  <span class="comment">// issue #352, do not apply decorators to custom caches</span></span><br><span class="line">  <span class="keyword">if</span> (PerpetualCache.class.equals(cache.getClass())) &#123;<span class="comment">//默认的缓存处理</span></span><br><span class="line">    <span class="keyword">for</span> (Class&lt;? extends Cache&gt; decorator : decorators) &#123;</span><br><span class="line">      cache = newCacheDecoratorInstance(decorator, cache);</span><br><span class="line">      setCacheProperties(cache);</span><br><span class="line">    &#125;</span><br><span class="line">    cache = setStandardDecorators(cache);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!LoggingCache.class.isAssignableFrom(cache.getClass())) &#123; <span class="comment">//其他缓存被包装成LoggingCache型缓存处理</span></span><br><span class="line">    cache = <span class="keyword">new</span> LoggingCache(cache);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> cache;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上文可以看到，build方法又贴心的为我们的参数进行了再一次的检查。。。然后调用newBaseCacheInstance方法创建，创建完成之后会根据缓存的类型进行不一样的处理，我们自定义的缓存最终都会被<code>包装成loggingCache对象</code>。下面具体看一下newBaseCacheInstance方法的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Cache <span class="title">newBaseCacheInstance</span><span class="params">(Class&lt;? extends Cache&gt; cacheClass, String id)</span> </span>&#123;</span><br><span class="line">  Constructor&lt;? extends Cache&gt; cacheConstructor = getBaseCacheConstructor(cacheClass);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> cacheConstructor.newInstance(id);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> CacheException(<span class="string">"Could not instantiate cache implementation ("</span> + cacheClass + <span class="string">"). Cause: "</span> + e, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里做的方法也很简单，通过反射拿到cacheClass类的Constructor对象，然后通过Constructor对象创建具体的实例。从参数看也能知道会调用一个有id参数的构造方法。</p>
+<p>然后值得一提的是缓存初始化完成后通过buildStatementFromContext方法，将缓存对应每个方法的<code>select|insert|update|delete</code>信息构建好。为什么要提到这里应该后面有用。然后经过层层调用到addMappedStatement方法，看一下具体的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> MappedStatement <span class="title">addMappedStatement</span><span class="params">(...)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (unresolvedCacheRef) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IncompleteElementException(<span class="string">"Cache-ref not yet resolved"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    id = applyCurrentNamespace(id, <span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">boolean</span> isSelect = sqlCommandType == SqlCommandType.SELECT;</span><br><span class="line"></span><br><span class="line">    MappedStatement.Builder statementBuilder = <span class="keyword">new</span> MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType)</span><br><span class="line">        .resource(resource)</span><br><span class="line">        .fetchSize(fetchSize)</span><br><span class="line">        .timeout(timeout)</span><br><span class="line">        .statementType(statementType)</span><br><span class="line">        .keyGenerator(keyGenerator)</span><br><span class="line">        .keyProperty(keyProperty)</span><br><span class="line">        .keyColumn(keyColumn)</span><br><span class="line">        .databaseId(databaseId)</span><br><span class="line">        .lang(lang)</span><br><span class="line">        .resultOrdered(resultOrdered)</span><br><span class="line">        .resultSets(resultSets)</span><br><span class="line">        .resultMaps(getStatementResultMaps(resultMap, resultType, id))</span><br><span class="line">        .resultSetType(resultSetType)</span><br><span class="line">        .flushCacheRequired(valueOrDefault(flushCache, !isSelect))</span><br><span class="line">        .useCache(valueOrDefault(useCache, isSelect))</span><br><span class="line">        .cache(currentCache); <span class="comment">//设置缓存</span></span><br><span class="line"></span><br><span class="line">    ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);</span><br><span class="line">    <span class="keyword">if</span> (statementParameterMap != <span class="keyword">null</span>) &#123;</span><br><span class="line">      statementBuilder.parameterMap(statementParameterMap);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    MappedStatement statement = statementBuilder.build(); <span class="comment">//构建statement</span></span><br><span class="line">    configuration.addMappedStatement(statement);</span><br><span class="line">    <span class="keyword">return</span> statement;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这里就是通过mapper中的配置文件，构建一条sql相关信息到statement中，还是build模式。</p>
+<p>到此我们已经知道了我们自定义的缓存已经被加载进去了。接下来就到了我们具体使用的场景了。</p>
+<h3 id="使用缓存"><a href="#使用缓存" class="headerlink" title="使用缓存"></a>使用缓存</h3><p>前面介绍了如何将自定义的缓存加载到cnfiguration中去，现在我们将来讲一讲是如何使用缓存的，我们都知道执行器加载都是在构建Sqlsession的时候就会初始化的,并且会在Executor里面包装插件。我想看到mybatis整体流程的都应该很清楚。具体可以看一下configuration.newExecutor方法。</p>
+<p>我们还是看一下具体的执行过程query方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    Cache cache = ms.getCache(); <span class="comment">//获取loggingCache</span></span><br><span class="line">    <span class="keyword">if</span> (cache != <span class="keyword">null</span>) &#123;</span><br><span class="line">      flushCacheIfRequired(ms); <span class="comment">//flushcache检测</span></span><br><span class="line">      <span class="keyword">if</span> (ms.isUseCache() &amp;&amp; resultHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">        ensureNoOutParams(ms, parameterObject, boundSql); <span class="comment">//暂时忽略</span></span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">        List&lt;E&gt; list = (List&lt;E&gt;) tcm.getObject(cache, key); <span class="comment">//从缓存获取</span></span><br><span class="line">        <span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">          list = delegate.&lt;E&gt; query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">          tcm.putObject(cache, key, list); <span class="comment">// issue #578 and #116</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> delegate.&lt;E&gt; query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上述方法主要目的就是从缓存读数据，如果没有读到，则直接从数据库中获取并保存到缓存中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">(Cache cache, CacheKey key)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> getTransactionalCache(cache).getObject(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> TransactionalCache <span class="title">getTransactionalCache</span><span class="params">(Cache cache)</span> </span>&#123;</span><br><span class="line">  TransactionalCache txCache = transactionalCaches.get(cache);</span><br><span class="line">  <span class="keyword">if</span> (txCache == <span class="keyword">null</span>) &#123; <span class="comment">//如果没有缓存则添加一个</span></span><br><span class="line">    txCache = <span class="keyword">new</span> TransactionalCache(cache);</span><br><span class="line">    transactionalCaches.put(cache, txCache);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> txCache;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就继续看TransactionalCache的getObject方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// issue #116</span></span><br><span class="line">    Object object = delegate.getObject(key); <span class="comment">//因为此处是loggingcache</span></span><br><span class="line">    <span class="keyword">if</span> (object == <span class="keyword">null</span>) &#123;</span><br><span class="line">      entriesMissedInCache.add(key); <span class="comment">//用于清除无效缓存</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// issue #146</span></span><br><span class="line">    <span class="keyword">if</span> (clearOnCommit) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> object;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>继续往下看loggingCache.getObject方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    requests++;</span><br><span class="line">    <span class="keyword">final</span> Object value = delegate.getObject(key); <span class="comment">//此处就是真正的自定义缓存</span></span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">      hits++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">      log.debug(<span class="string">"Cache Hit Ratio ["</span> + getId() + <span class="string">"]: "</span> + getHitRatio()); <span class="comment">//是否看到了熟悉的缓存日志</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>到此我们也基本知道了获取缓存的流程，那么加入缓存没有命中，此时就要从数据库中查询，然后保存到缓存中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putObject</span><span class="params">(Object key, Object object)</span> </span>&#123;</span><br><span class="line">    entriesToAddOnCommit.put(key, object);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到我们的putObject方法并没有直接像redis中进行写操作，而是将其加入到一个map中，这么做是为了后面一起提交。具体操作将会在SqlSession进行commit的方法时候层层调用到Transactionalcache方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (clearOnCommit) &#123;<span class="comment">//是否提交时先清空缓存</span></span><br><span class="line">    delegate.clear(); <span class="comment">//清空</span></span><br><span class="line">  &#125;</span><br><span class="line">  flushPendingEntries(); <span class="comment">//提交</span></span><br><span class="line">  reset(); <span class="comment">//清空</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先看一下提交的方法，其实非常的简单，就是循环的进行提交。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flushPendingEntries</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (Map.Entry&lt;Object, Object&gt; entry : entriesToAddOnCommit.entrySet()) &#123;</span><br><span class="line">    delegate.putObject(entry.getKey(), entry.getValue());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (Object entry : entriesMissedInCache) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!entriesToAddOnCommit.containsKey(entry)) &#123; <span class="comment">//没有命中缓存的也提交</span></span><br><span class="line">      delegate.putObject(entry, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是清空数据，没什么难点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  clearOnCommit = <span class="keyword">false</span>;</span><br><span class="line">  entriesToAddOnCommit.clear();</span><br><span class="line">  entriesMissedInCache.clear();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文通过自己实现一个mybatis-redis的二级缓存，然后一步步从加载到使用解析二级缓存的整体流程。通过本文，个人了解了缓存的工作原理以及mapper加载的相关知识点。并且还学了一个非常重要的设计模式 - builer模式。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>本文纯属个人的实战和源码记录，如果有描述不清楚或者疏漏的地方，欢迎大家指正。</p>
+<p>与君共勉！！！</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/02/16/mybatis-second-cache/" title="mybatis-second-cache" target="_blank" rel="external">http://www.eumji025.com/2018/02/16/mybatis-second-cache/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/02/16/mybatis-second-cache/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/02/11/reentrantLock-analysis/" title="独占锁ReentrantLock分析">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>

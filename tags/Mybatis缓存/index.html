@@ -18,33 +18,17 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>Idea-Maven项目的创建和部署 | EumJi博客</title>
-  <meta name="description" content="使用intellij idea创建maven项目">
-<meta name="keywords" content="Intellij Idea">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Idea-Maven项目的创建和部署">
-<meta property="og:url" content="http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/index.html">
+  <title>标签: Mybatis缓存 | EumJi博客</title>
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://www.eumji025.com/tags/Mybatis缓存/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="使用intellij idea创建maven项目">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712171832599">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712172014881">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712172141694">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712172411102">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712172451602">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712172722884">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712173018792">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712173308598">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712173035984">
-<meta property="og:image" content="http://img.blog.csdn.net/20160712173506163">
-<meta property="og:updated_time" content="2018-01-01T10:14:54.099Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Idea-Maven项目的创建和部署">
-<meta name="twitter:description" content="使用intellij idea创建maven项目">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160712171832599">
+<meta name="twitter:title" content="Hexo">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/tags/Mybatis缓存/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -361,165 +345,91 @@
 </aside>
 
   
-  
-<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    <nav id="toc" class="article-toc">
-      <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目的"><span class="toc-number">2.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程"><span class="toc-number">3.</span> <span class="toc-text">过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建空的项目"><span class="toc-number">3.1.</span> <span class="toc-text">创建空的项目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建maven-module"><span class="toc-number">4.</span> <span class="toc-text">创建maven module</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-点击-号创建"><span class="toc-number">4.1.</span> <span class="toc-text">1.点击+号创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-选择maven-webapp"><span class="toc-number">4.2.</span> <span class="toc-text">2.选择maven webapp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3输入groupId和ArtifactId"><span class="toc-number">4.3.</span> <span class="toc-text">3输入groupId和ArtifactId</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-陪著maven相关信息。"><span class="toc-number">4.4.</span> <span class="toc-text">4.陪著maven相关信息。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5设置名字-完成。"><span class="toc-number">4.5.</span> <span class="toc-text">5设置名字 完成。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-等待一段时间，maven自动加载web项目相关的配置"><span class="toc-number">4.6.</span> <span class="toc-text">6.等待一段时间，maven自动加载web项目相关的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-修改pom文件"><span class="toc-number">4.7.</span> <span class="toc-text">7 修改pom文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-修改项目配置"><span class="toc-number">4.8.</span> <span class="toc-text">8 修改项目配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提示"><span class="toc-number">5.</span> <span class="toc-text">提示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven-tomcat插件配置"><span class="toc-number">5.1.</span> <span class="toc-text">maven-tomcat插件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发布"><span class="toc-number">5.2.</span> <span class="toc-text">发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结语"><span class="toc-number">5.3.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
-    </nav>
-  </div>
-</aside>
-
-
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Idea-Maven项目的创建和部署" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <main class="main" role="main">
+  <article class="content article article-tags post-type-list" itemscope="">
+    <header class="article-header">
+      <h1 itemprop="name" class="hidden-xs">标签: Mybatis缓存</h1>
+      <p class="text-muted hidden-xs">共 2 篇文章</p>
+      <nav role="navigation" id="nav-main" class="okayNav">
+        <ul>
+          <li><a href="/tags">All</a></li>
+          
+          <li><a href="/tags/target/">target</a></li>
+          
+          <li><a href="/tags/java/">java</a></li>
+          
+          <li><a href="/tags/Intellij-Idea/">Intellij Idea</a></li>
+          
+          <li><a href="/tags/tools/">tools</a></li>
+          
+          <li><a href="/tags/golang/">golang</a></li>
+          
+          <li><a href="/tags/Mybatis缓存/">Mybatis缓存</a></li>
+          
+          <li><a href="/tags/spring-boot/">spring-boot</a></li>
+          
+          <li><a href="/tags/Spring-MVC/">Spring MVC</a></li>
+          
+          <li><a href="/tags/写作/">写作</a></li>
+          
+        </ul>
+      </nav>
+    </header>
+    <!-- /header -->
+    <div class="article-body">
+      <div class="row">
+        
+<div class="col-md-6">
     
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Idea-Maven项目的创建和部署
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="fa fa-calendar-check-o"></i>
-	<a href="/2016/11/21/Idea-Maven项目的创建和部署/" class="article-date">
-	  <time datetime="2016-11-21T12:12:40.000Z" itemprop="datePublished">2016-11-21</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/工具专栏/">工具专栏</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="fa fa-tag"></i>
-	<a class="article-tag-link" href="/tags/Intellij-Idea/">Intellij Idea</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2016/11/21/Idea-Maven项目的创建和部署/#comments" class="article-comment-link">评论</a></span>
-        
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 147(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
-	
-
-
-      </div>
-      
-    </div>
-    <div class="article-entry markdown-body" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于Intellij Idea创建项目方式和eclipse有一定的区别，所有maven项目也是一样。</p>
-<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>学会使用idea创建和部署Maven项目。</p>
-<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h3 id="创建空的项目"><a href="#创建空的项目" class="headerlink" title="创建空的项目"></a>创建空的项目</h3><p>  <img src="http://img.blog.csdn.net/20160712171832599" alt="这里写图片描述"></p>
-<h2 id="创建maven-module"><a href="#创建maven-module" class="headerlink" title="创建maven module"></a>创建maven module</h2><h3 id="1-点击-号创建"><a href="#1-点击-号创建" class="headerlink" title="1.点击+号创建"></a>1.点击+号创建</h3><p>  <img src="http://img.blog.csdn.net/20160712172014881" alt="这里写图片描述"></p>
-<h3 id="2-选择maven-webapp"><a href="#2-选择maven-webapp" class="headerlink" title="2.选择maven webapp"></a>2.选择maven webapp</h3><p>  <img src="http://img.blog.csdn.net/20160712172141694" alt="这里写图片描述"></p>
-<h3 id="3输入groupId和ArtifactId"><a href="#3输入groupId和ArtifactId" class="headerlink" title="3输入groupId和ArtifactId"></a>3输入groupId和ArtifactId</h3><p>  <img src="http://img.blog.csdn.net/20160712172411102" alt="这里写图片描述"></p>
-<h3 id="4-陪著maven相关信息。"><a href="#4-陪著maven相关信息。" class="headerlink" title="4.陪著maven相关信息。"></a>4.陪著maven相关信息。</h3><p>  <img src="http://img.blog.csdn.net/20160712172451602" alt="这里写图片描述"></p>
-<h3 id="5设置名字-完成。"><a href="#5设置名字-完成。" class="headerlink" title="5设置名字 完成。"></a>5设置名字 完成。</h3><h3 id="6-等待一段时间，maven自动加载web项目相关的配置"><a href="#6-等待一段时间，maven自动加载web项目相关的配置" class="headerlink" title="6.等待一段时间，maven自动加载web项目相关的配置"></a>6.等待一段时间，maven自动加载web项目相关的配置</h3><h3 id="7-修改pom文件"><a href="#7-修改pom文件" class="headerlink" title="7 修改pom文件"></a>7 修改pom文件</h3><p>  注意添加packaging<br>  <img src="http://img.blog.csdn.net/20160712172722884" alt="这里写图片描述"></p>
-<h3 id="8-修改项目配置"><a href="#8-修改项目配置" class="headerlink" title="8 修改项目配置"></a>8 修改项目配置</h3><p>  <img src="http://img.blog.csdn.net/20160712173018792" alt="这里写图片描述"><br>  <img src="http://img.blog.csdn.net/20160712173308598" alt="这里写图片描述"><br>  <img src="http://img.blog.csdn.net/20160712173035984" alt="这里写图片描述"></p>
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><h3 id="maven-tomcat插件配置"><a href="#maven-tomcat插件配置" class="headerlink" title="maven-tomcat插件配置"></a>maven-tomcat插件配置</h3><p>  <img src="http://img.blog.csdn.net/20160712173506163" alt="这里写图片描述"></p>
-<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><p>  右键项目 run maven-maven-tomcat即可</p>
-<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>  与君共勉！</p>
-
-      
-    </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/" title="Idea-Maven项目的创建和部署" target="_blank" rel="external">http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
-
-
-<div class="panel panel-default panel-badger">
+<article class="panel panel-default shadow-hover" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
-        <div>everything will be ok!</div>
-      </div>
-    </figure>
-  </div>
+     <div class="article-meta">
+       <time datetime="2018-02-16T03:29:18.000Z" itemprop="datePublished">2018-02-16</time>
+     </div>
+     <h3 class="article-title" itemprop="name">
+       <a class="article-link" href="/2018/02/16/mybatis-second-cache/">mybatis-second-cache</a>
+     </h3>
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/Mybatis缓存/" class="label label-default mb">Mybatis缓存</a>
+     
+   </div>
+   
+</article>
+
+
 </div>
 
+<div class="col-md-6">
+    
+<article class="panel panel-default shadow-hover" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="panel-body">
+     <div class="article-meta">
+       <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
+     </div>
+     <h3 class="article-title" itemprop="name">
+       <a class="article-link" href="/2018/02/10/mybatis-first-cache/">你不一定知道的mybatis缓存坑</a>
+     </h3>
+   </div>
+   
+   <div class="panel-footer">
+     
+      <a href="/tags/Mybatis缓存/" class="label label-default mb">Mybatis缓存</a>
+     
+   </div>
+   
+</article>
 
+
+</div>
+
+      </div>
     </div>
   </article>
   
-    
-  <section id="comments">
-  	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/' ></div>
-<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
-<script type="text/javascript">
-window.changyan.api.config({
-appid: 'cysYcQMdM',
-conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
-});
-</script>    
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2017/01/11/annotation/" title="web开发常用注解"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/2016/11/05/推荐的markdown编辑器/" title="推荐的markdown编辑器">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-  </div>
-  
-  </div>
-</nav>
-  
-
-
-
+ 
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -579,8 +489,6 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
     
-    
-        
     
     
 
