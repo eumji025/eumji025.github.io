@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-16T03:32:01.341Z</updated>
+  <updated>2018-02-16T03:43:16.097Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -17,17 +17,19 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>mybatis-second-cache</title>
+    <title>深入理解Mybatis二级缓存</title>
     <link href="http://www.eumji025.com/2018/02/16/mybatis-second-cache/"/>
     <id>http://www.eumji025.com/2018/02/16/mybatis-second-cache/</id>
     <published>2018-02-16T03:29:18.000Z</published>
-    <updated>2018-02-16T03:32:01.341Z</updated>
+    <updated>2018-02-16T03:43:16.097Z</updated>
     
     <summary type="html">
     
       本文同一个实例展示mybatis集成redis做二级缓存，并从源码的解读解析了整个流程，了解其工作原理
     
     </summary>
+    
+      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
       <category term="Mybatis缓存" scheme="http://www.eumji025.com/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
@@ -39,13 +41,15 @@
     <link href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/"/>
     <id>http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</id>
     <published>2018-02-11T11:58:18.000Z</published>
-    <updated>2018-02-11T12:10:57.971Z</updated>
+    <updated>2018-02-16T03:43:12.477Z</updated>
     
     <summary type="html">
     
       为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API
     
     </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
       <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
@@ -137,13 +141,15 @@
     <link href="http://www.eumji025.com/2018/01/12/go-learn-material/"/>
     <id>http://www.eumji025.com/2018/01/12/go-learn-material/</id>
     <published>2018-01-12T05:36:18.000Z</published>
-    <updated>2018-01-12T06:09:19.312Z</updated>
+    <updated>2018-02-16T03:43:18.973Z</updated>
     
     <summary type="html">
     
       本文主要介绍一些go语言学习的相关资料,希望在学习的路上减轻大家的负担,本文是一片装在文章,看到写的非常的充实,就申请转载了）
     
     </summary>
+    
+      <category term="Golang基础" scheme="http://www.eumji025.com/categories/Golang%E5%9F%BA%E7%A1%80/"/>
     
     
       <category term="golang" scheme="http://www.eumji025.com/tags/golang/"/>
@@ -275,7 +281,7 @@
     <link href="http://www.eumji025.com/2017/01/18/checkstyle/"/>
     <id>http://www.eumji025.com/2017/01/18/checkstyle/</id>
     <published>2017-01-18T14:39:13.000Z</published>
-    <updated>2018-01-02T03:29:09.164Z</updated>
+    <updated>2018-02-16T03:43:20.801Z</updated>
     
     <summary type="html">
     
