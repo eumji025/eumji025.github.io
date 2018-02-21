@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>Mybatis的Mapper加载使用分析 | EumJi博客</title>
+  <meta name="description" content="本文主要讲述mybatis的mapper加载和使用流程。在之前的配置文件加载分析中我们已经讲解了在mybatis构建sqlSessionFactory的时候就会加载mybatis的配置文件，其中当然包含了mybatis的alias，typeHandler，settings，mapper。但是我们并没有对其深入的去讲解，本文则主要通过细节去了解到底是如何进行mapper实例化">
+<meta name="keywords" content="Mybatis Mapper加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis的Mapper加载使用分析">
+<meta property="og:url" content="http://www.eumji025.com/2018/02/21/mybatis-mapper-info/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文主要讲述mybatis的mapper加载和使用流程。在之前的配置文件加载分析中我们已经讲解了在mybatis构建sqlSessionFactory的时候就会加载mybatis的配置文件，其中当然包含了mybatis的alias，typeHandler，settings，mapper。但是我们并没有对其深入的去讲解，本文则主要通过细节去了解到底是如何进行mapper实例化">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.eumji025.com/18-2-6/73477805.jpg">
+<meta property="og:updated_time" content="2018-02-21T07:06:13.015Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis的Mapper加载使用分析">
+<meta name="twitter:description" content="本文主要讲述mybatis的mapper加载和使用流程。在之前的配置文件加载分析中我们已经讲解了在mybatis构建sqlSessionFactory的时候就会加载mybatis的配置文件，其中当然包含了mybatis的alias，typeHandler，settings，mapper。但是我们并没有对其深入的去讲解，本文则主要通过细节去了解到底是如何进行mapper实例化">
+<meta name="twitter:image" content="http://image.eumji025.com/18-2-6/73477805.jpg">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/02/21/mybatis-mapper-info/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/person.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于hexo-theme-pure主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。本人停用个人所做的博客是因为，使用服务器速度太慢了，近期也很忙没时间打理。以后有时间在进行重新使用。现在暂时用hexo静态博客。 <br><br> 本人目前从事于Java Web方向，也不是什么厉害角色，很多事情都是凭借着兴趣来做的。
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.67px;">Intellij Idea</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.67px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 14.67px;">Spring MVC</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/spring-boot/" style="font-size: 15.33px;">spring-boot</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/21/mybatis-mapper-info/" class="title">Mybatis的Mapper加载使用分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-21T07:01:30.000Z" itemprop="datePublished">2018-02-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/16/mybatis-second-cache/" class="title">深入理解Mybatis二级缓存</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-16T03:29:18.000Z" itemprop="datePublished">2018-02-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/11/reentrantLock-analysis/" class="title">独占锁ReentrantLock分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-11T11:58:18.000Z" itemprop="datePublished">2018-02-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/10/mybatis-first-cache/" class="title">深入理解Mybatis一级缓存</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/06/futureTask-analysis/" class="title">FutureTask源码实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-06T05:23:46.000Z" itemprop="datePublished">2018-02-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mapper流程"><span class="toc-number">2.</span> <span class="toc-text">mapper流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getMapper方法"><span class="toc-number">2.1.</span> <span class="toc-text">getMapper方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#addMapper方法"><span class="toc-number">2.2.</span> <span class="toc-text">addMapper方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parse方法"><span class="toc-number">2.3.</span> <span class="toc-text">parse方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行"><span class="toc-number">3.</span> <span class="toc-text">执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mybatis-mapper-info" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mybatis的Mapper加载使用分析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/02/21/mybatis-mapper-info/" class="article-date">
+	  <time datetime="2018-02-21T07:01:30.000Z" itemprop="datePublished">2018-02-21</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/02/21/mybatis-mapper-info/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,504(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本文主要讲述mybatis的mapper加载和使用流程。在之前的配置文件加载分析中我们已经讲解了在mybatis构建sqlSessionFactory的时候就会加载mybatis的配置文件，其中当然包含了mybatis的alias，typeHandler，settings，mapper。但是我们并没有对其深入的去讲解，本文则主要通过细节去了解到底是如何进行mapper实例化。</p>
+<h2 id="mapper流程"><a href="#mapper流程" class="headerlink" title="mapper流程"></a>mapper流程</h2><p>要了解mapper的加载流程，我们首先要明白在mybatis中，mapper到底是如何工作的，本文不再赘述Mybatis的整体加载-执行流程，而则主要细致的讲解mapper相关的内容。</p>
+<p>我相信详细学习过mybatis的朋友也许都会熟悉类似这样的操作，当然长时间使用mybatis-spring的整合则可能几乎已经忘记这样写的方法。。。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DateMapper mapper = sqlSession.getMapper(DateMapper.class);</span><br><span class="line">UserInfo user = mapper.getUser(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>我们可以看到通过sqlSession可以加载一个mapper的代理类，毫无疑问的mybatis肯定是用的动态代理技术。具体是什么情况，我们通过追踪源码来弄清楚把。</p>
+<p>为了我们更加的清楚了解getMapper的加载过程，所以这里使用的是mybatis原生的方式，其实整合spring的也很类似，只是入口将不会是上述的代码，而是通过@Autowired注解来加载bean，会先找到MapperFactoryBean，然后调用getObject方法来到和上文相似的代码。</p>
+<h3 id="getMapper方法"><a href="#getMapper方法" class="headerlink" title="getMapper方法"></a>getMapper方法</h3><p>下面我们看一下getMapper方法到底做了什么。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getMapper</span><span class="params">(Class&lt;T&gt; type)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> configuration.&lt;T&gt;getMapper(type, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getMapper</span><span class="params">(Class&lt;T&gt; type, SqlSession sqlSession)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> mapperRegistry.getMapper(type, sqlSession); <span class="comment">//mapperRegistry加载mybatis配置的时候就已经初始化了，记录mapper</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getMapper</span><span class="params">(Class&lt;T&gt; type, SqlSession sqlSession)</span> </span>&#123;<span class="comment">//mapperRegistry.getMapper</span></span><br><span class="line">  <span class="keyword">final</span> MapperProxyFactory&lt;T&gt; mapperProxyFactory = (MapperProxyFactory&lt;T&gt;) knownMappers.get(type); <span class="comment">//knownMappers记录已经加载了的mapperProxyFactory</span></span><br><span class="line">  <span class="keyword">if</span> (mapperProxyFactory == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Type "</span> + type + <span class="string">" is not known to the MapperRegistry."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> mapperProxyFactory.newInstance(sqlSession);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Error getting mapper instance. Cause: "</span> + e, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我相信通过上面的代码都很清楚，首先我们需要从knownMappers中取出MapperProxyFactory，关于knownMappers是何时被初始化的我们稍后再说，然后构造出mapperProxy对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">newInstance</span><span class="params">(SqlSession sqlSession)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> MapperProxy&lt;T&gt; mapperProxy = <span class="keyword">new</span> MapperProxy&lt;T&gt;(sqlSession, mapperInterface, methodCache);</span><br><span class="line">  <span class="keyword">return</span> newInstance(mapperProxy);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">protected</span> T <span class="title">newInstance</span><span class="params">(MapperProxy&lt;T&gt; mapperProxy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), <span class="keyword">new</span> Class[] &#123; mapperInterface &#125;, mapperProxy);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，这里使用了JDK动态代理，生成的是mapperProxy代理对象。</p>
+<h3 id="addMapper方法"><a href="#addMapper方法" class="headerlink" title="addMapper方法"></a>addMapper方法</h3><p>那么我们现在的首要任务就是要找到knownMappers初始化的地方，很容易就在MapperRegistry类中找到addMapper的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">addMapper</span><span class="params">(Class&lt;T&gt; type)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (type.isInterface()) &#123; <span class="comment">//判断是否为接口</span></span><br><span class="line">    <span class="keyword">if</span> (hasMapper(type)) &#123; <span class="comment">//是否已经加载</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Type "</span> + type + <span class="string">" is already known to the MapperRegistry."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">boolean</span> loadCompleted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      knownMappers.put(type, <span class="keyword">new</span> MapperProxyFactory&lt;T&gt;(type)); <span class="comment">//包装放入</span></span><br><span class="line">      MapperAnnotationBuilder parser = <span class="keyword">new</span> MapperAnnotationBuilder(config, type);</span><br><span class="line">      parser.parse(); <span class="comment">//解析信息</span></span><br><span class="line">      loadCompleted = <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!loadCompleted) &#123;</span><br><span class="line">        knownMappers.remove(type);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上文我们就可以看到mapper接口是会被包装成MapperProxyFactory的，里面存放着我们实际的类型。</p>
+<p>那么现在肯定要知道addMapper是从哪里被调用的，debug一下就可以发现调用过程如下</p>
+<p><img src="http://image.eumji025.com/18-2-6/73477805.jpg" alt=""></p>
+<p>在这里说明一下的是本文使用的spring boot + mybatis的环境，所以我们也能到加载其实是从MybatisAutoConfiguration类中创建sqlSessionFactory对象中开始的，这个方法主要还是加载一些配置信息，主要的方法是在buildSqlSessionFactory中构建sqlSessionFactory中，这个方法内容比较多，主要包括加载别名，插件，typeHandler等信息，就是加载mybatis-conf.xml，其中也包括加载mapper。</p>
+<p>本文主要在意的是mapper代理相关的内容，其他的就不做介绍了，还是回到上面的方法，看一下buildSqlSessionFactory方法中关于mapper解析的片段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!isEmpty(<span class="keyword">this</span>.mapperLocations)) &#123;<span class="comment">//mapperLocaltions表示扫描到deep所有mapper.xml</span></span><br><span class="line">  <span class="keyword">for</span> (Resource mapperLocation : <span class="keyword">this</span>.mapperLocations) &#123;</span><br><span class="line">    <span class="keyword">if</span> (mapperLocation == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      XMLMapperBuilder xmlMapperBuilder = <span class="keyword">new</span> XMLMapperBuilder(mapperLocation.getInputStream(),</span><br><span class="line">          configuration, mapperLocation.toString(), configuration.getSqlFragments());</span><br><span class="line">      xmlMapperBuilder.parse(); <span class="comment">//解析mapper</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NestedIOException(<span class="string">"Failed to parse mapping resource: '"</span> + mapperLocation + <span class="string">"'"</span>, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      ErrorContext.instance().reset();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (LOGGER.isDebugEnabled()) &#123;</span><br><span class="line">      LOGGER.debug(<span class="string">"Parsed mapper file: '"</span> + mapperLocation + <span class="string">"'"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里面干的最重要的一件事就是解析mapper，</p>
+<h3 id="parse方法"><a href="#parse方法" class="headerlink" title="parse方法"></a>parse方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parse</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">if</span> (!configuration.isResourceLoaded(resource)) &#123;</span><br><span class="line">  configurationElement(parser.evalNode(<span class="string">"/mapper"</span>)); <span class="comment">//加载mapper节点及子节点</span></span><br><span class="line">  configuration.addLoadedResource(resource);</span><br><span class="line">  bindMapperForNamespace(); <span class="comment">//绑定mapper信息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">parsePendingResultMaps();</span><br><span class="line">parsePendingCacheRefs();</span><br><span class="line">parsePendingStatements();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过configurationElement方法看一下如何加载mapper下的标签和到底加载了那些内容的，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">configurationElement</span><span class="params">(XNode context)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    String namespace = context.getStringAttribute(<span class="string">"namespace"</span>);</span><br><span class="line">    <span class="keyword">if</span> (namespace == <span class="keyword">null</span> || namespace.equals(<span class="string">""</span>)) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Mapper's namespace cannot be empty"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    builderAssistant.setCurrentNamespace(namespace);</span><br><span class="line">    cacheRefElement(context.evalNode(<span class="string">"cache-ref"</span>));</span><br><span class="line">    cacheElement(context.evalNode(<span class="string">"cache"</span>));</span><br><span class="line">    parameterMapElement(context.evalNodes(<span class="string">"/mapper/parameterMap"</span>));</span><br><span class="line">    resultMapElements(context.evalNodes(<span class="string">"/mapper/resultMap"</span>));</span><br><span class="line">    sqlElement(context.evalNodes(<span class="string">"/mapper/sql"</span>));</span><br><span class="line">    buildStatementFromContext(context.evalNodes(<span class="string">"select|insert|update|delete"</span>));</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Error parsing Mapper XML. Cause: "</span> + e, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在我之前的mybatis缓存相关的文章中已经已经提及，具体的细节就不描述了，如果有需要再细看那一部分，主要的目的就是将mapper标签下的所有内容都加载出来，最终通过buildStatementFromContext方法将具体的sql包装成statement对象放在configuration中。</p>
+<p>下面具体看一下bindMapperForNamespace方法，通过mapper的命名空间找到对应的mapper接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">bindMapperForNamespace</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  String namespace = builderAssistant.getCurrentNamespace();</span><br><span class="line">  <span class="keyword">if</span> (namespace != <span class="keyword">null</span>) &#123;</span><br><span class="line">    Class&lt;?&gt; boundType = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      boundType = Resources.classForName(namespace); <span class="comment">//加载mapper接口</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">      <span class="comment">//ignore, bound type is not required</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (boundType != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!configuration.hasMapper(boundType)) &#123;</span><br><span class="line">        configuration.addLoadedResource(<span class="string">"namespace:"</span> + namespace);</span><br><span class="line">        configuration.addMapper(boundType); <span class="comment">//就会回到前面说的addMapper方法了</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在configuration中注册mapper信息和resource信息。从上面可以看到又回到了addMapper方法中了。</p>
+<p>parse方法里面的逻辑 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  String resource = type.toString();</span><br><span class="line">  <span class="keyword">if</span> (!configuration.isResourceLoaded(resource)) &#123; <span class="comment">//查看是否加载过，和前面用的类型不同哦，所以这里第一次到这里是没有被加载额</span></span><br><span class="line">    loadXmlResource();</span><br><span class="line">    configuration.addLoadedResource(resource);</span><br><span class="line">    assistant.setCurrentNamespace(type.getName());</span><br><span class="line">    parseCache(); <span class="comment">//加载CacheNamespace注解</span></span><br><span class="line">    parseCacheRef(); <span class="comment">//加载CacheNamespaceRef注解</span></span><br><span class="line">    Method[] methods = type.getMethods();</span><br><span class="line">    <span class="keyword">for</span> (Method method : methods) &#123; <span class="comment">//遍历所有的方法</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// issue #237 解决java8中重写方法的问题</span></span><br><span class="line">        <span class="keyword">if</span> (!method.isBridge()) &#123;</span><br><span class="line">          parseStatement(method);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IncompleteElementException e) &#123;</span><br><span class="line">        configuration.addIncompleteMethod(<span class="keyword">new</span> MethodResolver(<span class="keyword">this</span>, method));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  parsePendingMethods();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结一下上面的逻辑，</p>
+<p>1.首先判断是否被加载过，如果没有则加载xml内容，此处用的string类型，和前面的类型不用</p>
+<p>2.加载xml内容，以及注解加载，遍历方法判断是否需要</p>
+<p>下面看一下loadXmlResource方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loadXmlResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!configuration.isResourceLoaded(<span class="string">"namespace:"</span> + type.getName())) &#123; <span class="comment">//判断是否被加载，前面已经加载过，所以跳过</span></span><br><span class="line">    String xmlResource = type.getName().replace(<span class="string">'.'</span>, <span class="string">'/'</span>) + <span class="string">".xml"</span>;</span><br><span class="line">    InputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      inputStream = Resources.getResourceAsStream(type.getClassLoader(), xmlResource);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      <span class="comment">// ignore, resource is not required</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (inputStream != <span class="keyword">null</span>) &#123;</span><br><span class="line">      XMLMapperBuilder xmlParser = <span class="keyword">new</span> XMLMapperBuilder(inputStream, assistant.getConfiguration(), xmlResource, configuration.getSqlFragments(), type.getName());</span><br><span class="line">      xmlParser.parse();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p>我们从MapperProxy方法中可以看到，使用了jdk动态代理的技术实现了InvocationHandler接口。也就是说这个类的所有方法都会先调用invoke方法，具体看一下其中做的事情</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//如果是object类的方法直接调用</span></span><br><span class="line">    <span class="keyword">if</span> (Object.class.equals(method.getDeclaringClass())) &#123;</span><br><span class="line">      <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDefaultMethod(method)) &#123; <span class="comment">//是否为默认方法</span></span><br><span class="line">      <span class="keyword">return</span> invokeDefaultMethod(proxy, method, args);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">    <span class="keyword">throw</span> ExceptionUtil.unwrapThrowable(t);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">final</span> MapperMethod mapperMethod = cachedMapperMethod(method); <span class="comment">//从缓存中取，取不到就构建一个</span></span><br><span class="line">  <span class="keyword">return</span> mapperMethod.execute(sqlSession, args);<span class="comment">//否则被代理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以此处做的事情就是判断此方法是否要被特殊处理，要过滤object类中的方法，具体的执行还是mapperMethod的execute方法，这里又用到了设计模式中的<code>命令模式</code>，可以自己了解一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">execute</span><span class="params">(SqlSession sqlSession, Object[] args)</span> </span>&#123;</span><br><span class="line">  Object result;</span><br><span class="line">  <span class="keyword">switch</span> (command.getType()) &#123; <span class="comment">//获取方法对应mapper中的标签</span></span><br><span class="line">    <span class="keyword">case</span> INSERT: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.insert(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> UPDATE: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.update(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> DELETE: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.delete(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> SELECT:</span><br><span class="line">      <span class="keyword">if</span> (method.returnsVoid() &amp;&amp; method.hasResultHandler()) &#123;</span><br><span class="line">        executeWithResultHandler(sqlSession, args);</span><br><span class="line">        result = <span class="keyword">null</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsMany()) &#123;</span><br><span class="line">        result = executeForMany(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsMap()) &#123;</span><br><span class="line">        result = executeForMap(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsCursor()) &#123;</span><br><span class="line">        result = executeForCursor(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">        result = sqlSession.selectOne(command.getName(), param);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> FLUSH:</span><br><span class="line">      result = sqlSession.flushStatements();</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Unknown execution method for: "</span> + command.getName());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (result == <span class="keyword">null</span> &amp;&amp; method.getReturnType().isPrimitive() &amp;&amp; !method.returnsVoid()) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Mapper method '"</span> + command.getName()</span><br><span class="line">        + <span class="string">" attempted to return null from a method with a primitive return type ("</span> + method.getReturnType() + <span class="string">")."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>又回到了我们熟悉的一幕，根据方法对应mapper中的标签名称来确定到底做什么操作，最终执行还是通过sqlSession去执行的，</p>
+<p>这里需要注意下的是select方法里的操作，上面的方法根据返回结果的类型不同会执行不同的策略。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>mapper的加载和使用其实也不是很复杂，都是通过我们在mybatis-conf.xml这个配置文件中指定mapper接口和mapper.xml的位置，或者和spring整合通过spring配置文件指定了位置。然后在初始化的时候通过指定的位置找接口和mapper.xml记录下来，最后我们构造mapper代理对象然后进行我们的操作。</p>
+<p>当然本文没有具体分析比如解析mapper.xml中每个具体节点的逻辑，非常多也没有必要，我们现在知道了这些内容是在哪里被加载的，如果我们有需要的话再通过这个入口进行具体的代码分析就可以了。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>本文出自个人的学习笔记，可能有部分内容表述的不是很清晰或者存在错误的地方，欢迎指正！！</p>
+<p>与君共勉！！！</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/02/21/mybatis-mapper-info/" title="Mybatis的Mapper加载使用分析" target="_blank" rel="external">http://www.eumji025.com/2018/02/21/mybatis-mapper-info/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/person.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/02/21/mybatis-mapper-info/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/02/16/mybatis-second-cache/" title="深入理解Mybatis二级缓存">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>
