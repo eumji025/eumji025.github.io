@@ -241,7 +241,7 @@ th {
 
 .markdown-body table {
     width: 97%;
-    margin: 5px 24px 24px 24px;
+    margin: 5px 24px 24px 7px;
     max-width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
@@ -256,7 +256,7 @@ th {
 
     line-height: 22px;
     word-break: break-all;
-    /*border: 1px solid #ddd*/
+    border: 1px solid #ddd
 }
 
 .markdown-body table thead tr td {
@@ -5272,12 +5272,12 @@ pre code {
 }
 
 .highlight {
-  position: relative;
+  /*position: relative;*/
   padding: 38px 10px 0 10px;
   border-radius: 4px;
 }
 
-.highlight:before {
+/*.highlight:before {
   display: block;
   content: ' ';
   height: 38px;
@@ -5289,7 +5289,7 @@ pre code {
   padding: 0 10px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
+}*/
 
 .highlight:after {
   content: " ";
@@ -5325,6 +5325,10 @@ pre code {
 
 .highlight td.code {
   width: 100% !important;
+  border: none;
+}
+.highlight td.gutter {
+  border: none;
 }
 
 .highlight figcaption {

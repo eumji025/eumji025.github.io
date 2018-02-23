@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-21T07:06:13.015Z</updated>
+  <updated>2018-02-23T06:13:47.529Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/"/>
+    <id>http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/</id>
+    <published>2018-02-23T06:13:47.529Z</published>
+    <updated>2018-02-23T06:13:47.529Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>聊聊cglib的实现</title>
+    <link href="http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/"/>
+    <id>http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/</id>
+    <published>2018-02-23T02:18:22.000Z</published>
+    <updated>2018-02-23T03:43:43.247Z</updated>
+    
+    <summary type="html">
+    
+      cglib是另外一种动态代理的方法，他和jdk动态代理的实现是有区别的，我们在之前见过jdk动态代理类是必须实现了接口的，而cglib不需要实现接口，但是必须保证类不含有final关键字，否则是无法代理的
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="proxy" scheme="http://www.eumji025.com/tags/proxy/"/>
+    
+  </entry>
   
   <entry>
     <title>Mybatis的Mapper加载使用分析</title>
@@ -373,48 +407,6 @@
     
     
       <category term="写作" scheme="http://www.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>springMVC 几种页面跳转方式</title>
-    <link href="http://www.eumji025.com/2016/10/28/springMVC-%E5%87%A0%E7%A7%8D%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E6%96%B9%E5%BC%8F/"/>
-    <id>http://www.eumji025.com/2016/10/28/springMVC-几种页面跳转方式/</id>
-    <published>2016-10-28T04:45:00.000Z</published>
-    <updated>2018-01-02T03:29:09.176Z</updated>
-    
-    <summary type="html">
-    
-      Spring MVC属于SpringFrameWork的后续产品，已经融合在Spring Web Flow里面。Spring 框架提供了构建 Web 应用程序的全功能 MVC 模块。使用 Spring 可插入的 MVC 架构，从而在使用Spring进行WEB开发时，可以选择使用Spring的SpringMVC框架或集成其他MVC开发框架，如Struts1，Struts2等。
-    
-    </summary>
-    
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用idea开发srpingMVC第一个Demo</title>
-    <link href="http://www.eumji025.com/2016/10/28/%E4%BD%BF%E7%94%A8idea%E5%BC%80%E5%8F%91srpingMVC%E7%AC%AC%E4%B8%80%E4%B8%AADemo/"/>
-    <id>http://www.eumji025.com/2016/10/28/使用idea开发srpingMVC第一个Demo/</id>
-    <published>2016-10-28T04:24:48.000Z</published>
-    <updated>2018-02-16T03:43:23.429Z</updated>
-    
-    <summary type="html">
-    
-      JetBrains是一家捷克的软件开发公司，该公司位于捷克的布拉格，并在俄国的圣彼得堡及美国麻州波士顿都设有办公室，该公司最为人所熟知的产品是Java编程语言开发撰写时所用的集成开发环境：IntelliJ IDEA
-    
-    </summary>
-    
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="Intellij Idea" scheme="http://www.eumji025.com/tags/Intellij-Idea/"/>
-    
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
     
   </entry>
   

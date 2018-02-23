@@ -34,7 +34,7 @@
 .markdown-body .highlight {
   background: #f8f8f8;
   margin: 15px 0;
-  padding: 40px 12px 10px 10px;
+  padding: 5px 12px 10px 10px;
   border-style: solid;
   border-color: #eef1f8;
   border-width: 1px 0;
@@ -344,6 +344,13 @@ pre .xml .cdata {
 .markdown-body code {
   background-color:#dff6f9;
 }
+
+.markdown-body img {
+  clear: both; 
+  display: block; 
+  margin:auto; 
+}
+
 .night-mode figure,.night-mode pre,.night-mode code,.night-mode blockquote,.night-mode tr,.night-mode table,.night-mode tbody,.night-mode table td
 {
     background-color:#555!important;border-color:#555!important;color:#fff!important;
