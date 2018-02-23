@@ -5291,7 +5291,7 @@ pre code {
   border-top-right-radius: 4px;
 }*/
 
-.highlight:after {
+/*.highlight:after {
   content: " ";
   position: absolute;
   border-radius: 50%;
@@ -5303,7 +5303,7 @@ pre code {
   margin-top: 13px;
   -webkit-box-shadow: 20px 0 #fdbc40,40px 0 #35cd4b;
   box-shadow: 20px 0 #fdbc40,40px 0 #35cd4b;
-}
+}*/
 
 .highlight pre {
   border: none;
