@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-23T07:20:49.976Z</updated>
+  <updated>2018-02-25T11:37:03.093Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>聊聊cglib的实现</title>
+    <title>聊聊cglib动态代理的实现</title>
     <link href="http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/"/>
     <id>http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/</id>
     <published>2018-02-23T02:18:22.000Z</published>
-    <updated>2018-02-23T07:20:49.976Z</updated>
+    <updated>2018-02-25T11:37:03.093Z</updated>
     
     <summary type="html">
     
@@ -141,7 +141,7 @@
     <link href="http://www.eumji025.com/2018/02/01/threadPool-analysis/"/>
     <id>http://www.eumji025.com/2018/02/01/threadPool-analysis/</id>
     <published>2018-02-01T00:41:37.000Z</published>
-    <updated>2018-02-24T06:22:37.988Z</updated>
+    <updated>2018-02-25T11:51:59.462Z</updated>
     
     <summary type="html">
     
@@ -221,7 +221,7 @@
     <link href="http://www.eumji025.com/2018/01/02/dynamic-proxy/"/>
     <id>http://www.eumji025.com/2018/01/02/dynamic-proxy/</id>
     <published>2018-01-02T03:23:46.000Z</published>
-    <updated>2018-02-16T03:43:20.153Z</updated>
+    <updated>2018-02-25T05:08:41.312Z</updated>
     
     <summary type="html">
     
@@ -232,7 +232,7 @@
       <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="proxy" scheme="http://www.eumji025.com/tags/proxy/"/>
     
   </entry>
   
@@ -241,11 +241,11 @@
     <link href="http://www.eumji025.com/2018/01/01/2018-target/"/>
     <id>http://www.eumji025.com/2018/01/01/2018-target/</id>
     <published>2017-12-31T16:08:47.000Z</published>
-    <updated>2018-02-16T03:43:24.193Z</updated>
+    <updated>2018-02-25T11:51:50.742Z</updated>
     
     <summary type="html">
     
-      2018年自我简单规划,后续慢慢完善.
+      2017年已经成为过去，2018年已经来临，希望自己在新的一年能够得到更多的成长。同时对自己也有更多的要求
     
     </summary>
     
@@ -253,6 +253,26 @@
     
     
       <category term="target" scheme="http://www.eumji025.com/tags/target/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>开源系统 - 博客简介篇</title>
+    <link href="http://www.eumji025.com/2017/06/25/eumjiblog-introduce/"/>
+    <id>http://www.eumji025.com/2017/06/25/eumjiblog-introduce/</id>
+    <published>2017-06-25T05:03:44.000Z</published>
+    <updated>2018-02-25T11:37:09.066Z</updated>
+    
+    <summary type="html">
+    
+      个人的第一个自主开发的开源项目，目的就是锻炼自己，因为在之前的工作中自己没能调整好状态。越发的感慨要静下心好好做点东西。四月份正式开始写本项目，之前也留意过一些相关的东西。此博客系统大部分都是在晚上或者周末抽空开发的，中间肯定存在着许多的不足和BUG，希望大家能踊跃的反馈给我。可以在[issues](https://github.com/eumji025/EumJi-blog/issues)提出以及发送邮件到eumji025@gmail.com 目前代码已经托管在github，欢迎大家star和fork，也鼓励大家进行二次开发
+    
+    </summary>
+    
+      <category term="开源项目" scheme="http://www.eumji025.com/categories/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+    
+    
+      <category term="blog" scheme="http://www.eumji025.com/tags/blog/"/>
     
   </entry>
   
@@ -317,6 +337,26 @@
   </entry>
   
   <entry>
+    <title>Spring cloud笔记 - config 外部配置</title>
+    <link href="http://www.eumji025.com/2017/02/25/springcloud-config-introduce/"/>
+    <id>http://www.eumji025.com/2017/02/25/springcloud-config-introduce/</id>
+    <published>2017-02-25T12:02:52.000Z</published>
+    <updated>2018-02-25T12:12:18.868Z</updated>
+    
+    <summary type="html">
+    
+      本文是学习spring cloud的第一篇文章，写此文章的目的是为了更加容易理解spring cloud的官方文档，本文主要讲述的内容是如何利用外部的配置中心进行我们的配置，特别对于微服务的应用来说，如果我们没有配置中心管理我们的服务的配置，那是一件非常难管理的事情
+    
+    </summary>
+    
+      <category term="Spring cloud 专栏" scheme="http://www.eumji025.com/categories/Spring-cloud-%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="spring-cloud config" scheme="http://www.eumji025.com/tags/spring-cloud-config/"/>
+    
+  </entry>
+  
+  <entry>
     <title>checksty配置</title>
     <link href="http://www.eumji025.com/2017/01/18/checkstyle/"/>
     <id>http://www.eumji025.com/2017/01/18/checkstyle/</id>
@@ -373,46 +413,6 @@
     
     
       <category term="Intellij Idea" scheme="http://www.eumji025.com/tags/Intellij-Idea/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>推荐的markdown编辑器</title>
-    <link href="http://www.eumji025.com/2016/11/05/%E6%8E%A8%E8%8D%90%E7%9A%84markdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    <id>http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/</id>
-    <published>2016-11-05T01:26:54.000Z</published>
-    <updated>2018-02-16T03:43:22.801Z</updated>
-    
-    <summary type="html">
-    
-      优雅的markdown编辑器
-    
-    </summary>
-    
-      <category term="工具专栏" scheme="http://www.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="写作" scheme="http://www.eumji025.com/tags/%E5%86%99%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>springMVC 几种页面跳转方式</title>
-    <link href="http://www.eumji025.com/2016/10/28/springMVC-%E5%87%A0%E7%A7%8D%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E6%96%B9%E5%BC%8F/"/>
-    <id>http://www.eumji025.com/2016/10/28/springMVC-几种页面跳转方式/</id>
-    <published>2016-10-28T04:45:00.000Z</published>
-    <updated>2018-01-02T03:29:09.176Z</updated>
-    
-    <summary type="html">
-    
-      Spring MVC属于SpringFrameWork的后续产品，已经融合在Spring Web Flow里面。Spring 框架提供了构建 Web 应用程序的全功能 MVC 模块。使用 Spring 可插入的 MVC 架构，从而在使用Spring进行WEB开发时，可以选择使用Spring的SpringMVC框架或集成其他MVC开发框架，如Struts1，Struts2等。
-    
-    </summary>
-    
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
     
   </entry>
   
