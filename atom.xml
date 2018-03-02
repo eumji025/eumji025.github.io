@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-02-25T11:37:03.093Z</updated>
+  <updated>2018-03-02T12:24:15.444Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mybatis分析 - 插件的加载和使用</title>
+    <link href="http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/"/>
+    <id>http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/</id>
+    <published>2018-03-02T12:17:43.000Z</published>
+    <updated>2018-03-02T12:24:15.444Z</updated>
+    
+    <summary type="html">
+    
+      前面也陆陆续续的介绍了一些mybatis相关的内容，今天介绍一点mybatis里非常有用的拓展功能`插件`，我们都知道mybatis的pagehelper分页插件，可是有没有想过是怎么实现的呢，大概的我想应该就是在查询之前拦截mybatis的sql加上分页的语句。今天抱着学习的态度一起来探究一下mybatis插件原理
+    
+    </summary>
+    
+      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="Mybatis 插件" scheme="http://www.eumji025.com/tags/Mybatis-%E6%8F%92%E4%BB%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>聊聊cglib动态代理的实现</title>
@@ -393,26 +413,6 @@
     
     
       <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Idea-Maven项目的创建和部署</title>
-    <link href="http://www.eumji025.com/2016/11/21/Idea-Maven%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E9%83%A8%E7%BD%B2/"/>
-    <id>http://www.eumji025.com/2016/11/21/Idea-Maven项目的创建和部署/</id>
-    <published>2016-11-21T12:12:40.000Z</published>
-    <updated>2018-02-16T03:43:17.745Z</updated>
-    
-    <summary type="html">
-    
-      使用intellij idea创建maven项目
-    
-    </summary>
-    
-      <category term="工具专栏" scheme="http://www.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="Intellij Idea" scheme="http://www.eumji025.com/tags/Intellij-Idea/"/>
     
   </entry>
   
