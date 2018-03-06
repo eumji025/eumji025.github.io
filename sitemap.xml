@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.eumji025.com/2018/03/06/threadlocal-analysis/</loc>
+    
+    <lastmod>2018-03-06T00:02:47.301Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.eumji025.com/2018/02/21/mybatis-mapper-info/</loc>
+    
+    <lastmod>2018-03-05T23:43:43.684Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.eumji025.com/2018/01/01/2018-target/</loc>
     
     <lastmod>2018-03-02T12:38:56.831Z</lastmod>
@@ -75,13 +89,6 @@
     <loc>http://www.eumji025.com/2018/01/02/dynamic-proxy/</loc>
     
     <lastmod>2018-02-25T05:08:41.312Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.eumji025.com/2018/02/21/mybatis-mapper-info/</loc>
-    
-    <lastmod>2018-02-21T07:06:13.015Z</lastmod>
     
   </url>
   
