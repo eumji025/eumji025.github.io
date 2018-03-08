@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>MyBatis分析 - SQL参数绑定【初稿】 | EumJi Talk</title>
+  <meta name="description" content="相信我们在使用过mybatis多参数查询时，又不使用@param注释的时候，将无法和我们xml中参数绑定的情况，因为mybatis在我们没有使用param注解时候，默认使用的param1，param2等名称表示我们的请求参数。今天主要追要追踪一下mybatis到底是怎么进行处理的">
+<meta name="keywords" content="Mybatis参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis分析 - SQL参数绑定【初稿】">
+<meta property="og:url" content="http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相信我们在使用过mybatis多参数查询时，又不使用@param注释的时候，将无法和我们xml中参数绑定的情况，因为mybatis在我们没有使用param注解时候，默认使用的param1，param2等名称表示我们的请求参数。今天主要追要追踪一下mybatis到底是怎么进行处理的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-08T14:51:04.817Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyBatis分析 - SQL参数绑定【初稿】">
+<meta name="twitter:description" content="相信我们在使用过mybatis多参数查询时，又不使用@param注释的时候，将无法和我们xml中参数绑定的情况，因为mybatis在我们没有使用param注解时候，默认使用的param1，param2等名称表示我们的请求参数。今天主要追要追踪一下mybatis到底是怎么进行处理的">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/me.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于hexo-theme-pure主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。本人停用个人所做的博客是因为，使用服务器速度太慢了，近期也很忙没时间打理。以后有时间在进行重新使用。现在暂时用hexo静态博客。 <br><br> 本人目前从事于Java Web方向，也不是什么厉害角色，很多事情都是凭借着兴趣来做的。
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-插件/">Mybatis 插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis参数/">Mybatis参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-cloud-config/">spring-cloud config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.67px;">Intellij Idea</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis-插件/" style="font-size: 14px;">Mybatis 插件</a> <a href="/tags/Mybatis参数/" style="font-size: 14px;">Mybatis参数</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.67px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 14.67px;">Spring MVC</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/proxy/" style="font-size: 14.67px;">proxy</a> <a href="/tags/spring-boot/" style="font-size: 15.33px;">spring-boot</a> <a href="/tags/spring-cloud-config/" style="font-size: 14px;">spring-cloud config</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/08/mybatis-paramter-binder/" class="title">MyBatis分析 - SQL参数绑定【初稿】</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-08T14:49:12.000Z" itemprop="datePublished">2018-03-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/06/threadlocal-analysis/" class="title">Java基础 - ThreadLocal分析篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-05T23:44:42.000Z" itemprop="datePublished">2018-03-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/02/mybatis-interceptor-analysis/" class="title">Mybatis分析 - 插件的加载和使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-02T12:17:43.000Z" itemprop="datePublished">2018-03-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/23/cglib-proxy-analysis/" class="title">聊聊cglib动态代理的实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-23T02:18:22.000Z" itemprop="datePublished">2018-02-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/21/mybatis-mapper-info/" class="title">Mybatis分析 - Mapper加载使用分析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-21T07:01:30.000Z" itemprop="datePublished">2018-02-21</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#parameter解析"><span class="toc-number">2.1.</span> <span class="toc-text">parameter解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SqlSource构建"><span class="toc-number">2.2.</span> <span class="toc-text">SqlSource构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数匹配"><span class="toc-number">2.3.</span> <span class="toc-text">参数匹配</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">4.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mybatis-paramter-binder" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MyBatis分析 - SQL参数绑定【初稿】
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/03/08/mybatis-paramter-binder/" class="article-date">
+	  <time datetime="2018-03-08T14:49:12.000Z" itemprop="datePublished">2018-03-08</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Mybatis参数/">Mybatis参数</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/03/08/mybatis-paramter-binder/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3,887(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 18(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>相信我们在使用过mybatis多参数查询时，又不使用@param注释的时候，将无法和我们xml中参数绑定的情况，因为mybatis在我们没有使用param注解时候，默认使用的param1，param2等名称表示我们的请求参数。今天主要追要追踪一下mybatis到底是怎么进行处理的。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>当然在这里依旧不讲解mybatis的流程了，直接简明扼要的进入主题，首先看一下MapperMethod构造过程中做了什么，因为有我们关心的东西。</p>
+<h3 id="parameter解析"><a href="#parameter解析" class="headerlink" title="parameter解析"></a>parameter解析</h3><p>我们直接看一下构造MapperMethod对象的类MapperProxy，在invoke方法就能找到。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     <span class="keyword">if</span> (Object.class.equals(method.getDeclaringClass())) &#123;</span><br><span class="line">       <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDefaultMethod(method)) &#123;</span><br><span class="line">       <span class="keyword">return</span> invokeDefaultMethod(proxy, method, args);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">     <span class="keyword">throw</span> ExceptionUtil.unwrapThrowable(t);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">final</span> MapperMethod mapperMethod = cachedMapperMethod(method); <span class="comment">//重点</span></span><br><span class="line">   <span class="keyword">return</span> mapperMethod.execute(sqlSession, args);<span class="comment">//后续的重点</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>从cachedMapperMethod方法继续跟进MapperMethod的构造方法，然后继续到MethodSignature构造方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MethodSignature</span><span class="params">(Configuration configuration, Class&lt;?&gt; mapperInterface, Method method)</span> </span>&#123;</span><br><span class="line">      Type resolvedReturnType = TypeParameterResolver.resolveReturnType(method, mapperInterface); <span class="comment">//获取返回类型，根据不同类型设置具体的返回类型</span></span><br><span class="line">      <span class="keyword">if</span> (resolvedReturnType <span class="keyword">instanceof</span> Class&lt;?&gt;) &#123;</span><br><span class="line">        <span class="keyword">this</span>.returnType = (Class&lt;?&gt;) resolvedReturnType;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (resolvedReturnType <span class="keyword">instanceof</span> ParameterizedType) &#123;</span><br><span class="line">        <span class="keyword">this</span>.returnType = (Class&lt;?&gt;) ((ParameterizedType) resolvedReturnType).getRawType();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.returnType = method.getReturnType();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">this</span>.returnsVoid = <span class="keyword">void</span>.class.equals(<span class="keyword">this</span>.returnType); <span class="comment">//是否为void</span></span><br><span class="line">      <span class="keyword">this</span>.returnsMany = (configuration.getObjectFactory().isCollection(<span class="keyword">this</span>.returnType) || <span class="keyword">this</span>.returnType.isArray());<span class="comment">//返回的是否为集合</span></span><br><span class="line">      <span class="keyword">this</span>.returnsCursor = Cursor.class.equals(<span class="keyword">this</span>.returnType); <span class="comment">//是否返回的为cursor</span></span><br><span class="line">      <span class="keyword">this</span>.mapKey = getMapKey(method); <span class="comment">//mapkey注解解析</span></span><br><span class="line">      <span class="keyword">this</span>.returnsMap = (<span class="keyword">this</span>.mapKey != <span class="keyword">null</span>); <span class="comment">//获取map</span></span><br><span class="line">      <span class="keyword">this</span>.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);</span><br><span class="line">      <span class="keyword">this</span>.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);</span><br><span class="line">      <span class="keyword">this</span>.paramNameResolver = <span class="keyword">new</span> ParamNameResolver(configuration, method); <span class="comment">//重点</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里主要的功能就是包装一些方法对应的参数，包括返回类型，请求参数等信息，我们需要区分不同的返回类型。</p>
+<p>但是我觉得这里不太好的地方就是没有设置假设为集合的时候，集合里具体的类型是什么，只是记录了返回的类型。</p>
+<p>记录这些信息我相信大家都知道是为了后续的使用。</p>
+<p>我们现在再看一下ParamNameResolver构造函数的内容，从名字也可以看出来是为了解析请求的参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ParamNameResolver</span><span class="params">(Configuration config, Method method)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">final</span> Class&lt;?&gt;[] paramTypes = method.getParameterTypes();</span><br><span class="line">   <span class="keyword">final</span> Annotation[][] paramAnnotations = method.getParameterAnnotations();<span class="comment">//获取包含的注解</span></span><br><span class="line">   <span class="keyword">final</span> SortedMap&lt;Integer, String&gt; map = <span class="keyword">new</span> TreeMap&lt;Integer, String&gt;();</span><br><span class="line">   <span class="keyword">int</span> paramCount = paramAnnotations.length;</span><br><span class="line">   <span class="comment">// get names from @Param annotations</span></span><br><span class="line">   <span class="keyword">for</span> (<span class="keyword">int</span> paramIndex = <span class="number">0</span>; paramIndex &lt; paramCount; paramIndex++) &#123;</span><br><span class="line">     <span class="keyword">if</span> (isSpecialParameter(paramTypes[paramIndex])) &#123;<span class="comment">//跳过rowBonds和resultHandler这样的特殊参数</span></span><br><span class="line">       <span class="comment">// skip special parameters</span></span><br><span class="line">       <span class="keyword">continue</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     String name = <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">for</span> (Annotation annotation : paramAnnotations[paramIndex]) &#123;</span><br><span class="line">       <span class="keyword">if</span> (annotation <span class="keyword">instanceof</span> Param) &#123;</span><br><span class="line">         hasParamAnnotation = <span class="keyword">true</span>;</span><br><span class="line">         name = ((Param) annotation).value();</span><br><span class="line">         <span class="keyword">break</span>;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> (name == <span class="keyword">null</span>) &#123;<span class="comment">//没有注解名称</span></span><br><span class="line">       <span class="comment">// @Param was not specified.</span></span><br><span class="line">       <span class="keyword">if</span> (config.isUseActualParamName()) &#123;<span class="comment">//如果允许使用默认名称</span></span><br><span class="line">         name = getActualParamName(method, paramIndex);<span class="comment">//使用默认的名称</span></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (name == <span class="keyword">null</span>) &#123;<span class="comment">//使用数字下标</span></span><br><span class="line">         <span class="comment">// use the parameter index as the name ("0", "1", ...)</span></span><br><span class="line">         <span class="comment">// gcode issue #71</span></span><br><span class="line">         name = String.valueOf(map.size());</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     map.put(paramIndex, name);<span class="comment">//下表和对应的名称记录下来</span></span><br><span class="line">   &#125;</span><br><span class="line">   names = Collections.unmodifiableSortedMap(map);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码中可以看出，假如我们并没有使用@param注解，则我们首先会尝试把名称设置为默认的arg0，arg1形式，如果默认的是不被允许的，则我们会设置成为0,1,2下标这样的形式。</p>
+<p>MapperMethod的构造到此我们也算是弄明白了，其主要作用把我们的请求和响应的相关信息包装成一个对象，并对请求参数的名称进行了修饰。</p>
+<p>接下来我们需要看一下MapperMethod的execute方法干了些什么事情。这里主要介绍一下里面我们最关心代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object param = method.convertArgsToSqlCommandParam(args);</span><br></pre></td></tr></table></figure>
+<p>不管是什么类型的sql语句，都需要执行上面的这段代码。其主要作用我们也可以从名字看出来，将参数和sql具体绑定。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">convertArgsToSqlCommandParam</span><span class="params">(Object[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> paramNameResolver.getNamedParams(args); <span class="comment">//之前构造的paramResolver</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getNamedParams</span><span class="params">(Object[] args)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">int</span> paramCount = names.size();</span><br><span class="line">  <span class="keyword">if</span> (args == <span class="keyword">null</span> || paramCount == <span class="number">0</span>) &#123;<span class="comment">//没有参数直接结束</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasParamAnnotation &amp;&amp; paramCount == <span class="number">1</span>) &#123;<span class="comment">//直接返回第一个</span></span><br><span class="line">    <span class="keyword">return</span> args[names.firstKey()];</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> Map&lt;String, Object&gt; param = <span class="keyword">new</span> ParamMap&lt;Object&gt;();</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Integer, String&gt; entry : names.entrySet()) &#123;</span><br><span class="line">      param.put(entry.getValue(), args[entry.getKey()]); <span class="comment">//现在把名称设为key，value设置真正的值</span></span><br><span class="line">      <span class="comment">// add generic param names (param1, param2, ...)</span></span><br><span class="line">      <span class="keyword">final</span> String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + <span class="number">1</span>);</span><br><span class="line">      <span class="comment">// ensure not to overwrite parameter named with @Param</span></span><br><span class="line">      <span class="keyword">if</span> (!names.containsValue(genericParamName)) &#123;<span class="comment">//同时还会尝试以param1，param2为key的方式也设置一份</span></span><br><span class="line">        param.put(genericParamName, args[entry.getKey()]);</span><br><span class="line">      &#125;</span><br><span class="line">      i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> param;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的可以看出，当我们参数只有一个或者0个的时候就会尝试直接返回，否则的话都会按照之前设置的名称包装成map，并且此处还会设置一份默认的param1，param2这样形式的参数。</p>
+<p>然后我们省略中间一系列步骤看到DefaultSQLSession的selectList方法，这里会进一步包装我们的请求参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);</span><br></pre></td></tr></table></figure>
+<p>在这里wrapCollection会包装集合类型的参数，其实就是我们只有一个参数的时候可能会需要包装。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">wrapCollection</span><span class="params">(<span class="keyword">final</span> Object object)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (object <span class="keyword">instanceof</span> Collection) &#123;<span class="comment">//如果是集合，首先会默认记录一份key为collution的map</span></span><br><span class="line">    StrictMap&lt;Object&gt; map = <span class="keyword">new</span> StrictMap&lt;Object&gt;();</span><br><span class="line">    map.put(<span class="string">"collection"</span>, object);</span><br><span class="line">    <span class="keyword">if</span> (object <span class="keyword">instanceof</span> List) &#123;</span><br><span class="line">      map.put(<span class="string">"list"</span>, object);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (object != <span class="keyword">null</span> &amp;&amp; object.getClass().isArray()) &#123;<span class="comment">//数组记录成key为array的map</span></span><br><span class="line">    StrictMap&lt;Object&gt; map = <span class="keyword">new</span> StrictMap&lt;Object&gt;();</span><br><span class="line">    map.put(<span class="string">"array"</span>, object);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> object; <span class="comment">//否则直接返回</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里主要是针对一个参数且为集合类型或者数组类型的时候包装成map。到此我们已经知道我们的参数会被最终包装成什么样子了。</p>
+<h3 id="SqlSource构建"><a href="#SqlSource构建" class="headerlink" title="SqlSource构建"></a>SqlSource构建</h3><p>我们现在需要了解一下我们的Sql是怎么构建到MappedStatement中去的，所以我们需要再次回到XMLStatementBuilder的parseStatementNode方法中，看一看sqlSource是如何被构建的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parseStatementNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   ...</span><br><span class="line">   LanguageDriver langDriver = getLanguageDriver(lang);</span><br><span class="line">   SqlSource sqlSource = langDriver.createSqlSource(configuration, context, parameterTypeClass);</span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+<p>上述的代码中我们省略了很多我们此时不关心的代码，直接看一下我们关心的createSqlSource方法，默认langDriver是XMLLanguageDriver对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> SqlSource <span class="title">createSqlSource</span><span class="params">(Configuration configuration, XNode script, Class&lt;?&gt; parameterType)</span> </span>&#123;</span><br><span class="line">    XMLScriptBuilder builder = <span class="keyword">new</span> XMLScriptBuilder(configuration, script, parameterType);</span><br><span class="line">    <span class="keyword">return</span> builder.parseScriptNode(); <span class="comment">//重点</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSource <span class="title">parseScriptNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;SqlNode&gt; contents = parseDynamicTags(context); <span class="comment">//sql内容</span></span><br><span class="line">    MixedSqlNode rootSqlNode = <span class="keyword">new</span> MixedSqlNode(contents); <span class="comment">//获取根sql</span></span><br><span class="line">    SqlSource sqlSource = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (isDynamic) &#123;<span class="comment">//是不是动态sql</span></span><br><span class="line">      sqlSource = <span class="keyword">new</span> DynamicSqlSource(configuration, rootSqlNode);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      sqlSource = <span class="keyword">new</span> RawSqlSource(configuration, rootSqlNode, parameterType);<span class="comment">//我们直接看一下普通sql</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sqlSource;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上述的方法主要是找到我们的根sql，然后根据是否为动态sql选择不同的方法进行初始化、我们此处以普通sql为例子查看一下实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RawSqlSource</span><span class="params">(Configuration configuration, SqlNode rootSqlNode, Class&lt;?&gt; parameterType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(configuration, getSql(configuration, rootSqlNode), parameterType);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RawSqlSource</span><span class="params">(Configuration configuration, String sql, Class&lt;?&gt; parameterType)</span> </span>&#123;</span><br><span class="line">    SqlSourceBuilder sqlSourceParser = <span class="keyword">new</span> SqlSourceBuilder(configuration);<span class="comment">//构建sqlSourceBuild</span></span><br><span class="line">    Class&lt;?&gt; clazz = parameterType == <span class="keyword">null</span> ? Object.class : parameterType; <span class="comment">//请求参数类型，默认为null</span></span><br><span class="line">    sqlSource = sqlSourceParser.parse(sql, clazz, <span class="keyword">new</span> HashMap&lt;String, Object&gt;()); <span class="comment">//关键</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中有一个getSql方法，其主要目的是解析我们sql中出现的各种标签，如foreach，if，trims等等的标签类型，不过我们以最简单的方法分析，假设上述的条件都没有继续向下看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> SqlSource <span class="title">parse</span><span class="params">(String originalSql, Class&lt;?&gt; parameterType, Map&lt;String, Object&gt; additionalParameters)</span> </span>&#123;</span><br><span class="line">   ParameterMappingTokenHandler handler = <span class="keyword">new</span> ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);</span><br><span class="line">   GenericTokenParser parser = <span class="keyword">new</span> GenericTokenParser(<span class="string">"#&#123;"</span>, <span class="string">"&#125;"</span>, handler); <span class="comment">//替换变量</span></span><br><span class="line">   String sql = parser.parse(originalSql); <span class="comment">//将变量替换为？，并记录parameter的信息</span></span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> StaticSqlSource(configuration, sql, handler.getParameterMappings());<span class="comment">//这里我们也就知道了sql期待的parameter是什么了。</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上文还是包装方法，主要的作用就是设置parse的格式是替换#{}为？，并记录其中的参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">parse</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (text == <span class="keyword">null</span> || text.isEmpty()) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>[] src = text.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> offset = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// search open token</span></span><br><span class="line">    <span class="keyword">int</span> start = text.indexOf(openToken, offset); <span class="comment">//找到开始的坐标</span></span><br><span class="line">    <span class="keyword">if</span> (start == -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> text;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> StringBuilder builder = <span class="keyword">new</span> StringBuilder(); <span class="comment">//记录整个sql</span></span><br><span class="line">    StringBuilder expression = <span class="keyword">null</span>; <span class="comment">//记录目标表达式</span></span><br><span class="line">    <span class="keyword">while</span> (start &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (start &gt; <span class="number">0</span> &amp;&amp; src[start - <span class="number">1</span>] == <span class="string">'\\'</span>) &#123;</span><br><span class="line">        <span class="comment">// this open token is escaped. remove the backslash and continue.</span></span><br><span class="line">        builder.append(src, offset, start - offset - <span class="number">1</span>).append(openToken);</span><br><span class="line">        offset = start + openToken.length(); <span class="comment">//位置</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// found open token. let's search close token.</span></span><br><span class="line">        <span class="keyword">if</span> (expression == <span class="keyword">null</span>) &#123;</span><br><span class="line">          expression = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          expression.setLength(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        builder.append(src, offset, start - offset);</span><br><span class="line">        offset = start + openToken.length();</span><br><span class="line">        <span class="keyword">int</span> end = text.indexOf(closeToken, offset); <span class="comment">//介绍的下标</span></span><br><span class="line">        <span class="keyword">while</span> (end &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (end &gt; offset &amp;&amp; src[end - <span class="number">1</span>] == <span class="string">'\\'</span>) &#123;</span><br><span class="line">            <span class="comment">// this close token is escaped. remove the backslash and continue.</span></span><br><span class="line">            expression.append(src, offset, end - offset - <span class="number">1</span>).append(closeToken); <span class="comment">//找到一个待匹配的表达式</span></span><br><span class="line">            offset = end + closeToken.length();</span><br><span class="line">            end = text.indexOf(closeToken, offset);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            expression.append(src, offset, end - offset);</span><br><span class="line">            offset = end + closeToken.length();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (end == -<span class="number">1</span>) &#123;</span><br><span class="line">          <span class="comment">// close token was not found.</span></span><br><span class="line">          builder.append(src, start, src.length - start);</span><br><span class="line">          offset = src.length;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          builder.append(handler.handleToken(expression.toString())); <span class="comment">//处理我们变量中的东西</span></span><br><span class="line">          offset = end + closeToken.length();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      start = text.indexOf(openToken, offset);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (offset &lt; src.length) &#123;</span><br><span class="line">      builder.append(src, offset, src.length - offset);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> builder.toString();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上文中所做的事情很简单，就是替换#{…}为？，并且处理我们的参数，记录信息到parameter中，详情可以看handler.handleToken方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">handleToken</span><span class="params">(String content)</span> </span>&#123;</span><br><span class="line">  parameterMappings.add(buildParameterMapping(content));</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"?"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>buildParameterMapping这里面也比较复杂，在此就不展示和讲解了，其实我们也能想到具体做了什么，根据内容，设置parameter的jdbcType，javaType，等相关信息。</p>
+<h3 id="参数匹配"><a href="#参数匹配" class="headerlink" title="参数匹配"></a>参数匹配</h3><p>上面我们介绍了sqlSource的构建以及方法参数的封装，那么接下来我们就需要看一下两边是怎么匹配的。</p>
+<p>我们直接看到baseExecutor中的query方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    BoundSql boundSql = ms.getBoundSql(parameter); <span class="comment">//使用$&#123;&#125;会在这里被匹配</span></span><br><span class="line">    CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql); <span class="comment">//这里会尝试匹配</span></span><br><span class="line">    <span class="keyword">return</span> query(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上述方法中的getBoundSql方法就会把我们的sql和参数匹配起来，这里只会匹配使用${}不用预编译的sql。我们来追踪一下实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> BoundSql <span class="title">getBoundSql</span><span class="params">(Object parameterObject)</span> </span>&#123;</span><br><span class="line">  DynamicContext context = <span class="keyword">new</span> DynamicContext(configuration, parameterObject);</span><br><span class="line">  rootSqlNode.apply(context); <span class="comment">//此处是关键</span></span><br><span class="line">  SqlSourceBuilder sqlSourceParser = <span class="keyword">new</span> SqlSourceBuilder(configuration);</span><br><span class="line">  Class&lt;?&gt; parameterType = parameterObject == <span class="keyword">null</span> ? Object.class : parameterObject.getClass();</span><br><span class="line">  SqlSource sqlSource = sqlSourceParser.parse(context.getSql(), parameterType, context.getBindings());</span><br><span class="line">  BoundSql boundSql = sqlSource.getBoundSql(parameterObject);</span><br><span class="line">  <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : context.getBindings().entrySet()) &#123;</span><br><span class="line">    boundSql.setAdditionalParameter(entry.getKey(), entry.getValue());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> boundSql;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以从上文中看到先构建包含parameterObject的上下文，然后把sql进行解析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">apply</span><span class="params">(DynamicContext context)</span> </span>&#123;</span><br><span class="line">    GenericTokenParser parser = createParser(<span class="keyword">new</span> BindingTokenParser(context, injectionFilter));<span class="comment">//设置解析的parser</span></span><br><span class="line">    context.appendSql(parser.parse(text)); <span class="comment">//再次回到parse方法</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> GenericTokenParser <span class="title">createParser</span><span class="params">(TokenHandler handler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GenericTokenParser(<span class="string">"$&#123;"</span>, <span class="string">"&#125;"</span>, handler);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上述中和我们之前构建预编译的sql有点类似，还是回到了进行参数替换的步骤，但是我们这里的替换和之前的使用的不是同一个Handler。此处使用的BindingTokenParser对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">handleToken</span><span class="params">(String content)</span> </span>&#123;</span><br><span class="line">  Object parameter = context.getBindings().get(<span class="string">"_parameter"</span>);</span><br><span class="line">  <span class="keyword">if</span> (parameter == <span class="keyword">null</span>) &#123;</span><br><span class="line">    context.getBindings().put(<span class="string">"value"</span>, <span class="keyword">null</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (SimpleTypeRegistry.isSimpleType(parameter.getClass())) &#123;</span><br><span class="line">    context.getBindings().put(<span class="string">"value"</span>, parameter);</span><br><span class="line">  &#125;</span><br><span class="line">  Object value = OgnlCache.getValue(content, context.getBindings());<span class="comment">//可以理解为从map找到对应的值</span></span><br><span class="line">  String srtValue = (value == <span class="keyword">null</span> ? <span class="string">""</span> : String.valueOf(value)); <span class="comment">// issue #274 return "" instead of "null"</span></span><br><span class="line">  checkInjection(srtValue);</span><br><span class="line">  <span class="keyword">return</span> srtValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以通过上述的代码也很容易理解了，我们使用${}时候，boundSql时候就会直接替换为对应的值，但是我们使用#{}会被替换成?，等待后面statement的预编译。这里是非常重要的对比，反复体会一下。</p>
+<p>然后我们接着看在构建cacheKey时候，会尝试把预编译的参数进行匹配以构成cacheKey。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CacheKey <span class="title">createCacheKey</span><span class="params">(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (closed) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ExecutorException(<span class="string">"Executor was closed."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  CacheKey cacheKey = <span class="keyword">new</span> CacheKey();</span><br><span class="line">  cacheKey.update(ms.getId());</span><br><span class="line">  cacheKey.update(rowBounds.getOffset());</span><br><span class="line">  cacheKey.update(rowBounds.getLimit());</span><br><span class="line">  cacheKey.update(boundSql.getSql());</span><br><span class="line">  List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();<span class="comment">//maper中的parameter</span></span><br><span class="line">  TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();<span class="comment">//typeHandler</span></span><br><span class="line">  <span class="comment">// mimic DefaultParameterHandler logic</span></span><br><span class="line">  <span class="keyword">for</span> (ParameterMapping parameterMapping : parameterMappings) &#123;</span><br><span class="line">    <span class="keyword">if</span> (parameterMapping.getMode() != ParameterMode.OUT) &#123;<span class="comment">//表示是输入的参数</span></span><br><span class="line">      Object value;</span><br><span class="line">      String propertyName = parameterMapping.getProperty();<span class="comment">//获取名称</span></span><br><span class="line">      <span class="keyword">if</span> (boundSql.hasAdditionalParameter(propertyName)) &#123;<span class="comment">//是否已经匹配过</span></span><br><span class="line">        value = boundSql.getAdditionalParameter(propertyName);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (parameterObject == <span class="keyword">null</span>) &#123;<span class="comment">//判断方法是否有请求参数，没有直接返回</span></span><br><span class="line">        value = <span class="keyword">null</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) &#123;</span><br><span class="line">        value = parameterObject;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        MetaObject metaObject = configuration.newMetaObject(parameterObject);<span class="comment">//构建请求参数的metaObject</span></span><br><span class="line">        value = metaObject.getValue(propertyName); <span class="comment">//去匹配参数，找不到会抛异常</span></span><br><span class="line">      &#125;</span><br><span class="line">      cacheKey.update(value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (configuration.getEnvironment() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// issue #176</span></span><br><span class="line">    cacheKey.update(configuration.getEnvironment().getId());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> cacheKey;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上文的方法做的事情也很简单，就是匹配我们的参数并更新缓存key，如果匹配不到会直接抛异常，具体实现在metaObject.getValue方法中，此处省略中间步骤直接到MapperMethod的get方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">super</span>.containsKey(key)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">"Parameter '"</span> + key + <span class="string">"' not found. Available parameters are "</span> + keySet());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">super</span>.get(key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们平时看到的参数不匹配就是上述的异常信息。当然上述的内容在构建statement的时候还是会再进行一下，跟着代码我们看到simpleExecutor的doQuery方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">doQuery</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Configuration configuration = ms.getConfiguration();</span><br><span class="line">      StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql); <span class="comment">//构建statement</span></span><br><span class="line">      stmt = prepareStatement(handler, ms.getStatementLog());<span class="comment">//这里就会编译时匹配值</span></span><br><span class="line">      <span class="keyword">return</span> handler.&lt;E&gt;query(stmt, resultHandler);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      closeStatement(stmt);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上面主要做的事情就是构造statement对象然后编译sql</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Statement <span class="title">prepareStatement</span><span class="params">(StatementHandler handler, Log statementLog)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">   Statement stmt;</span><br><span class="line">   Connection connection = getConnection(statementLog); <span class="comment">//获取链接</span></span><br><span class="line">   stmt = handler.prepare(connection, transaction.getTimeout()); <span class="comment">//预编译</span></span><br><span class="line">   handler.parameterize(stmt); <span class="comment">//设置值</span></span><br><span class="line">   <span class="keyword">return</span> stmt;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>我们就跳过中间的包装层直接看到PreparedStatementHandler的parameterize方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parameterize</span><span class="params">(Statement statement)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    parameterHandler.setParameters((PreparedStatement) statement);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//DefaultParameterHandler.setParameters方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setParameters</span><span class="params">(PreparedStatement ps)</span> </span>&#123;</span><br><span class="line">    ErrorContext.instance().activity(<span class="string">"setting parameters"</span>).object(mappedStatement.getParameterMap().getId());</span><br><span class="line">    List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();</span><br><span class="line">    <span class="keyword">if</span> (parameterMappings != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; parameterMappings.size(); i++) &#123;</span><br><span class="line">        ParameterMapping parameterMapping = parameterMappings.get(i);</span><br><span class="line">        <span class="keyword">if</span> (parameterMapping.getMode() != ParameterMode.OUT) &#123;</span><br><span class="line">          Object value;</span><br><span class="line">          String propertyName = parameterMapping.getProperty();</span><br><span class="line">          <span class="keyword">if</span> (boundSql.hasAdditionalParameter(propertyName)) &#123; <span class="comment">// issue #448 ask first for additional params</span></span><br><span class="line">            value = boundSql.getAdditionalParameter(propertyName);</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (parameterObject == <span class="keyword">null</span>) &#123;</span><br><span class="line">            value = <span class="keyword">null</span>;</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) &#123;</span><br><span class="line">            value = parameterObject;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            MetaObject metaObject = configuration.newMetaObject(parameterObject);</span><br><span class="line">            value = metaObject.getValue(propertyName);</span><br><span class="line">          &#125;</span><br><span class="line">          TypeHandler typeHandler = parameterMapping.getTypeHandler();</span><br><span class="line">          JdbcType jdbcType = parameterMapping.getJdbcType();</span><br><span class="line">          <span class="keyword">if</span> (value == <span class="keyword">null</span> &amp;&amp; jdbcType == <span class="keyword">null</span>) &#123;</span><br><span class="line">            jdbcType = configuration.getJdbcTypeForNull();</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            typeHandler.setParameter(ps, i + <span class="number">1</span>, value, jdbcType); <span class="comment">//又可以回到自定义typeHandler的设值方法</span></span><br><span class="line">          &#125; <span class="keyword">catch</span> (TypeException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> TypeException(<span class="string">"Could not set parameters for mapping: "</span> + parameterMapping + <span class="string">". Cause: "</span> + e, e);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> TypeException(<span class="string">"Could not set parameters for mapping: "</span> + parameterMapping + <span class="string">". Cause: "</span> + e, e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上文中的内容和createCacheKey方法中的颇为相似，再次我就不在过多的讲解了。到此我们也基本上走完了mybatis的参数绑定过程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1.通过本文的分析，我们就可以知道mybatis是如何进行xml文件和mapper接口的参数匹配的。</p>
+<p>2.我们还知道了#{}和${}参数匹配时候的不同处理。</p>
+<p>3.我们还应该知道mybatis默认会把接口中的参数转成param1，param2这样的格式，当然不推荐使用，一点也不直观。</p>
+<p>4.我们还要知道当只是一个参数的时候，或者为集合参数会进行不同的处理。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>本文只是出自个人阅读mybatis源码的笔记，如果有表述不清晰或者存在错误的地方，欢迎指正。</p>
+<p>与君共勉！！！</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/" title="MyBatis分析 - SQL参数绑定【初稿】" target="_blank" rel="external">http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>everything will be ok!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/03/06/threadlocal-analysis/" title="Java基础 - ThreadLocal分析篇">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>

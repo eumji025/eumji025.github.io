@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-03-06T00:02:47.301Z</updated>
+  <updated>2018-03-08T14:51:04.817Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatis分析 - SQL参数绑定【初稿】</title>
+    <link href="http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/"/>
+    <id>http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/</id>
+    <published>2018-03-08T14:49:12.000Z</published>
+    <updated>2018-03-08T14:51:04.817Z</updated>
+    
+    <summary type="html">
+    
+      相信我们在使用过mybatis多参数查询时，又不使用@param注释的时候，将无法和我们xml中参数绑定的情况，因为mybatis在我们没有使用param注解时候，默认使用的param1，param2等名称表示我们的请求参数。今天主要追要追踪一下mybatis到底是怎么进行处理的
+    
+    </summary>
+    
+      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="Mybatis参数" scheme="http://www.eumji025.com/tags/Mybatis%E5%8F%82%E6%95%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>Java基础 - ThreadLocal分析篇</title>
@@ -141,7 +161,7 @@
     <link href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/"/>
     <id>http://www.eumji025.com/2018/02/10/mybatis-first-cache/</id>
     <published>2018-02-10T15:30:30.000Z</published>
-    <updated>2018-03-02T12:36:23.596Z</updated>
+    <updated>2018-03-06T00:55:28.706Z</updated>
     
     <summary type="html">
     
@@ -393,26 +413,6 @@
     
     
       <category term="spring-cloud config" scheme="http://www.eumji025.com/tags/spring-cloud-config/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>checksty配置</title>
-    <link href="http://www.eumji025.com/2017/01/18/checkstyle/"/>
-    <id>http://www.eumji025.com/2017/01/18/checkstyle/</id>
-    <published>2017-01-18T14:39:13.000Z</published>
-    <updated>2018-02-16T03:43:20.801Z</updated>
-    
-    <summary type="html">
-    
-      CheckStyle是SourceForge下的一个项目，提供了一个帮助JAVA开发人员遵守某些编码规范的工具。它能够自动化代码规范检查过程，从而使得开发人员从这项重要，但是枯燥的任务中解脱出来。
-    
-    </summary>
-    
-      <category term="工具专栏" scheme="http://www.eumji025.com/categories/%E5%B7%A5%E5%85%B7%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="tools" scheme="http://www.eumji025.com/tags/tools/"/>
     
   </entry>
   
