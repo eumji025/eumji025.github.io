@@ -161,7 +161,7 @@
     <link href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/"/>
     <id>http://www.eumji025.com/2018/02/10/mybatis-first-cache/</id>
     <published>2018-02-10T15:30:30.000Z</published>
-    <updated>2018-03-06T00:55:28.706Z</updated>
+    <updated>2018-03-11T02:26:57.622Z</updated>
     
     <summary type="html">
     
@@ -213,6 +213,26 @@
     
     
       <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MyBatis专栏 - 总体流程回顾</title>
+    <link href="http://www.eumji025.com/2018/01/21/mybatis-epitome/"/>
+    <id>http://www.eumji025.com/2018/01/21/mybatis-epitome/</id>
+    <published>2018-01-21T01:35:17.000Z</published>
+    <updated>2018-03-11T02:31:05.769Z</updated>
+    
+    <summary type="html">
+    
+      本文主要回顾mybatis的整体执行流程，走马观花去看一下mybatis是如何进行加载和使用的，为后续的文章分析做铺垫
+    
+    </summary>
+    
+      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="Mybatis概括" scheme="http://www.eumji025.com/tags/Mybatis%E6%A6%82%E6%8B%AC/"/>
     
   </entry>
   
@@ -393,26 +413,6 @@
     
     
       <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spring cloud笔记 - config 外部配置</title>
-    <link href="http://www.eumji025.com/2017/02/25/springcloud-config-introduce/"/>
-    <id>http://www.eumji025.com/2017/02/25/springcloud-config-introduce/</id>
-    <published>2017-02-25T12:02:52.000Z</published>
-    <updated>2018-02-25T12:12:18.868Z</updated>
-    
-    <summary type="html">
-    
-      本文是学习spring cloud的第一篇文章，写此文章的目的是为了更加容易理解spring cloud的官方文档，本文主要讲述的内容是如何利用外部的配置中心进行我们的配置，特别对于微服务的应用来说，如果我们没有配置中心管理我们的服务的配置，那是一件非常难管理的事情
-    
-    </summary>
-    
-      <category term="Spring cloud 专栏" scheme="http://www.eumji025.com/categories/Spring-cloud-%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="spring-cloud config" scheme="http://www.eumji025.com/tags/spring-cloud-config/"/>
     
   </entry>
   
