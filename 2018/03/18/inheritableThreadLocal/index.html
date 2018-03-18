@@ -18,24 +18,22 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>推荐的markdown编辑器 | EumJi Talk</title>
-  <meta name="description" content="优雅的markdown编辑器">
-<meta name="keywords" content="写作">
+  <title>ThreadLocal扩展 - InheritableThreadLocal的原理 | EumJi Talk</title>
+  <meta name="description" content="本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响">
+<meta name="keywords" content="ThreadLocal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="推荐的markdown编辑器">
-<meta property="og:url" content="http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/index.html">
+<meta property="og:title" content="ThreadLocal扩展 - InheritableThreadLocal的原理">
+<meta property="og:url" content="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="优雅的markdown编辑器">
+<meta property="og:description" content="本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/table_002.png">
-<meta property="og:updated_time" content="2018-02-16T03:43:22.801Z">
+<meta property="og:updated_time" content="2018-03-18T02:18:58.934Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="推荐的markdown编辑器">
-<meta name="twitter:description" content="优雅的markdown编辑器">
-<meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/table_002.png">
+<meta name="twitter:title" content="ThreadLocal扩展 - InheritableThreadLocal的原理">
+<meta name="twitter:description" content="本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -357,7 +355,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#官网"><span class="toc-number">1.1.</span> <span class="toc-text">官网</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#windows"><span class="toc-number">2.1.</span> <span class="toc-text">windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux"><span class="toc-number">2.2.</span> <span class="toc-text">linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mac"><span class="toc-number">2.3.</span> <span class="toc-text">mac</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#功能介绍"><span class="toc-number">3.</span> <span class="toc-text">功能介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#表格编辑"><span class="toc-number">3.1.</span> <span class="toc-text">表格编辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片操作"><span class="toc-number">3.2.</span> <span class="toc-text">图片操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#目录大纲"><span class="toc-number">3.3.</span> <span class="toc-text">目录大纲</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主题"><span class="toc-number">3.4.</span> <span class="toc-text">主题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">4.</span> <span class="toc-text">结语</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">2.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#剖析"><span class="toc-number">3.</span> <span class="toc-text">剖析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -365,14 +363,14 @@
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-推荐的markdown编辑器" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-inheritableThreadLocal" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      推荐的markdown编辑器
+      ThreadLocal扩展 - InheritableThreadLocal的原理
     </h1>
   
 
@@ -380,32 +378,32 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="fa fa-calendar-check-o"></i>
-	<a href="/2016/11/05/推荐的markdown编辑器/" class="article-date">
-	  <time datetime="2016-11-05T01:26:54.000Z" itemprop="datePublished">2016-11-05</time>
+	<a href="/2018/03/18/inheritableThreadLocal/" class="article-date">
+	  <time datetime="2018-03-18T02:15:35.000Z" itemprop="datePublished">2018-03-18</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/工具专栏/">工具专栏</a>
+    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
   </span>
 
         
   <span class="article-tag">
     <i class="fa fa-tag"></i>
-	<a class="article-tag-link" href="/tags/写作/">写作</a>
+	<a class="article-tag-link" href="/tags/ThreadLocal/">ThreadLocal</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2016/11/05/推荐的markdown编辑器/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/03/18/inheritableThreadLocal/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 473(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,072(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
 
@@ -414,58 +412,26 @@
     </div>
     <div class="article-entry markdown-body" itemprop="articleBody">
       
-        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Typora是一款非常优雅的markdown编辑器</p>
-<blockquote>
-<p>因为它将「写字」和「预览」合并，你输入的地方，也是输出的地方，即现在很流行的 WYSIWYG（What You See Is What You Get）。其实转念一想，这不就是回到了 Office Word 嘛，只不过编辑文本时不用再去工具栏上点选，一切的格式都能通过符号来控制。</p>
-<p>用 Typora 官方的介绍视频，你就懂这一切是多么的自然。没错，所有的行内元素（如加粗、斜体）都会根据当前是否在编辑态而智能地在编辑态和预览态切换，而区块级元素（如标题、列表）则会在按下 Enter 后即时渲染，不能再次编辑。</p>
-<p>一切都变得如此干净、纯粹。</p>
-</blockquote>
-<h3 id="官网"><a href="#官网" class="headerlink" title="官网"></a>官网</h3><blockquote>
-<p>传送门：　<a href="http://www.typora.io/" target="_blank" rel="noopener">hexo官网</a></p>
-</blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h3><blockquote>
-<p><a href="http://www.typora.io/#windows" target="_blank" rel="noopener">下载地址</a></p>
-</blockquote>
-<p>安装没有难度</p>
-<h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><blockquote>
-<p>sudo apt-key adv –keyserver keyserver.ubuntu.com –recv-keys BA300B7755AFCFAE</p>
-<p>sudo add-apt-repository ‘deb <a href="https://typora.io" target="_blank" rel="noopener">https://typora.io</a> ./linux/‘</p>
-<p>sudo apt-get update</p>
-<p>sudo apt-get install typora</p>
-</blockquote>
-<h3 id="mac"><a href="#mac" class="headerlink" title="mac"></a>mac</h3><blockquote>
-<p>解压安装</p>
-</blockquote>
-<h2 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h2><h3 id="表格编辑"><a href="#表格编辑" class="headerlink" title="表格编辑"></a>表格编辑</h3><p>其他的markdown表格编辑方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">| Left-Aligned  | Center Aligned  | Right Aligned |</span><br><span class="line">| :------------ |:---------------:| -----:|</span><br><span class="line">| col 3 is      | some wordy text | $1600 |</span><br><span class="line">| col 2 is      | centered        |   $12 |</span><br><span class="line">| zebra stripes | are neat        |    $1 |</span><br></pre></td></tr></table></figure>
-<p> 十分复杂的操作有木有</p>
-<p>Typora表格操作方式</p>
-<blockquote>
-<p>CTRL+T快捷键直接生成</p>
-<p><img src="http://of8rkrh1w.bkt.clouddn.com/table_002.png" alt=""></p>
-</blockquote>
-<h3 id="图片操作"><a href="#图片操作" class="headerlink" title="图片操作"></a>图片操作</h3><p>插入图片的语法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![logo](http://typora.io/img/favicon-128.png)</span><br></pre></td></tr></table></figure>
-<p>typora语法</p>
-<blockquote>
-<p>CTRL+SHIFT+I</p>
-</blockquote>
-<p>更简单的直接将图片拖拽进来即可。</p>
-<h3 id="目录大纲"><a href="#目录大纲" class="headerlink" title="目录大纲"></a>目录大纲</h3><blockquote>
-<p>Typora 还可以根据当前文档的标题层级，自动生成显示大纲，</p>
-<p>点击软件左下角圆圈即可，就会出现字数统计和大纲预览。</p>
-<p>圆圈旁边是切换视图按钮。</p>
-</blockquote>
-<h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><blockquote>
-<p>ypora 默认提供了六套主题样式：</p>
-<p>Github风格、</p>
-<p>默认主题 Gothic、</p>
-<p>出版风格的 Newsprint、</p>
-<p>夜间模式 Night、</p>
-<p>Pixyll、</p>
-<p>Whitey.</p>
-</blockquote>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>与君共勉！！！</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们应该都知道ThreadLocal是为了解决同一线程内，多个地方可以共享同一个变量，而线程间可以起隔离一个非常有用的工具类。具体可以参看我的文章<a href="https://eumji025.github.io/2018/03/06/threadlocal-analysis/" target="_blank" rel="noopener">Java基础 - ThreadLocal分析篇</a>文章中对threadLocal中的分析。</p>
+<p>本文则是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>来举一个简单的例子演示一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InheritableThreadLocalDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; local = <span class="keyword">new</span> InheritableThreadLocal&lt;&gt;();</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    local.set(<span class="string">"aaaaa"</span>);</span><br><span class="line">    <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">      System.out.println(local.get());</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，子线程见输出<code>aaaaa</code>。</p>
+<h2 id="剖析"><a href="#剖析" class="headerlink" title="剖析"></a>剖析</h2><p>我们都知道ThreadLocal是线程隔离的，但是为什么InheritableThreadLocal就可以传递，并且还是有限制条件的，那么一个很大的玄机肯定在线程初始化的时候。</p>
+<p>具体让我们跟随代码来看看其中的逻辑。首先还是看一下InheritableThreadLocal的代码变化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InheritableThreadLocal</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">ThreadLocal</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> T <span class="title">childValue</span><span class="params">(T parentValue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> parentValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> t.inheritableThreadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">        t.inheritableThreadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到变化是非常少的，只是将threadLocals上的操作转到了inheritableThreadLocals之上。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Thread</span><span class="params">(Runnable target)</span> </span>&#123;</span><br><span class="line">    init(<span class="keyword">null</span>, target, <span class="string">"Thread-"</span> + nextThreadNum(), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ThreadGroup g, Runnable target, String name,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">long</span> stackSize)</span> </span>&#123;</span><br><span class="line">    init(g, target, name, stackSize, <span class="keyword">null</span>, <span class="keyword">true</span>);<span class="comment">////inheritThreadLocals默认为true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ThreadGroup g, Runnable target, String name,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">long</span> stackSize, AccessControlContext acc,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">boolean</span> inheritThreadLocals)</span> </span>&#123;</span><br><span class="line">    ...<span class="comment">//省略</span></span><br><span class="line">    <span class="keyword">if</span> (inheritThreadLocals &amp;&amp; parent.inheritableThreadLocals != <span class="keyword">null</span>)<span class="comment">//关键默认都满足</span></span><br><span class="line">        <span class="keyword">this</span>.inheritableThreadLocals =</span><br><span class="line">            ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);<span class="comment">//看这里</span></span><br><span class="line">    <span class="comment">/* Stash the specified stack size in case the VM cares */</span></span><br><span class="line">    <span class="keyword">this</span>.stackSize = stackSize;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Set thread ID */</span></span><br><span class="line">    tid = nextThreadID();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上文中可以看出，我们在线程初始化的时候有部分就是将父线程的inheritableThreadLocals设置到子线程中来，当然是要处理，因为两个默认使用的线程不同。接着向下看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> ThreadLocalMap <span class="title">createInheritedMap</span><span class="params">(ThreadLocalMap parentMap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadLocalMap(parentMap);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">ThreadLocalMap</span><span class="params">(ThreadLocalMap parentMap)</span> </span>&#123;</span><br><span class="line">    Entry[] parentTable = parentMap.table;</span><br><span class="line">    <span class="keyword">int</span> len = parentTable.length;</span><br><span class="line">    setThreshold(len);</span><br><span class="line">    table = <span class="keyword">new</span> Entry[len];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; len; j++) &#123;<span class="comment">//遍历父线程的threadLocal里的table</span></span><br><span class="line">      数组</span><br><span class="line">        Entry e = parentTable[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">            ThreadLocal&lt;Object&gt; key = (ThreadLocal&lt;Object&gt;) e.get();</span><br><span class="line">            <span class="keyword">if</span> (key != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Object value = key.childValue(e.value);</span><br><span class="line">                Entry c = <span class="keyword">new</span> Entry(key, value);</span><br><span class="line">                <span class="keyword">int</span> h = key.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">while</span> (table[h] != <span class="keyword">null</span>)</span><br><span class="line">                    h = nextIndex(h, len);</span><br><span class="line">                table[h] = c;</span><br><span class="line">                size++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到做的事情也很简单，就是把父线程的中threadLocalMap复制一份到子线程中。由于取值还是用的同一个ThreadLocal对象，所以自然 能从子类中取到值。</p>
+<p>结合上面这两段代码，我们可以看到，在子线程创建的时候会把父线程的inheritableThreadLocals复制一份，又因为InheritableThreadLocals在调用createMap时候已经被重写了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">    t.inheritableThreadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是这里做的并不是替换引用，而是复制一份。所以当父类之后在修改的时候，子线程取得还是自己线程里取的值，所以两者在创建之后是无法相互影响的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>InheritableThreadLocal主要目的为了父子线程间能够自动传递变量，所以这里的变量不适合变化，也就是传递的应该是不会发生变化的东西，就比如说我想传入一个全局的Id一样，将所有记录都记录到这个全局Id下。</p>
+<p>所以当我们有时候需要传递一些标识或者不可变的东西，又不想自己写对象和构造函数一级级的传递时候，InheritableThreadLocal就是一个非常不错的选择。</p>
+<p>多注意积累，非常nice。</p>
+<p>与君共勉！！！</p>
 
       
     </div>
@@ -475,7 +441,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/" title="推荐的markdown编辑器" target="_blank" rel="external">http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/</a>
+      <a href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/" title="ThreadLocal扩展 - InheritableThreadLocal的原理" target="_blank" rel="external">http://www.eumji025.com/2018/03/18/inheritableThreadLocal/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -508,7 +474,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2016/11/05/推荐的markdown编辑器/' ></div>
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/03/18/inheritableThreadLocal/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
@@ -528,13 +494,9 @@ conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2016/11/21/Idea-Maven项目的创建和部署/" title="Idea-Maven项目的创建和部署"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2016/10/28/springMVC-几种页面跳转方式/" title="springMVC 几种页面跳转方式">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+      <a href="/2018/03/08/mybatis-paramter-binder/" title="MyBatis分析 - SQL参数绑定【初稿】">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
     </li>
     
   </ul>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-03-13T12:25:39.064Z</updated>
+  <updated>2018-03-18T02:18:58.934Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ThreadLocal扩展 - InheritableThreadLocal的原理</title>
+    <link href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/"/>
+    <id>http://www.eumji025.com/2018/03/18/inheritableThreadLocal/</id>
+    <published>2018-03-18T02:15:35.000Z</published>
+    <updated>2018-03-18T02:18:58.934Z</updated>
+    
+    <summary type="html">
+    
+      本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="ThreadLocal" scheme="http://www.eumji025.com/tags/ThreadLocal/"/>
+    
+  </entry>
   
   <entry>
     <title>MyBatis分析 - SQL参数绑定【初稿】</title>
@@ -33,26 +53,6 @@
     
     
       <category term="Mybatis参数" scheme="http://www.eumji025.com/tags/Mybatis%E5%8F%82%E6%95%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java基础 - ThreadLocal分析篇</title>
-    <link href="http://www.eumji025.com/2018/03/06/threadlocal-analysis/"/>
-    <id>http://www.eumji025.com/2018/03/06/threadlocal-analysis/</id>
-    <published>2018-03-05T23:44:42.000Z</published>
-    <updated>2018-03-06T00:02:47.301Z</updated>
-    
-    <summary type="html">
-    
-      ThreadLocal是一种可以将变量线程间隔离，但是线程内又可以共享的一个工具类，非常有利于解决一些希望在线程间复用的变量而又不知道如何存放的问题。当然使用ThreadLocal是有需要的，因为滥用可能会造成内存移除等问题，具体请看本文
-    
-    </summary>
-    
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
     
   </entry>
   
@@ -297,6 +297,26 @@
   </entry>
   
   <entry>
+    <title>Java基础 - ThreadLocal分析篇</title>
+    <link href="http://www.eumji025.com/2018/01/06/threadlocal-analysis/"/>
+    <id>http://www.eumji025.com/2018/01/06/threadlocal-analysis/</id>
+    <published>2018-01-05T23:44:42.000Z</published>
+    <updated>2018-03-18T02:19:12.546Z</updated>
+    
+    <summary type="html">
+    
+      ThreadLocal是一种可以将变量线程间隔离，但是线程内又可以共享的一个工具类，非常有利于解决一些希望在线程间复用的变量而又不知道如何存放的问题。当然使用ThreadLocal是有需要的，因为滥用可能会造成内存移除等问题，具体请看本文
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="ThreadLocal" scheme="http://www.eumji025.com/tags/ThreadLocal/"/>
+    
+  </entry>
+  
+  <entry>
     <title>动态代理及Proxy源码分析</title>
     <link href="http://www.eumji025.com/2018/01/02/dynamic-proxy/"/>
     <id>http://www.eumji025.com/2018/01/02/dynamic-proxy/</id>
@@ -386,26 +406,6 @@
     <summary type="html">
     
       使用spring boot内置tomcat,并自定义端口.
-    
-    </summary>
-    
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring boot开篇</title>
-    <link href="http://www.eumji025.com/2017/02/26/spring-boot-helloworld/"/>
-    <id>http://www.eumji025.com/2017/02/26/spring-boot-helloworld/</id>
-    <published>2017-02-26T02:32:34.000Z</published>
-    <updated>2018-03-02T12:36:05.044Z</updated>
-    
-    <summary type="html">
-    
-      Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域（rapid application development）成为领导者。
     
     </summary>
     
