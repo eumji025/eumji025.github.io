@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-03-18T02:18:58.934Z</updated>
+  <updated>2018-03-19T13:04:22.720Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java8 - 时间API记录</title>
+    <link href="http://www.eumji025.com/2018/03/19/localdatetime-api/"/>
+    <id>http://www.eumji025.com/2018/03/19/localdatetime-api/</id>
+    <published>2018-03-19T11:15:51.000Z</published>
+    <updated>2018-03-19T13:04:22.720Z</updated>
+    
+    <summary type="html">
+    
+      本文主要介绍Java8中新时间API的案例，来快速掌握Java8中时间API，个人感觉其中的改进使我们能更加轻松的使用这些API来满足我们平时的使用需求，特别是在时间的处理修改上更加的细致和丰富，通过本文算是对个人使用过程中的一些记录和总结
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="LocalDateTime" scheme="http://www.eumji025.com/tags/LocalDateTime/"/>
+    
+  </entry>
   
   <entry>
     <title>ThreadLocal扩展 - InheritableThreadLocal的原理</title>
@@ -386,26 +406,6 @@
     <summary type="html">
     
       记录spring boot跳转到静态页面。
-    
-    </summary>
-    
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="spring-boot" scheme="http://www.eumji025.com/tags/spring-boot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring boot自定义端口</title>
-    <link href="http://www.eumji025.com/2017/02/26/spring-boot-customport/"/>
-    <id>http://www.eumji025.com/2017/02/26/spring-boot-customport/</id>
-    <published>2017-02-26T12:19:56.000Z</published>
-    <updated>2018-03-02T12:35:36.480Z</updated>
-    
-    <summary type="html">
-    
-      使用spring boot内置tomcat,并自定义端口.
     
     </summary>
     

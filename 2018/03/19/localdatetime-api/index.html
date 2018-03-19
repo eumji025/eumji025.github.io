@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>Java8 - 时间API记录 | EumJi Talk</title>
+  <meta name="description" content="本文主要介绍Java8中新时间API的案例，来快速掌握Java8中时间API，个人感觉其中的改进使我们能更加轻松的使用这些API来满足我们平时的使用需求，特别是在时间的处理修改上更加的细致和丰富，通过本文算是对个人使用过程中的一些记录和总结">
+<meta name="keywords" content="LocalDateTime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 - 时间API记录">
+<meta property="og:url" content="http://www.eumji025.com/2018/03/19/localdatetime-api/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文主要介绍Java8中新时间API的案例，来快速掌握Java8中时间API，个人感觉其中的改进使我们能更加轻松的使用这些API来满足我们平时的使用需求，特别是在时间的处理修改上更加的细致和丰富，通过本文算是对个人使用过程中的一些记录和总结">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/time-of-java8.png">
+<meta property="og:updated_time" content="2018-03-19T13:04:22.720Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8 - 时间API记录">
+<meta name="twitter:description" content="本文主要介绍Java8中新时间API的案例，来快速掌握Java8中时间API，个人感觉其中的改进使我们能更加轻松的使用这些API来满足我们平时的使用需求，特别是在时间的处理修改上更加的细致和丰富，通过本文算是对个人使用过程中的一些记录和总结">
+<meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/time-of-java8.png">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/03/19/localdatetime-api/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/me.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于cofess主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。本人停用个人所做的博客是因为，使用服务器速度太慢了，近期也很忙没时间打理。以后有时间在进行重新使用。现在暂时用hexo静态博客。 <br><br> 夯实基础,厚积薄发,欢迎交流和讨论 email:eumji025@gmail.com
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LocalDateTime/">LocalDateTime</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-插件/">Mybatis 插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis参数/">Mybatis参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis概括/">Mybatis概括</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-cloud-config/">spring-cloud config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.67px;">Intellij Idea</a> <a href="/tags/LocalDateTime/" style="font-size: 14px;">LocalDateTime</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis-插件/" style="font-size: 14px;">Mybatis 插件</a> <a href="/tags/Mybatis参数/" style="font-size: 14px;">Mybatis参数</a> <a href="/tags/Mybatis概括/" style="font-size: 14px;">Mybatis概括</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.67px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 14.67px;">Spring MVC</a> <a href="/tags/ThreadLocal/" style="font-size: 14.67px;">ThreadLocal</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/proxy/" style="font-size: 14.67px;">proxy</a> <a href="/tags/spring-boot/" style="font-size: 15.33px;">spring-boot</a> <a href="/tags/spring-cloud-config/" style="font-size: 14px;">spring-cloud config</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/19/localdatetime-api/" class="title">Java8 - 时间API记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-19T11:15:51.000Z" itemprop="datePublished">2018-03-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/18/inheritableThreadLocal/" class="title">ThreadLocal扩展 - InheritableThreadLocal的原理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-18T02:15:35.000Z" itemprop="datePublished">2018-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/08/mybatis-paramter-binder/" class="title">MyBatis分析 - SQL参数绑定【初稿】</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-08T14:49:12.000Z" itemprop="datePublished">2018-03-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/02/mybatis-interceptor-analysis/" class="title">Mybatis分析 - 插件的加载和使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-02T12:17:43.000Z" itemprop="datePublished">2018-03-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/02/23/cglib-proxy-analysis/" class="title">聊聊cglib动态代理的实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-02-23T02:18:22.000Z" itemprop="datePublished">2018-02-23</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构介绍"><span class="toc-number">2.</span> <span class="toc-text">结构介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LocalTime"><span class="toc-number">3.</span> <span class="toc-text">LocalTime</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取时间的某一部分"><span class="toc-number">3.0.1.</span> <span class="toc-text">获取时间的某一部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#格式化时间"><span class="toc-number">3.0.2.</span> <span class="toc-text">格式化时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建日期"><span class="toc-number">3.0.3.</span> <span class="toc-text">创建日期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改日期"><span class="toc-number">4.</span> <span class="toc-text">修改日期</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取日期"><span class="toc-number">4.0.1.</span> <span class="toc-text">获取日期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#格式化日期"><span class="toc-number">4.0.2.</span> <span class="toc-text">格式化日期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LocalDateTime"><span class="toc-number">5.</span> <span class="toc-text">LocalDateTime</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建时间"><span class="toc-number">5.0.1.</span> <span class="toc-text">创建时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他"><span class="toc-number">5.0.2.</span> <span class="toc-text">其他</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#汇总"><span class="toc-number">6.</span> <span class="toc-text">汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TimeZone"><span class="toc-number">7.</span> <span class="toc-text">TimeZone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间戳"><span class="toc-number">8.</span> <span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间间距"><span class="toc-number">9.</span> <span class="toc-text">时间间距</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ChronoUnit"><span class="toc-number">9.1.</span> <span class="toc-text">ChronoUnit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">10.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-localdatetime-api" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java8 - 时间API记录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/03/19/localdatetime-api/" class="article-date">
+	  <time datetime="2018-03-19T11:15:51.000Z" itemprop="datePublished">2018-03-19</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/LocalDateTime/">LocalDateTime</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/03/19/localdatetime-api/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,553(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JAVA8的新特性之一就是DATE/TIME的改善,之前的时间API确实不够好用,JAVA8借鉴了Joda-Time的精华对旧的API进行了改善和升级API,正好最近工作中常常使用到时间,简单的记录一下java时间API的用法,不涉及非常高深的东西.</p>
+<h2 id="结构介绍"><a href="#结构介绍" class="headerlink" title="结构介绍"></a>结构介绍</h2><p><img src="http://of8rkrh1w.bkt.clouddn.com/time-of-java8.png" alt=""></p>
+<h2 id="LocalTime"><a href="#LocalTime" class="headerlink" title="LocalTime"></a>LocalTime</h2><p>LocalTime 顾名思义就是介绍具体的时间的类.</p>
+<p>####创建时间对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// current time 11:34:53.201</span></span><br><span class="line">LocalTime currentTime = LocalTime.now();</span><br><span class="line"><span class="comment">//of重载了多个方法,可以根据自己的需求选择合适的方法</span></span><br><span class="line"><span class="comment">// 12:00</span></span><br><span class="line">LocalTime midday = LocalTime.of(<span class="number">12</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 13:10:15</span></span><br><span class="line">LocalTime afterMidday = LocalTime.of(<span class="number">13</span>, <span class="number">10</span>, <span class="number">15</span>);</span><br><span class="line"><span class="comment">// 10:00:01</span></span><br><span class="line">LocalTime fromSecondsOfDay = LocalTime.ofSecondOfDay(<span class="number">36001</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="获取时间的某一部分"><a href="#获取时间的某一部分" class="headerlink" title="获取时间的某一部分"></a>获取时间的某一部分</h4><p>接下来看一下如何通过LocalTime 对象获取具体的时分秒</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//11</span></span><br><span class="line"><span class="keyword">int</span> hour = currentTime.getHour();</span><br><span class="line"><span class="comment">//34</span></span><br><span class="line"><span class="keyword">int</span> minute = currentTime.getMinute();</span><br><span class="line"><span class="comment">//53</span></span><br><span class="line"><span class="keyword">int</span> second = currentTime.getSecond();</span><br><span class="line"><span class="comment">//733</span></span><br><span class="line"><span class="keyword">int</span> nano = currentTime.getNano();</span><br></pre></td></tr></table></figure>
+<p>另外补充</p>
+<ol>
+<li>withXXX方法为通过改变当前时间的时或分或秒生成新时间</li>
+<li>plusXXX方法为在当前时间对象的基础上加多少小时或者多少分钟或者多少秒生成新时间对象</li>
+<li>minusXXX方法则为在当前时间对象的基础上减多少小时或者多少分钟或者多少秒生成新时间对象</li>
+</ol>
+<h4 id="格式化时间"><a href="#格式化时间" class="headerlink" title="格式化时间"></a>格式化时间</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//格式化时间 11:34:53.201</span></span><br><span class="line">String basic = currentTime.format(DateTimeFormatter.ISO_LOCAL_TIME);</span><br><span class="line"><span class="comment">//12:00:00</span></span><br><span class="line">String middayFormat = midday.format(DateTimeFormatter.ISO_LOCAL_TIME);</span><br><span class="line"><span class="comment">//自定义格式化时间 11:34:53</span></span><br><span class="line">String custom = currentTime.format(DateTimeFormatter.ofPattern(<span class="string">"HH:mm:ss"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//解析时间</span></span><br><span class="line">LocalTime basicTime = LocalTime.parse(basic);</span><br><span class="line"><span class="comment">//12:00</span></span><br><span class="line">LocalTime middayParse = LocalTime.parse(middayFormat);</span><br><span class="line"><span class="comment">//自定义格式解析时间</span></span><br><span class="line">LocalTime customTime = LocalTime.parse(custom, DateTimeFormatter.ofPattern(<span class="string">"HH:mm:ss"</span>));</span><br></pre></td></tr></table></figure>
+<p>我们不需要关系DateTimeFormatter只需要关心我们格式化和解析的格式就可以了,中间还添加不完整格式的时间进行格式化.</p>
+<p>##LocalDate</p>
+<p>LocalDate顾名思义就是本地日期的类,用来专门处理日期相关的操作</p>
+<h4 id="创建日期"><a href="#创建日期" class="headerlink" title="创建日期"></a>创建日期</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// the current date</span></span><br><span class="line">LocalDate currentDate = LocalDate.now();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2017-11-25</span></span><br><span class="line">LocalDate day1 = LocalDate.of(<span class="number">2017</span>, Month.NOVEMBER, <span class="number">25</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2014-05-11</span></span><br><span class="line">LocalDate day2 = LocalDate.of(<span class="number">2014</span>, <span class="number">5</span>, <span class="number">11</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2010的第65天</span></span><br><span class="line">LocalDate day3 = LocalDate.ofYearDay(<span class="number">2010</span>, <span class="number">65</span>);</span><br><span class="line"><span class="comment">//1970-01-02 从1970的第一天加1天</span></span><br><span class="line">LocalDate epochDay = LocalDate.ofEpochDay(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="修改日期"><a href="#修改日期" class="headerlink" title="修改日期"></a>修改日期</h2><p>会生成新的日期,本演示结果省略</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">day1.withYear(<span class="number">1993</span>);<span class="comment">//修改年份并创建日期</span></span><br><span class="line"></span><br><span class="line">day1.withMonth(<span class="number">3</span>); <span class="comment">//会自动更新天数越界的问题</span></span><br><span class="line"></span><br><span class="line">day1.withDayOfYear(<span class="number">23</span>);<span class="comment">//年份不变,改为当前年的第23天</span></span><br><span class="line"></span><br><span class="line">day1.withDayOfMonth(<span class="number">3</span>);<span class="comment">//当前月的第三天</span></span><br><span class="line"></span><br><span class="line">day1.plusDays(<span class="number">3</span>); <span class="comment">//当前日期加3天</span></span><br><span class="line"></span><br><span class="line">day1.plusYears(<span class="number">3</span>);  <span class="comment">//加3年</span></span><br><span class="line"></span><br><span class="line">day1.plusWeeks(<span class="number">3</span>);  <span class="comment">//加3周</span></span><br><span class="line"></span><br><span class="line">day1.plusMonths(<span class="number">3</span>); <span class="comment">//加三个月</span></span><br></pre></td></tr></table></figure>
+<h4 id="获取日期"><a href="#获取日期" class="headerlink" title="获取日期"></a>获取日期</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//=============================获取日期================================</span></span><br><span class="line"><span class="keyword">int</span> year = day1.getYear();<span class="comment">//获取年份</span></span><br><span class="line"></span><br><span class="line">Month month = day1.getMonth(); <span class="comment">//获取月份 --为枚举类</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> dayOfYear = day1.getDayOfYear(); <span class="comment">//当前年的多少天</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> dayOfMonth = day1.getDayOfMonth(); <span class="comment">//当前月的多少天</span></span><br><span class="line"></span><br><span class="line">DayOfWeek dayOfWeek = day1.getDayOfWeek(); <span class="comment">//当前周的第几天 --枚举类</span></span><br></pre></td></tr></table></figure>
+<h4 id="格式化日期"><a href="#格式化日期" class="headerlink" title="格式化日期"></a>格式化日期</h4><p>和格式化时间类似</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String format = day1.format(DateTimeFormatter.ISO_LOCAL_DATE);</span><br><span class="line">String customDate = day1.format(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd"</span>));</span><br><span class="line">LocalDate parse = LocalDate.parse(format);</span><br><span class="line">LocalDate.parse(customDate,DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd"</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="LocalDateTime"><a href="#LocalDateTime" class="headerlink" title="LocalDateTime"></a>LocalDateTime</h2><p>顾名思义就是具体的日期+时间的类,可以理解为localDate和localTime的结合体.</p>
+<h4 id="创建时间"><a href="#创建时间" class="headerlink" title="创建时间"></a>创建时间</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前日期+时间</span></span><br><span class="line">LocalDateTime currentDateTime = LocalDateTime.now();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2017-10-12 12:30</span></span><br><span class="line">LocalDateTime localDateTime1 = LocalDateTime.of(<span class="number">2017</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">12</span>, <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2014-11-4 12:10:05</span></span><br><span class="line">LocalDateTime localDateTime2 = LocalDateTime.of(<span class="number">2014</span>, Month.NOVEMBER, <span class="number">4</span>, <span class="number">12</span>, <span class="number">10</span>,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//日期+时间拼接</span></span><br><span class="line">LocalDateTime localDateTime3= LocalDateTime.of(currentDate, currentTime);</span><br></pre></td></tr></table></figure>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>也有和LocalDate和LocalTime类似的</p>
+<ol>
+<li>getXXX方法,包括年月日时分秒</li>
+<li>withXXX方法,更改局部生成新对象,包括年月日时分秒</li>
+<li>plusXXX方法,在当前的基础上加一定的时间</li>
+<li>minusXXX方法,当前时间基础上减一定的时间</li>
+<li>format和parse方法格式化对象</li>
+</ol>
+<h2 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h2><p>1.equals,isBefore,isAfter方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">compare</span><span class="params">()</span></span>&#123;</span><br><span class="line">    LocalDate date1 = LocalDate.now();</span><br><span class="line">    LocalDate date2 = LocalDate.now();</span><br><span class="line">    System.out.println(date1.equals(date1)); <span class="comment">//true</span></span><br><span class="line">    System.out.println(date1.isBefore(date2)); <span class="comment">//false</span></span><br><span class="line">    System.out.println(date1.isAfter(date2)); <span class="comment">//false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里没有大于等于和小于等于，所以只能使用equals和isBefore，equals和isAfter做组合才行。</p>
+<p>2.对象转换</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过localDateTime获取localDate</span></span><br><span class="line">LocalDate localDate = currentDateTime.toLocalDate();</span><br><span class="line"><span class="comment">//通过localDateTime获取localTime</span></span><br><span class="line">LocalTime localTime = currentDateTime.toLocalTime();</span><br><span class="line"><span class="comment">//通过localTime+localDate生产localDateTime</span></span><br><span class="line">LocalDateTime localDateTime4 = localDate.atTime(localTime);</span><br><span class="line">LocalDateTime localDateTime5 = localTime.atDate(localDate);</span><br></pre></td></tr></table></figure>
+<h2 id="TimeZone"><a href="#TimeZone" class="headerlink" title="TimeZone"></a>TimeZone</h2><p>时区的时间操作,将本地时间转化为对应时区的时间</p>
+<p>ZoneId类 记录时区信息和转换时区的操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZonedDateTime berlinDateTime = ZonedDateTime.of(dateTime, ZoneId.of(<span class="string">"Europe/Berlin"</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h2><p>时间戳,在JAVA8中使用Instant作为时间戳类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//当前时间戳</span><br><span class="line">Instant now = Instant.now();</span><br><span class="line">// 1262334567秒转化为时间戳</span><br><span class="line">Instant.ofEpochSecond(1262334567);</span><br><span class="line">//时间戳转成毫秒的数字</span><br><span class="line"> long toEpochMillis = now.toEpochMilli();</span><br></pre></td></tr></table></figure>
+<p>在看一下之前的时间戳类TimeStamp<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">timestamp</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Timestamp timestamp = <span class="keyword">new</span> Timestamp(System.currentTimeMillis());</span><br><span class="line">    LocalDateTime localDateTime = timestamp.toLocalDateTime();</span><br><span class="line">    Timestamp valueTime = Timestamp.valueOf(localDateTime);</span><br><span class="line"></span><br><span class="line">    Instant instant = timestamp.toInstant();</span><br><span class="line">    Timestamp instantTime = Timestamp.from(instant);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Timestamp只能直接和这两类进行转换。</p>
+<h2 id="时间间距"><a href="#时间间距" class="headerlink" title="时间间距"></a>时间间距</h2><p>前面我们已经介绍了几个新时间类的常用API，包括构造，类型之间转化，格式化，时间处理等操作。但是我们没有介绍两个时间类之间的间隔该怎么求。</p>
+<p>默认的方式，使用本身的unit方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> LocalDate before = LocalDate.of(<span class="number">2018</span>, <span class="number">2</span>, <span class="number">10</span>);</span><br><span class="line"><span class="keyword">final</span> LocalDate now = LocalDate.now();</span><br><span class="line"><span class="keyword">final</span> LocalTime localTime = LocalTime.now();</span><br><span class="line"><span class="keyword">final</span> LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> month = localDateTime.until(localTime, ChronoUnit.MONTHS);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> hours = localDateTime.until(now, ChronoUnit.HOURS);</span><br></pre></td></tr></table></figure></p>
+<h3 id="ChronoUnit"><a href="#ChronoUnit" class="headerlink" title="ChronoUnit"></a>ChronoUnit</h3><p>借助工具类，ChronoUnit的between方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">chronoUnitTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> LocalDate before = LocalDate.of(<span class="number">2018</span>, <span class="number">2</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="keyword">final</span> LocalDate now = LocalDate.now();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> between = ChronoUnit.DAYS.between(before, now);</span><br><span class="line">    System.out.println(between);</span><br><span class="line">    System.out.println(ChronoUnit.MONTHS.between(before,now));</span><br><span class="line">    System.out.println(ChronoUnit.WEEKS.between(before,now));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ChronoUnit里面有年月日时分秒等等枚举的，其实between方法用的还是上面的unit。只是进行了包装看起来更加的直白。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>就简单介绍到这里了，目前用的东西也就这么多，等需要的时候再补充！！</p>
+<p>与君共勉!!!</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/03/19/localdatetime-api/" title="Java8 - 时间API记录" target="_blank" rel="external">http://www.eumji025.com/2018/03/19/localdatetime-api/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>人生坎坎坷坷，跌跌撞撞那是在所难免。但是，不论跌了多少次，你都要坚强地再次站起来。任何时候，无论你面临着生命的何等困惑，抑或经受着多少挫折，无论道路如何的艰难，无论希望变得如何渺茫，请你不要绝望，再试一次!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/03/19/localdatetime-api/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/03/18/inheritableThreadLocal/" title="ThreadLocal扩展 - InheritableThreadLocal的原理">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>
