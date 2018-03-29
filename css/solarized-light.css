@@ -266,7 +266,7 @@ pre .regexp {
   color: #42b983;
 }
 pre .title {
-  color: #a6e22e;
+  color: #78a51e;
 }
 pre .tag .value,
 pre .string,
@@ -337,10 +337,10 @@ pre .xml .cdata {
 {
     color:#4094c7
 }
-.markdown-body figure,.markdown-body pre,.markdown-body tr,.markdown-body table,.markdown-body tbody,.markdown-body table td
+/*.markdown-body figure,.markdown-body pre,.markdown-body tr,.markdown-body table,.markdown-body tbody,.markdown-body table td
 {
     background-color:#f8f8f8;
-}
+}*/
 .markdown-body code {
   background-color:#dff6f9;
 }

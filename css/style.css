@@ -240,18 +240,18 @@ th {
 }
 
 .markdown-body table {
-    width: 97%;
+    width: 99%;
     margin: 5px 24px 24px 7px;
     max-width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     border: 1px solid #ddd;
-    background-color: #fff
+    /*background-color: #fff*/
 }
 
 .markdown-body table thead tr th,.markdown-body table thead tr td,.markdown-body table tbody tr th,.markdown-body table tbody tr td {
     /*border: 1px solid #d6d6d6;*/
-    /*padding: 6px 10px;*/
+    padding: 6px 10px;
     font-size: 14px;
 
     line-height: 22px;
@@ -261,6 +261,10 @@ th {
 
 .markdown-body table thead tr td {
     word-break: break-all
+}
+
+td.gutter,td.code {
+  padding: 0px;
 }
 
 .markdown-body table thead tr th {
@@ -757,9 +761,9 @@ abbr[data-original-title] {
 blockquote {
   padding: 10px 15px;
   margin: 0 0 20px;
-  border: 1px dotted #eeeeee;
+  border: 1px dotted #d4cdcd;
   border-left: 3px solid #20a441;
-  background-color: #fbfbfb;
+  background-color: #d9dad9;
 }
 
 blockquote p:last-child,
@@ -5330,6 +5334,12 @@ pre code {
 }
 .highlight td.gutter {
   border: none;
+
+}
+/*format code*/
+.highlight td.gutter, .highlight td.code {
+    padding: 0px;
+    border: 0;
 }
 
 .highlight figcaption {
