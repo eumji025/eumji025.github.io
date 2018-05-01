@@ -18,17 +18,22 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>分类: Mybatis解析专栏 | EumJi Talk</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://www.eumji025.com/categories/Mybatis解析专栏/index.html">
+  <title>mysql-8-install | EumJi Talk</title>
+  <meta name="description" content="本文主要讲述MySQL8.11版本解压版的操作过程。因为和之前自己使用的5.6版本有一些差距，而且百度了多次也没有什么比较好的答案，所以记录一下以备不时之需。">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql-8-install">
+<meta property="og:url" content="http://www.eumji025.com/2018/05/01/mysql-8-install/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文主要讲述MySQL8.11版本解压版的操作过程。因为和之前自己使用的5.6版本有一些差距，而且百度了多次也没有什么比较好的答案，所以记录一下以备不时之需。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-01T04:47:49.204Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="mysql-8-install">
+<meta name="twitter:description" content="本文主要讲述MySQL8.11版本解压版的操作过程。因为和之前自己使用的5.6版本有一些差距，而且百度了多次也没有什么比较好的答案，所以记录一下以备不时之需。">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/categories/Mybatis解析专栏/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/2018/05/01/mysql-8-install/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -345,108 +350,175 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-categories article-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">分类: Mybatis解析专栏</h1>
-      <p class="hidden-xs">共 6 篇文章</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/categories">All</a></li>
-          
-          <li><a href="/categories/其他/">其他</a></li>
-          
-          <li><a href="/categories/Java基础/">Java基础</a></li>
-          
-          <li><a href="/categories/工具专栏/">工具专栏</a></li>
-          
-          <li><a href="/categories/开源项目/">开源项目</a></li>
-          
-          <li><a href="/categories/Golang基础/">Golang基础</a></li>
-          
-          <li><a href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a></li>
-          
-          <li><a href="/categories/数据库/">数据库</a></li>
-          
-          <li><a href="/categories/Spring专栏/">Spring专栏</a></li>
-          
-          <li><a href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="panel panel-default b-no">
-    <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapseMybatis解析专栏" aria-expanded="true">
-              <i class="fa fa-folder-o text-active"></i><i class="fa fa-folder-open-o text"></i>
-              Mybatis解析专栏
-            </a>
-            <small class="text-muted">(Total 6 articles)</small>
-        </h4>
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程记录"><span class="toc-number">2.</span> <span class="toc-text">过程记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载和解压"><span class="toc-number">2.1.</span> <span class="toc-text">下载和解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">2.2.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">3.</span> <span class="toc-text">结语</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mysql-8-install" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql-8-install
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/05/01/mysql-8-install/" class="article-date">
+	  <time datetime="2018-05-01T04:28:14.000Z" itemprop="datePublished">2018-05-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/mysql/">mysql</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/05/01/mysql-8-install/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 582(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
+	
+
+
+      </div>
+      
     </div>
-    <div id="collapseMybatis解析专栏" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingMybatis解析专栏">
-        <div class="panel-body">
-            <div class="collection">
-              
-                
-<a href="/2018/03/08/mybatis-paramter-binder/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-03-08T14:49:12.000Z" itemprop="datePublished">2018-03-08</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> MyBatis分析 - SQL参数绑定【初稿】
-</a>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为最近MySQL8.0.11版本已经发布，而且从网上公布的数据来看，MySQL8有较多的改善，具体大家可以参看这篇文章<a href="https://www.oschina.net/news/95325/mysql-8-0-ga-released" target="_blank" rel="noopener">MySQL 8.0 正式版 8.0.11 发布：比 MySQL 5.7 快 2 倍</a></p>
+<p>所以个人直接就下载了一个8.0.11版本。准备尝试一下新版本的MySQL。因为我是在公司的新机上测试的，可能后面记录的东西对升级的同学有帮助。</p>
+<h2 id="过程记录"><a href="#过程记录" class="headerlink" title="过程记录"></a>过程记录</h2><p>下面是详细的过程记录。</p>
+<h3 id="下载和解压"><a href="#下载和解压" class="headerlink" title="下载和解压"></a>下载和解压</h3><p>下载地址：<a href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">https://dev.mysql.com/downloads/mysql/</a><br>然后解压到你喜欢的位置。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>由于在新版的MySQL中，是没有提供默认的配置文件的，所以我们需要在解压的根目录下新建一个配置文件my.ini。下面是配置文件中具体的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line"></span><br><span class="line">default-character-set=utf8</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line"></span><br><span class="line">port=3306</span><br><span class="line"></span><br><span class="line">basedir =&quot;D:/soft/mysql8/&quot;</span><br><span class="line"></span><br><span class="line">datadir =&quot;D:/soft/mysql8/data/&quot;</span><br><span class="line"></span><br><span class="line">tmpdir =&quot;D:/soft/mysql8/data/&quot;</span><br><span class="line"></span><br><span class="line">socket =&quot;D:/soft/mysql8/data/mysql.sock&quot;</span><br><span class="line"></span><br><span class="line">log-error=&quot;D:/soft/mysql8/data/mysql_error.log&quot;</span><br><span class="line"></span><br><span class="line">character-set-server=utf8</span><br><span class="line"></span><br><span class="line">collation-server=utf8_unicode_ci</span><br></pre></td></tr></table></figure></p>
+<p>其中 D:/soft/mysql8 替换成自己解压的目录。</p>
+<p>然后通过命令行进入到D:/soft/mysql8，注意需要管理员权限。</p>
+<p>首先是初始化数据，这一步很重要，不然后面会玩不了的。</p>
+<blockquote>
+<p>mysqld –initialize-insecure</p>
+</blockquote>
+<p>注意，要使用mysqld –initialize-insecure 而不是 mysqld –initialie。前者初始化的时候不会给root账户一个初始化密码。而后者会给一个随机的密码。</p>
+<p>具体的说明参看官方文档： <a href="https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization-mysqld.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization-mysqld.html</a></p>
+<p>然后就是常规的几个步骤</p>
+<blockquote>
+<p>mysqld install<br>net start mysql<br>mysql -u root -p</p>
+</blockquote>
+<p>然后直接回车进入到mysql中，然后我们需要修改一个新的密码</p>
+<blockquote>
+<p>ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘new_password’;</p>
+</blockquote>
+<p>然后退除mysql重启服务就可以了。</p>
+<p>小结<br>和MySQL5.6版本的操作还是有很大的不同哈，需要自己新建配置文件，还要初始化，并且初始化一定使用mysqld –initialize-insecure命令</p>
+<p>最后就是修改密码也变得简单了。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>近期打算看一下高性能这本书，后续有机会分享更多的知识点。</p>
+<p>与君共勉！！</p>
 
-
-              
-                
-<a href="/2018/03/02/mybatis-interceptor-analysis/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-03-02T12:17:43.000Z" itemprop="datePublished">2018-03-02</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Mybatis分析 - 插件的加载和使用
-</a>
-
-
-              
-                
-<a href="/2018/02/21/mybatis-mapper-info/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-02-21T07:01:30.000Z" itemprop="datePublished">2018-02-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Mybatis分析 - Mapper加载使用分析
-</a>
-
-
-              
-                
-<a href="/2018/02/16/mybatis-second-cache/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-02-16T03:29:18.000Z" itemprop="datePublished">2018-02-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Mybatis分析 - 二级缓存
-</a>
-
-
-              
-                
-<a href="/2018/02/10/mybatis-first-cache/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-02-10T15:30:30.000Z" itemprop="datePublished">2018-02-10</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Mybatis分析 - 一级缓存
-</a>
-
-
-              
-                
-<a href="/2018/01/21/mybatis-epitome/" class="collection-item" target="_blank" itemprop="url">
-  <time datetime="2018-01-21T01:35:17.000Z" itemprop="datePublished">2018-01-21</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> MyBatis专栏 - 总体流程回顾
-</a>
-
-
-              
-            </div>
-        </div>
+      
     </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/05/01/mysql-8-install/" title="mysql-8-install" target="_blank" rel="external">http://www.eumji025.com/2018/05/01/mysql-8-install/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>人生坎坎坷坷，跌跌撞撞那是在所难免。但是，不论跌了多少次，你都要坚强地再次站起来。任何时候，无论你面临着生命的何等困惑，抑或经受着多少挫折，无论道路如何的艰难，无论希望变得如何渺茫，请你不要绝望，再试一次!</div>
+      </div>
+    </figure>
+  </div>
 </div>
+
+
     </div>
   </article>
   
- 
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/05/01/mysql-8-install/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/03/19/localdatetime-api/" title="Java8 - 时间API记录">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -506,6 +578,8 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
     
+    
+        
     
     
 
