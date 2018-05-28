@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-05-27T01:54:31.341Z</updated>
+  <updated>2018-05-28T15:12:03.312Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -17,11 +17,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>CORS在spring mvc中的使用</title>
+    <link href="http://www.eumji025.com/2018/05/28/cors-init/"/>
+    <id>http://www.eumji025.com/2018/05/28/cors-init/</id>
+    <published>2018-05-28T04:45:00.000Z</published>
+    <updated>2018-05-28T15:12:03.312Z</updated>
+    
+    <summary type="html">
+    
+      ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览器会禁止这种跨域请求。那是还是用iframe进行这种跨域的访问方式
+    
+    </summary>
+    
+      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
+    
+  </entry>
+  
+  <entry>
     <title>springMVC-DispatcherServlet源码初探</title>
     <link href="http://www.eumji025.com/2018/05/27/springmvc-review/"/>
     <id>http://www.eumji025.com/2018/05/27/springmvc-review/</id>
     <published>2018-05-27T00:45:00.000Z</published>
-    <updated>2018-05-27T01:54:31.341Z</updated>
+    <updated>2018-05-27T01:56:01.572Z</updated>
     
     <summary type="html">
     
@@ -393,26 +413,6 @@
     
     
       <category term="proxy" scheme="http://www.eumji025.com/tags/proxy/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>展望2018</title>
-    <link href="http://www.eumji025.com/2018/01/01/2018-target/"/>
-    <id>http://www.eumji025.com/2018/01/01/2018-target/</id>
-    <published>2017-12-31T16:08:47.000Z</published>
-    <updated>2018-03-02T12:38:56.831Z</updated>
-    
-    <summary type="html">
-    
-      2017年已经成为过去，2018年已经来临，希望自己在新的一年能够得到更多的成长。同时对自己也有更多的要求
-    
-    </summary>
-    
-      <category term="其他" scheme="http://www.eumji025.com/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="target" scheme="http://www.eumji025.com/tags/target/"/>
     
   </entry>
   

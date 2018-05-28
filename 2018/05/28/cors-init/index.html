@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>CORS在spring mvc中的使用 | EumJi Talk</title>
+  <meta name="description" content="ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览">
+<meta name="keywords" content="Spring MVC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CORS在spring mvc中的使用">
+<meta property="og:url" content="http://www.eumji025.com/2018/05/28/cors-init/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-28T15:12:03.312Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CORS在spring mvc中的使用">
+<meta name="twitter:description" content="ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/05/28/cors-init/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/me.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 声明:本主题是基于cofess主题修改而成，与我个人所写的<a href="https://github.com/eumji025/EumJi-blog" target="_blank" style="color:red">EumJI-blog</a>样式相似。 最近购买了服务器，重新启用eumji-blog，目前运行稳定。欢迎大家优化和完善，个人可能没什么时间投入。 <br><br> 夯实基础,厚积薄发,欢迎交流和讨论 email:eumji025@gmail.com
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LocalDateTime/">LocalDateTime</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-插件/">Mybatis 插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis参数/">Mybatis参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis概括/">Mybatis概括</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-cloud-config/">spring-cloud config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Intellij-Idea/" style="font-size: 14.5px;">Intellij Idea</a> <a href="/tags/LocalDateTime/" style="font-size: 14px;">LocalDateTime</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis-插件/" style="font-size: 14px;">Mybatis 插件</a> <a href="/tags/Mybatis参数/" style="font-size: 14px;">Mybatis参数</a> <a href="/tags/Mybatis概括/" style="font-size: 14px;">Mybatis概括</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.5px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 15.5px;">Spring MVC</a> <a href="/tags/ThreadLocal/" style="font-size: 14.5px;">ThreadLocal</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/mysql/" style="font-size: 14px;">mysql</a> <a href="/tags/proxy/" style="font-size: 14.5px;">proxy</a> <a href="/tags/spring-boot/" style="font-size: 15px;">spring-boot</a> <a href="/tags/spring-cloud-config/" style="font-size: 14px;">spring-cloud config</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/28/cors-init/" class="title">CORS在spring mvc中的使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-28T04:45:00.000Z" itemprop="datePublished">2018-05-28</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/27/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-27T00:45:00.000Z" itemprop="datePublished">2018-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/01/mysql-8-install/" class="title">mysql8.0解压版本安装和配置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-01T04:28:14.000Z" itemprop="datePublished">2018-05-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/19/localdatetime-api/" class="title">Java8 - 时间API记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-19T11:15:51.000Z" itemprop="datePublished">2018-03-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/03/18/inheritableThreadLocal/" class="title">ThreadLocal扩展 - InheritableThreadLocal的原理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-03-18T02:15:35.000Z" itemprop="datePublished">2018-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是CORS"><span class="toc-number">2.</span> <span class="toc-text">什么是CORS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么使用"><span class="toc-number">2.1.</span> <span class="toc-text">怎么使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CORS加载"><span class="toc-number">2.2.</span> <span class="toc-text">CORS加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#注册WebMvcConfigurer"><span class="toc-number">2.2.1.</span> <span class="toc-text">注册WebMvcConfigurer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#引入WebMvcConfigurer"><span class="toc-number">2.2.2.</span> <span class="toc-text">引入WebMvcConfigurer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用corsConfigurations"><span class="toc-number">2.3.</span> <span class="toc-text">使用corsConfigurations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">2.4.</span> <span class="toc-text">小结</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-cors-init" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CORS在spring mvc中的使用
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/05/28/cors-init/" class="article-date">
+	  <time datetime="2018-05-28T04:45:00.000Z" itemprop="datePublished">2018-05-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Spring专栏/">Spring专栏</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Spring-MVC/">Spring MVC</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/05/28/cors-init/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,124(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇我们简单的分析了Spring MVC的DispatcherServlet一次请求所做的事情。并分析了很多相关的组件和处理过程。不过也留下了很多的疑点。本篇主要是在上篇的基础上分析CORS的作用和原理。</p>
+<h2 id="什么是CORS"><a href="#什么是CORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h2><p>CORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览器会禁止这种跨域请求。那是还是用iframe进行这种跨域的访问方式。</p>
+<p>不过由于CORS的规范出台，使得我们不必正再使用jsoup或者iframe等不优雅的方式实现跨域。而是通过服务器和客户端的协调和配合就可以进行跨域配合。</p>
+<p>具体有关CORS相关的内容参考这篇文章<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS</a></p>
+<h3 id="怎么使用"><a href="#怎么使用" class="headerlink" title="怎么使用"></a>怎么使用</h3><p>本文将结合一个spring boot的demo进行演示，其主要目的是为了进行我们spring mvc CORS的原理探究。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CORSWebConfig</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurerAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">        registry.addMapping(<span class="string">"/*"</span>)</span><br><span class="line">                .allowedOrigins(<span class="string">"http://localhost:8888"</span>)</span><br><span class="line">                .allowedMethods(<span class="string">"PUT"</span>, <span class="string">"DELETE"</span>)</span><br><span class="line">                .allowedHeaders(<span class="string">"header1"</span>, <span class="string">"header2"</span>, <span class="string">"header3"</span>)</span><br><span class="line">                .exposedHeaders(<span class="string">"header1"</span>, <span class="string">"header2"</span>)</span><br><span class="line">                .allowCredentials(<span class="keyword">true</span>).maxAge(<span class="number">3600</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们就使用上面的CORSWebConfig拦截所有的请求，并且允许的域为<a href="http://localhost:8888，允许的方法类型是put类型等请求拦截信息。" target="_blank" rel="noopener">http://localhost:8888，允许的方法类型是put类型等请求拦截信息。</a></p>
+<p>然后我们在编写一个测试的Controller方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"object"</span>)</span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">objectValue</span><span class="params">(@RequestParam Map&lt;String,String&gt; values)</span></span>&#123;</span><br><span class="line">    System.out.println(values);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"OK"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们使用postman工具模拟一个header【Origin:localhost8080】，然后在发一些参数。调用之后会出现如下的结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Invalid CORS request</span><br></pre></td></tr></table></figure>
+<p>因为我们测试的条件和cors配置的不符合，可见我们这个不满足要求的方法被拦截下来了。如果我们想正确的让方法被执行需要使用正确的Origin还有method。那么这个方法将正确的被</p>
+<p>如果我们想正确的让方法被执行需要使用正确的Origin</p>
+<p>放行。</p>
+<p>到这里我们已经简单的介绍了如何使用一个CORS配置。但是目前比较大的问题就是这配置是如何被加载和生效的。</p>
+<h3 id="CORS加载"><a href="#CORS加载" class="headerlink" title="CORS加载"></a>CORS加载</h3><h4 id="注册WebMvcConfigurer"><a href="#注册WebMvcConfigurer" class="headerlink" title="注册WebMvcConfigurer"></a>注册WebMvcConfigurer</h4><p>首先我们需要看一下配置上的注解EnableWebMvc</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Import</span>(DelegatingWebMvcConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableWebMvc &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个注解引入了DelegatingWebMvcConfiguration这个配置类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span>(required = <span class="keyword">false</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConfigurers</span><span class="params">(List&lt;WebMvcConfigurer&gt; configurers)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!CollectionUtils.isEmpty(configurers)) &#123;</span><br><span class="line">        <span class="keyword">this</span>.configurers.addWebMvcConfigurers(configurers);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个类的开头我们很容易就发现了这么一个自动装配的方法。WebMvcConfigurer好像似曾相识，没错这个类就是WebMvcConfigurerAdapter的父接口，也就是我们CORSWebConfig的父接口。</p>
+<p>这里就是将我们声明的WebMvcConfigurer记录到configurers中。</p>
+<h4 id="引入WebMvcConfigurer"><a href="#引入WebMvcConfigurer" class="headerlink" title="引入WebMvcConfigurer"></a>引入WebMvcConfigurer</h4><p>上面我们已经将WebMvcConfigurer顺利的记录到configurers中去了。那么接下来我们要去找在哪里这个WebMvcConfigurer被使用。这里其实是在声明requestMappingHandlerMapping时候被调用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RequestMappingHandlerMapping <span class="title">requestMappingHandlerMapping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RequestMappingHandlerMapping handlerMapping = createRequestMappingHandlerMapping();</span><br><span class="line">    handlerMapping.setOrder(<span class="number">0</span>);</span><br><span class="line">    handlerMapping.setInterceptors(getInterceptors());</span><br><span class="line">    handlerMapping.setContentNegotiationManager(mvcContentNegotiationManager());</span><br><span class="line">    handlerMapping.setCorsConfigurations(getCorsConfigurations());<span class="comment">//这里</span></span><br><span class="line">	...</span><br><span class="line">    <span class="keyword">return</span> handlerMapping;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们重点放在getCorsConfigurations方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> Map&lt;String, CorsConfiguration&gt; <span class="title">getCorsConfigurations</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.corsConfigurations == <span class="keyword">null</span>) &#123;<span class="comment">//默认是为空</span></span><br><span class="line">        CorsRegistry registry = <span class="keyword">new</span> CorsRegistry();</span><br><span class="line">        addCorsMappings(registry);<span class="comment">//给CORSRegisty添加Mapping</span></span><br><span class="line">        <span class="keyword">this</span>.corsConfigurations = registry.getCorsConfigurations();<span class="comment">//构建一个corsConfiguration</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.corsConfigurations;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里主要是构建一个corsConfiguration，然后附属条件构造CorsRegistry对象以及加载配置到CorsRegistry中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.configurers.addCorsMappings(registry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里就是我们之前上面声明configurers对象配置类的方法。然后调用addCorsMappings追加Mapping</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (WebMvcConfigurer delegate : <span class="keyword">this</span>.delegates) &#123;</span><br><span class="line">        delegate.addCorsMappings(registry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是遍历每一个WebMvcConfigurer，将其配置加载到CorsRegistry中。就是我们之前自定义类中重写的addCorsMappings方法。</p>
+<p>可以看出整个方法主要目的就是把自定义配置的所有WebMvcConfigurer都添加到CorsRegistry中。然后我们在上面<code>this.corsConfigurations = registry.getCorsConfigurations()</code>就是拿出我们所有的配置。</p>
+<p>然后同时我们也知道了RequestMappingHandlerMapping是存有corsConfigurations这个对象的。</p>
+<h3 id="使用corsConfigurations"><a href="#使用corsConfigurations" class="headerlink" title="使用corsConfigurations"></a>使用corsConfigurations</h3><p>上节我们在分析spring MVC整体流程时候，当时也遇到了校验CORS信息的地方，只是当时没 有重点介绍，这里我们再次回到这里AbstractHandlerMapping类中获取Handler的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> HandlerExecutionChain <span class="title">getHandler</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Object handler = getHandlerInternal(request);</span><br><span class="line">		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);</span><br><span class="line">		<span class="keyword">if</span> (CorsUtils.isCorsRequest(request)) &#123;<span class="comment">//CORS处理</span></span><br><span class="line">			CorsConfiguration globalConfig = <span class="keyword">this</span>.corsConfigSource.getCorsConfiguration(request);<span class="comment">//通过路径匹配拿到CorsConfiguration</span></span><br><span class="line">			CorsConfiguration handlerConfig = getCorsConfiguration(handler, request);<span class="comment">//request已经配置了私有的CorsConfiguration</span></span><br><span class="line">			CorsConfiguration config = (globalConfig != <span class="keyword">null</span> ? globalConfig.combine(handlerConfig) : handlerConfig);<span class="comment">//默认使用全局的配置</span></span><br><span class="line">			executionChain = getCorsHandlerExecutionChain(request, executionChain, config);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> executionChain;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断当前请求是否为一个CorsRequest。就是判断请求的header中是否包含Origin。通过</p>
+<p>请求的路径去找到匹配的CorsConfiguration。然后选择合适的包装executioChain。到这里我们算是明白了之前为什么知道是requestMappingHandlerMapping方法引入了webMvcConfigurer。</p>
+<p>接着我们看getCorsHandlerExecutionChain方法的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> HandlerExecutionChain <span class="title">getCorsHandlerExecutionChain</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">        HandlerExecutionChain chain, CorsConfiguration config)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (CorsUtils.isPreFlightRequest(request)) &#123;<span class="comment">//判断是否为PreFlightRequest</span></span><br><span class="line">        HandlerInterceptor[] interceptors = chain.getInterceptors();</span><br><span class="line">        chain = <span class="keyword">new</span> HandlerExecutionChain(<span class="keyword">new</span> PreFlightHandler(config), interceptors);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        chain.addInterceptor(<span class="keyword">new</span> CorsInterceptor(config));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> chain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断是否为PreFlightRequest，即是否为OPTIONS类型的方法，相当于前置通信方法。</p>
+<p>如果是的话就需要再包装成HandlerExecutionChain，并将拦截器设置进去。</p>
+<p>如果不是的话，就需要往chain中加入一个新的插件CorsInterceptor。</p>
+<p>到这里我们明白了，在获取Handler的时候会将cors引入，并且是通过插件的形式。</p>
+<p>###CorsInterceptor拦截</p>
+<p>前面我们已经通过加载Handler的时候加载了CORS的配置信息，并把他们包装在CorsInterceptor中。</p>
+<p>然后那我们必然可以猜测在preHandle中会进行CORS的校验。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> corsProcessor.processRequest(<span class="keyword">this</span>.config, request, response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的CORSProcess是DefaultCorsProcessor对象。</p>
+<p>然后通过DefaultCorsProcessor的processRequest进行处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">processRequest</span><span class="params">(CorsConfiguration config, HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!CorsUtils.isCorsRequest(request)) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		ServletServerHttpResponse serverResponse = <span class="keyword">new</span> ServletServerHttpResponse(response);</span><br><span class="line">		<span class="keyword">if</span> (responseHasCors(serverResponse)) &#123;</span><br><span class="line">			logger.debug(<span class="string">"Skip CORS processing: response already contains \"Access-Control-Allow-Origin\" header"</span>);</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		ServletServerHttpRequest serverRequest = <span class="keyword">new</span> ServletServerHttpRequest(request);</span><br><span class="line">		<span class="keyword">if</span> (WebUtils.isSameOrigin(serverRequest)) &#123;</span><br><span class="line">			logger.debug(<span class="string">"Skip CORS processing: request is from same origin"</span>);</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">boolean</span> preFlightRequest = CorsUtils.isPreFlightRequest(request);</span><br><span class="line">		<span class="keyword">if</span> (config == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span> (preFlightRequest) &#123;</span><br><span class="line">				rejectRequest(serverResponse);</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> handleInternal(serverRequest, serverResponse, config, preFlightRequest);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只是个前置方法，主要校验请求是否为CorsRequest，PreFlightRequest等请求。如果没有满足那些条件 调用handleInternal方法进行最后的判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">handleInternal</span><span class="params">(ServerHttpRequest request, ServerHttpResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">        CorsConfiguration config, <span class="keyword">boolean</span> preFlightRequest)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    String requestOrigin = request.getHeaders().getOrigin();<span class="comment">//获取Origin</span></span><br><span class="line">    String allowOrigin = checkOrigin(config, requestOrigin);<span class="comment">//获取匹配的Origin名</span></span><br><span class="line"></span><br><span class="line">    HttpMethod requestMethod = getMethodToUse(request, preFlightRequest);<span class="comment">//获取htpp方法</span></span><br><span class="line">    List&lt;HttpMethod&gt; allowMethods = checkMethods(config, requestMethod);<span class="comment">//获取匹配的方法</span></span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; requestHeaders = getHeadersToUse(request, preFlightRequest);</span><br><span class="line">    List&lt;String&gt; allowHeaders = checkHeaders(config, requestHeaders);<span class="comment">//得到允许通过的请求头</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (allowOrigin == <span class="keyword">null</span> || allowMethods == <span class="keyword">null</span> || (preFlightRequest &amp;&amp; allowHeaders == <span class="keyword">null</span>)) &#123;<span class="comment">//不满足条件则直接返回</span></span><br><span class="line">        rejectRequest(response);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    HttpHeaders responseHeaders = response.getHeaders();<span class="comment">//装配响应头信息</span></span><br><span class="line">    responseHeaders.setAccessControlAllowOrigin(allowOrigin);</span><br><span class="line">    responseHeaders.add(HttpHeaders.VARY, HttpHeaders.ORIGIN);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (preFlightRequest) &#123;</span><br><span class="line">        responseHeaders.setAccessControlAllowMethods(allowMethods);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (preFlightRequest &amp;&amp; !allowHeaders.isEmpty()) &#123;</span><br><span class="line">        responseHeaders.setAccessControlAllowHeaders(allowHeaders);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!CollectionUtils.isEmpty(config.getExposedHeaders())) &#123;</span><br><span class="line">        responseHeaders.setAccessControlExposeHeaders(config.getExposedHeaders());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Boolean.TRUE.equals(config.getAllowCredentials())) &#123;</span><br><span class="line">        responseHeaders.setAccessControlAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (preFlightRequest &amp;&amp; config.getMaxAge() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        responseHeaders.setAccessControlMaxAge(config.getMaxAge());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    response.flush();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述的方法虽然比较长，但是其实逻辑很简单，第一步获取请求头的各种参数和CORS配置的进行对比，如果不能满足其条件，则直接返回验证不通过。</p>
+<p>如果验证通过，则将这些信息记录到ResponseHeader中去。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>到这里我们总算知道CORS是怎么被加载和被注册到Handler中拦截不合法的请求的，但是需要注意一点的是如果是想请求能被CORS进行拦截，就一定要在requestHeader中加入Origin参数。这是必备的。不然CORS配置的拦截并不能对这次请求生效。</p>
+<p>###</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/05/28/cors-init/" title="CORS在spring mvc中的使用" target="_blank" rel="external">http://www.eumji025.com/2018/05/28/cors-init/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>人生坎坎坷坷，跌跌撞撞那是在所难免。但是，不论跌了多少次，你都要坚强地再次站起来。任何时候，无论你面临着生命的何等困惑，抑或经受着多少挫折，无论道路如何的艰难，无论希望变得如何渺茫，请你不要绝望，再试一次!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/05/28/cors-init/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/05/27/springmvc-review/" title="springMVC-DispatcherServlet源码初探">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>
