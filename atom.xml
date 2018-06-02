@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-06-01T15:38:53.429Z</updated>
+  <updated>2018-06-02T14:39:46.518Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cors-second</title>
+    <link href="http://www.eumji025.com/2018/06/02/cors-second/"/>
+    <id>http://www.eumji025.com/2018/06/02/cors-second/</id>
+    <published>2018-06-02T13:25:08.000Z</published>
+    <updated>2018-06-02T14:39:46.518Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>CORS在spring mvc中的使用</title>
@@ -393,26 +412,6 @@
     
     
       <category term="ThreadLocal" scheme="http://www.eumji025.com/tags/ThreadLocal/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>动态代理及Proxy源码分析</title>
-    <link href="http://www.eumji025.com/2018/01/02/dynamic-proxy/"/>
-    <id>http://www.eumji025.com/2018/01/02/dynamic-proxy/</id>
-    <published>2018-01-02T03:23:46.000Z</published>
-    <updated>2018-02-25T05:08:41.312Z</updated>
-    
-    <summary type="html">
-    
-      代理是java中非常重要的一种设计模式,动态代理则可以认为是一种动态代理的最佳实践,本文将由浅及深的介绍动态代理及其proxy源码分析,文章写的不一定都对,请各位看官带着批判的态度阅读此文章
-    
-    </summary>
-    
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="proxy" scheme="http://www.eumji025.com/tags/proxy/"/>
     
   </entry>
   
