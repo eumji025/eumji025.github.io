@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.eumji025.com/"/>
-  <updated>2018-06-02T14:39:46.518Z</updated>
+  <updated>2018-06-17T15:27:37.352Z</updated>
   <id>http://www.eumji025.com/</id>
   
   <author>
@@ -21,17 +21,18 @@
     <link href="http://www.eumji025.com/2018/06/02/cors-second/"/>
     <id>http://www.eumji025.com/2018/06/02/cors-second/</id>
     <published>2018-06-02T13:25:08.000Z</published>
-    <updated>2018-06-02T14:39:46.518Z</updated>
+    <updated>2018-06-17T15:27:37.352Z</updated>
     
     <summary type="html">
     
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现
-      
+      在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现CORS跨域访问，当然你也可以理解为本篇是个性化配置的一篇。这篇 主要是介绍@CrossOrigin的使用和原理解析。@CrossOrigin的作用方法非常类似@RequestMapping注解。所以@CrossOrigin注解主要作用于当前类和当前方法的一种配置方式
     
     </summary>
     
+      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="CORS" scheme="http://www.eumji025.com/tags/CORS/"/>
     
   </entry>
   
@@ -40,7 +41,7 @@
     <link href="http://www.eumji025.com/2018/05/28/cors-init/"/>
     <id>http://www.eumji025.com/2018/05/28/cors-init/</id>
     <published>2018-05-28T04:45:00.000Z</published>
-    <updated>2018-06-01T15:38:53.429Z</updated>
+    <updated>2018-06-17T15:26:08.236Z</updated>
     
     <summary type="html">
     
@@ -51,7 +52,7 @@
       <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
+      <category term="CORS" scheme="http://www.eumji025.com/tags/CORS/"/>
     
   </entry>
   
