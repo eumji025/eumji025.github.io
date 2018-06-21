@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>springMVC-HandlerMapping初探 | EumJi Talk</title>
+  <meta name="description" content="在之前的文章里，已经简单分析完了spring MVC的整体流程,但是并没有对Spring MVC的9大组件进行细节的分析。本文的主要目的就是去分析handlerMapping在Spring的加载和使用流程。当然本文主要还是以RequestMappingHandlerMapping为主要目标进行分析，因为他的优先级最高且绝大多数情况下我们使用的都是RequestMappingHandlerMappi">
+<meta name="keywords" content="Spring MVC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springMVC-HandlerMapping初探">
+<meta property="og:url" content="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在之前的文章里，已经简单分析完了spring MVC的整体流程,但是并没有对Spring MVC的9大组件进行细节的分析。本文的主要目的就是去分析handlerMapping在Spring的加载和使用流程。当然本文主要还是以RequestMappingHandlerMapping为主要目标进行分析，因为他的优先级最高且绝大多数情况下我们使用的都是RequestMappingHandlerMappi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg">
+<meta property="og:updated_time" content="2018-06-21T00:35:59.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springMVC-HandlerMapping初探">
+<meta name="twitter:description" content="在之前的文章里，已经简单分析完了spring MVC的整体流程,但是并没有对Spring MVC的9大组件进行细节的分析。本文的主要目的就是去分析handlerMapping在Spring的加载和使用流程。当然本文主要还是以RequestMappingHandlerMapping为主要目标进行分析，因为他的优先级最高且绝大多数情况下我们使用的都是RequestMappingHandlerMappi">
+<meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/me.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> 说明:本主题是基于cofess主题修改而成，配合HEXO使用。 <br><br> 没事瞎玩玩，有什么不好的地方欢迎反馈！！！ <br><br> 夯实基础,厚积薄发,欢迎交流和讨论 email:eumji025@gmail.com
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其他/">其他</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LocalDateTime/">LocalDateTime</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-插件/">Mybatis 插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis参数/">Mybatis参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis概括/">Mybatis概括</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-cloud-config/">spring-cloud config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/target/">target</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CORS/" style="font-size: 14.5px;">CORS</a> <a href="/tags/Intellij-Idea/" style="font-size: 14.5px;">Intellij Idea</a> <a href="/tags/LocalDateTime/" style="font-size: 14px;">LocalDateTime</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis-插件/" style="font-size: 14px;">Mybatis 插件</a> <a href="/tags/Mybatis参数/" style="font-size: 14px;">Mybatis参数</a> <a href="/tags/Mybatis概括/" style="font-size: 14px;">Mybatis概括</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.5px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 15.5px;">Spring MVC</a> <a href="/tags/ThreadLocal/" style="font-size: 14.5px;">ThreadLocal</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/mysql/" style="font-size: 14px;">mysql</a> <a href="/tags/proxy/" style="font-size: 14.5px;">proxy</a> <a href="/tags/spring-boot/" style="font-size: 15px;">spring-boot</a> <a href="/tags/spring-cloud-config/" style="font-size: 14px;">spring-cloud config</a> <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/06/15/springmvc-handlermapping/" class="title">springMVC-HandlerMapping初探</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-06-15T00:45:00.000Z" itemprop="datePublished">2018-06-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/06/02/cors-second/" class="title">CORS注解扩展配置的理解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-06-02T13:25:08.000Z" itemprop="datePublished">2018-06-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/25/cors-init/" class="title">CORS在spring mvc中的使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-25T04:45:00.000Z" itemprop="datePublished">2018-05-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/15/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-15T00:45:00.000Z" itemprop="datePublished">2018-05-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/01/mysql-8-install/" class="title">mysql8.0解压版本安装和配置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-01T04:28:14.000Z" itemprop="datePublished">2018-05-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestMappingHandlerMapping分析"><span class="toc-number">2.</span> <span class="toc-text">RequestMappingHandlerMapping分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#initHandlerMappings加载"><span class="toc-number">2.1.</span> <span class="toc-text">initHandlerMappings加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#handlerMapping初始化"><span class="toc-number">2.2.</span> <span class="toc-text">handlerMapping初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#afterPropertiesSet扩展"><span class="toc-number">2.3.</span> <span class="toc-text">afterPropertiesSet扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#handlerMapping使用"><span class="toc-number">2.4.</span> <span class="toc-text">handlerMapping使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">2.5.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结-1"><span class="toc-number">2.6.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下期预告"><span class="toc-number">2.7.</span> <span class="toc-text">下期预告</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-springmvc-handlermapping" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springMVC-HandlerMapping初探
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/06/15/springmvc-handlermapping/" class="article-date">
+	  <time datetime="2018-06-15T00:45:00.000Z" itemprop="datePublished">2018-06-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Spring专栏/">Spring专栏</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Spring-MVC/">Spring MVC</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/06/15/springmvc-handlermapping/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,851(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章里，已经简单分析完了spring MVC的整体流程,但是并没有对Spring MVC的9大组件进行细节的分析。</p>
+<p>本文的主要目的就是去分析handlerMapping在Spring的加载和使用流程。当然本文主要还是以RequestMappingHandlerMapping为主要目标进行分析，因为他的优先级最高且绝大多数情况下我们使用的都是RequestMappingHandlerMapping来映射请求</p>
+<h2 id="RequestMappingHandlerMapping分析"><a href="#RequestMappingHandlerMapping分析" class="headerlink" title="RequestMappingHandlerMapping分析"></a>RequestMappingHandlerMapping分析</h2><p>在分析之前我们还是要回顾一下,handlerMapping在Spring MVC何时被加载和使用的.就是在initStrategies方法.而initStrategies其实是通过父类init方法被调用的.init方法只会被调用一次.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initStrategies</span><span class="params">(ApplicationContext context)</span> </span>&#123;</span><br><span class="line">    initMultipartResolver(context);</span><br><span class="line">    initLocaleResolver(context);</span><br><span class="line">    initThemeResolver(context);</span><br><span class="line">    initHandlerMappings(context); <span class="comment">//此次重点</span></span><br><span class="line">    initHandlerAdapters(context);</span><br><span class="line">    initHandlerExceptionResolvers(context);</span><br><span class="line">    initRequestToViewNameTranslator(context);</span><br><span class="line">    initViewResolvers(context);</span><br><span class="line">    initFlashMapManager(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上述的这个表述来看,他们的主要目的就是从context中获取对应的bean,我们就以initHandlerMappings方法为例来看一下.</p>
+<h3 id="initHandlerMappings加载"><a href="#initHandlerMappings加载" class="headerlink" title="initHandlerMappings加载"></a>initHandlerMappings加载</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initHandlerMappings</span><span class="params">(ApplicationContext context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.handlerMappings = <span class="keyword">null</span>;</span><br><span class="line">  <span class="comment">//允许加载所有的handlerMapping</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.detectAllHandlerMappings) &#123;</span><br><span class="line">        Map&lt;String, HandlerMapping&gt; matchingBeans =</span><br><span class="line">                BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, <span class="keyword">true</span>, <span class="keyword">false</span>);<span class="comment">//获取类型为HandlerMapping的所有bean</span></span><br><span class="line">        <span class="keyword">if</span> (!matchingBeans.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.handlerMappings = <span class="keyword">new</span> ArrayList&lt;HandlerMapping&gt;(matchingBeans.values());</span><br><span class="line">            <span class="comment">// 对handerMapping排序</span></span><br><span class="line">            AnnotationAwareOrderComparator.sort(<span class="keyword">this</span>.handlerMappings);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">//否则获取一个bean</span></span><br><span class="line">        HandlerMapping hm = context.getBean(HANDLER_MAPPING_BEAN_NAME, HandlerMapping.class);</span><br><span class="line">        <span class="keyword">this</span>.handlerMappings = Collections.singletonList(hm);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//如果找不到使用默认的handlerMapping,默认的mapping是通过配置文件指定的</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.handlerMappings == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述的方法其实很简单,就是通过我们的上下文,去获取我们已经成功构造的类型为HandlerMapping的bean,如果找不到,这直接使用配置文件[DispatcherServlet.properties]中指定的默认bean.</p>
+<p>注意获取到的handlerMapping是需要进行排序的,使用的是AnnotationAwareOrderComparator,主要是通过getOrder方法获取设置的值,值越小优先级越高.</p>
+<p>getDefaultStrategies方法是通过读取配置文件,然后通过key[org.springframework.web.servlet.HandlerMapping]获取对应要加载的的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.web.servlet.HandlerAdapter=org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\</span><br><span class="line">	org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,\</span><br><span class="line">	org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter</span><br></pre></td></tr></table></figure>
+<p>然后再生成默认的handlerMapping.</p>
+<h3 id="handlerMapping初始化"><a href="#handlerMapping初始化" class="headerlink" title="handlerMapping初始化"></a>handlerMapping初始化</h3><p>我们通过找RequestMappingHandlerMapping的引用关系,可以知道bean是在WebMvcConfigurationSupport这个配置加载类中进行的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RequestMappingHandlerMapping <span class="title">requestMappingHandlerMapping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   RequestMappingHandlerMapping handlerMapping = createRequestMappingHandlerMapping();<span class="comment">//创建对象</span></span><br><span class="line">  <span class="comment">//设置一系列默认参数</span></span><br><span class="line">   handlerMapping.setOrder(<span class="number">0</span>); <span class="comment">//优先级很高</span></span><br><span class="line">   handlerMapping.setInterceptors(getInterceptors());<span class="comment">//拦截器</span></span><br><span class="line">   handlerMapping.setContentNegotiationManager(mvcContentNegotiationManager());<span class="comment">//MediaType管理</span></span><br><span class="line">   handlerMapping.setCorsConfigurations(getCorsConfigurations());<span class="comment">//cors配置</span></span><br><span class="line"></span><br><span class="line">   PathMatchConfigurer configurer = getPathMatchConfigurer(); <span class="comment">//路径匹配配置</span></span><br><span class="line">   <span class="keyword">if</span> (configurer.isUseSuffixPatternMatch() != <span class="keyword">null</span>) &#123;</span><br><span class="line">      handlerMapping.setUseSuffixPatternMatch(configurer.isUseSuffixPatternMatch());<span class="comment">//是否后缀匹配</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (configurer.isUseRegisteredSuffixPatternMatch() != <span class="keyword">null</span>) &#123;</span><br><span class="line">      handlerMapping.setUseRegisteredSuffixPatternMatch(configurer.isUseRegisteredSuffixPatternMatch());</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (configurer.isUseTrailingSlashMatch() != <span class="keyword">null</span>) &#123;</span><br><span class="line">      handlerMapping.setUseTrailingSlashMatch(configurer.isUseTrailingSlashMatch());<span class="comment">//斜杠匹配</span></span><br><span class="line">   &#125;</span><br><span class="line">   UrlPathHelper pathHelper = configurer.getUrlPathHelper(); <span class="comment">//url工具类</span></span><br><span class="line">   <span class="keyword">if</span> (pathHelper != <span class="keyword">null</span>) &#123;</span><br><span class="line">      handlerMapping.setUrlPathHelper(pathHelper);</span><br><span class="line">   &#125;</span><br><span class="line">   PathMatcher pathMatcher = configurer.getPathMatcher();</span><br><span class="line">   <span class="keyword">if</span> (pathMatcher != <span class="keyword">null</span>) &#123;</span><br><span class="line">      handlerMapping.setPathMatcher(pathMatcher);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> handlerMapping;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到requestMappingHandlerMapping方法的主要的目的就是初始化RequestMappingHandlerMapping,并为其设置众多的基本属性和条件.</p>
+<p>大概先了解以下,后续都会用到.cors相关的介绍之前也有说过,所以应该会很熟悉.</p>
+<p>这里首先看一下RequestMappingHandlerMapping类的整体结构图</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg" alt="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg"></p>
+<p>可以看到整个RequestMappingHandlerMapping还是继承和实现了非常多的类和接口的.这里就简单的说一下几个关键的类和接口的主要作用.</p>
+<p>Ordered: 主要是用来排序的,如果实现了这个接口,默认使用getOrder方法获得的值</p>
+<p>MatchableHandlerMapping: 定一个匹配request和RequestMappingInfo的方法</p>
+<p>HandlerMapping</p>
+<pre><code>定义了一系列的常量,用于子类将其作为组件的key
+定义一个将request转换成hander的方法:gethandler
+</code></pre><p>AbstractHandlerMapping</p>
+<pre><code>定义了一些如interceptor,corsPaser,urlPathHelper,pathMatcher等组件
+并为这些这些属性实现了基础的get,set以及初始化的方法
+实现了getHander方法,但定义了模板方法getHandlerInternal
+定义了CorsInterceptor,用来作cors的拦截器
+主要是实现了interceptor和cors配置相关的方法
+</code></pre><p>RequestMappingInfoHandlerMapping:</p>
+<pre><code>定义了RequestMappingInfo相关配置和解析方法
+定义了HandlerMethodMappingNamingStrategy对象
+RequestMappingInfo相关操作方法
+实现handleMatch方法,并定义了PartialMatchHelper
+</code></pre><p>AbstractHandlerMethodMapping</p>
+<pre><code>定义handlermapping名称映射策略
+定义了handlerMethod的注册和解析的实现
+实现了getHandlerInternal的逻辑
+但是定义了isHandler,getMappingForMethod,initCorsConfiguration等处理细节的模板方法 
+主要实现了handlerMethod的注册和匹配,包括url,cors,mapping信息
+</code></pre><p>最主要就是上述的这些接口和类,然后构造方法也没什么特别的地方,主要是在父类RequestMappingInfoHandlerMapping中进行了option的设置和nameStrategy</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Method HTTP_OPTIONS_HANDLE_METHOD;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    HTTP_OPTIONS_HANDLE_METHOD = HttpOptionsHandler.class.getMethod(<span class="string">"handle"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="title">RequestMappingInfoHandlerMapping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   setHandlerMethodMappingNamingStrategy(<span class="keyword">new</span> RequestMappingInfoHandlerMethodMappingNamingStrategy());<span class="comment">//解析方法名称的策略类</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以及父类AbstractHandlerMethodMapping中设置了默认的CorsConfiguration</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> CorsConfiguration ALLOW_CORS_CONFIG = <span class="keyword">new</span> CorsConfiguration();<span class="comment">//默认的cors配置</span></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">   ALLOW_CORS_CONFIG.addAllowedOrigin(<span class="string">"*"</span>);</span><br><span class="line">   ALLOW_CORS_CONFIG.addAllowedMethod(<span class="string">"*"</span>);</span><br><span class="line">   ALLOW_CORS_CONFIG.addAllowedHeader(<span class="string">"*"</span>);</span><br><span class="line">   ALLOW_CORS_CONFIG.setAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化的内容就是这些,最主要的还是要了解RequestMappingHandlerMapping的整个结构和他们的作用.为什么要分为这么多层.</p>
+<h3 id="afterPropertiesSet扩展"><a href="#afterPropertiesSet扩展" class="headerlink" title="afterPropertiesSet扩展"></a>afterPropertiesSet扩展</h3><p>从上面的图中可以看到,由于我们实现了接口IitializingBean,所有在bean初始化完后会调用afterPropertiesSet方法进行扩展的操作.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.config = <span class="keyword">new</span> RequestMappingInfo.BuilderConfiguration();</span><br><span class="line">    <span class="keyword">this</span>.config.setUrlPathHelper(getUrlPathHelper());</span><br><span class="line">    <span class="keyword">this</span>.config.setPathMatcher(getPathMatcher());</span><br><span class="line">    <span class="keyword">this</span>.config.setSuffixPatternMatch(<span class="keyword">this</span>.useSuffixPatternMatch);</span><br><span class="line">    <span class="keyword">this</span>.config.setTrailingSlashMatch(<span class="keyword">this</span>.useTrailingSlashMatch);</span><br><span class="line">    <span class="keyword">this</span>.config.setRegisteredSuffixPatternMatch(<span class="keyword">this</span>.useRegisteredSuffixPatternMatch);</span><br><span class="line">    <span class="keyword">this</span>.config.setContentNegotiationManager(getContentNegotiationManager());</span><br><span class="line">    <span class="keyword">super</span>.afterPropertiesSet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的内容可以看到主要将我们在构造bean时候设置的一些参数设置到config中,主要是为了后面作RequestMappingInfo处理时作为参数传递的.然后调用父类的afterPropertiesSet方法.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initHandlerMethods</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String[] beanNames = (<span class="keyword">this</span>.detectHandlerMethodsInAncestorContexts ?</span><br><span class="line">            BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class) :</span><br><span class="line">            getApplicationContext().getBeanNamesForType(Object.class));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (String beanName : beanNames) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) &#123;<span class="comment">//排除scroped代理对象</span></span><br><span class="line">            Class&lt;?&gt; beanType = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                beanType = getApplicationContext().getType(beanName);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (beanType != <span class="keyword">null</span> &amp;&amp; isHandler(beanType)) &#123;<span class="comment">//关键在这里</span></span><br><span class="line">                detectHandlerMethods(beanName);<span class="comment">//处理方法</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    handlerMethodsInitialized(getHandlerMethods());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述的方法很简单,主要做了如下几件事情:</p>
+<p>1.筛选出符合条件的bean,isHandler有较多的逻辑</p>
+<p>2.如果是符合条件的bean,这调用detectHandlerMethods对bean进行处理.</p>
+<p>3.对所有的handlerMethod进行初始化扩展处理,默认为空.</p>
+<p>首先我们看第一个是如何判断一个Bean是不是符合条件的handler的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHandler</span><span class="params">(Class&lt;?&gt; beanType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) ||</span><br><span class="line">            AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要就是判断这个bean是否包含Controller注解或者RequestMapping注解.</p>
+<p>然后第二步是最为关键的一步,到底检测的方法detectHandlerMethods到底做了那些内容…</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detectHandlerMethods</span><span class="params">(<span class="keyword">final</span> Object handler)</span> </span>&#123;</span><br><span class="line">    Class&lt;?&gt; handlerType = (handler <span class="keyword">instanceof</span> String ?</span><br><span class="line">            getApplicationContext().getType((String) handler) : handler.getClass());</span><br><span class="line">    <span class="keyword">final</span> Class&lt;?&gt; userType = ClassUtils.getUserClass(handlerType);<span class="comment">//我觉得上面直接传递class对象不就好了吗</span></span><br><span class="line"></span><br><span class="line">    Map&lt;Method, T&gt; methods = MethodIntrospector.selectMethods(userType,</span><br><span class="line">            <span class="keyword">new</span> MethodIntrospector.MetadataLookup&lt;T&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> T <span class="title">inspect</span><span class="params">(Method method)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> getMappingForMethod(method, userType);<span class="comment">//筛选方法的主要实现</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);<span class="comment">//筛选合适的方法</span></span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Method, T&gt; entry : methods.entrySet()) &#123;<span class="comment">//对每一个满足条件的方法进行处理</span></span><br><span class="line">        Method invocableMethod = AopUtils.selectInvocableMethod(entry.getKey(), userType);<span class="comment">//理解是找方法的实现,有可能是接口</span></span><br><span class="line">        T mapping = entry.getValue();</span><br><span class="line">        registerHandlerMethod(handler, invocableMethod, mapping);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的方法也主要做了三件事情:</p>
+<p>1.通过合适的逻辑筛选出合适的Method,</p>
+<p>2.将这些符合的method进行处理,包装成合适key为method,alue为mapping对象的Map</p>
+<p>3.便利符合条件的数据m进行处理.</p>
+<p>先看第一步,如果筛选合适的Method对象.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> RequestMappingInfo <span class="title">getMappingForMethod</span><span class="params">(Method method, Class&lt;?&gt; handlerType)</span> </span>&#123;</span><br><span class="line">    RequestMappingInfo info = createRequestMappingInfo(method);<span class="comment">//解析方法的requestmapping注解</span></span><br><span class="line">    <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</span><br><span class="line">        RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);<span class="comment">//解析类的requestmapping注解</span></span><br><span class="line">        <span class="keyword">if</span> (typeInfo != <span class="keyword">null</span>) &#123;</span><br><span class="line">            info = typeInfo.combine(info);<span class="comment">//组合两个条件</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> info;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>筛选方法很简单就是将方法级别的注解和类级别的注解RequestMapping进行组合,这很容易理解,非常平时我们处理的风格.具体是如何将requestmapping注解的信息转换成RequestMappingInfo的我想很简单,就不多说类.</p>
+<p>然后进行第二步,对符合对象进行组合.这里T就是指代的RequestMappingInfo对象.</p>
+<p>第三步对方法进行注册.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">registerHandlerMethod</span><span class="params">(Object handler, Method method, T mapping)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.mappingRegistry.register(mapping, handler, method);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注册的逻辑就不多说了,无非就是将url和method进行绑定,以及一些其他额外的条件处理.这里面会被包装成handlerMethod,后续获取的也是handlerMethod.</p>
+<h3 id="handlerMapping使用"><a href="#handlerMapping使用" class="headerlink" title="handlerMapping使用"></a>handlerMapping使用</h3><p>在前面的介绍中我们说到了handler在DispatcherServlet中的加载过程,同样也是在相同的类中被调用.了解spring mvc原理的都应该知道在doDispatch方法中被调用,直接看代码.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> HandlerExecutionChain <span class="title">getHandler</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">      <span class="keyword">for</span> (HandlerMapping hm : <span class="keyword">this</span>.handlerMappings) &#123;<span class="comment">//根据优先级进行我们的handlermapping筛选</span></span><br><span class="line">          HandlerExecutionChain handler = hm.getHandler(request);<span class="comment">//筛选的逻辑</span></span><br><span class="line">          <span class="keyword">if</span> (handler != <span class="keyword">null</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> handler;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是按照优先级,对我们注册的handlerMapping进行筛选,找到合适就返回,这里就直接看AbstractHandlerMapping里面的方法了.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> HandlerExecutionChain <span class="title">getHandler</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Object handler = getHandlerInternal(request); <span class="comment">//找handler</span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">// Bean name or resolved handler?</span></span><br><span class="line">    <span class="keyword">if</span> (handler <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        String handlerName = (String) handler;</span><br><span class="line">        handler = getApplicationContext().getBean(handlerName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);</span><br><span class="line">    <span class="keyword">if</span> (CorsUtils.isCorsRequest(request)) &#123;<span class="comment">//cors处理</span></span><br><span class="line">        CorsConfiguration globalConfig = <span class="keyword">this</span>.corsConfigSource.getCorsConfiguration(request);</span><br><span class="line">        CorsConfiguration handlerConfig = getCorsConfiguration(handler, request);</span><br><span class="line">        CorsConfiguration config = (globalConfig != <span class="keyword">null</span> ? globalConfig.combine(handlerConfig) : handlerConfig);</span><br><span class="line">        executionChain = getCorsHandlerExecutionChain(request, executionChain, config);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> executionChain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法主要作了三件事:</p>
+<p>1.getHandlerInternal找到合适handler,如果找不到就使用默认的,如果默认的也没有直接返回null</p>
+<p>2.如果找到了,对handler进行包装处理</p>
+<p>3.然后对CORS的配置进行处理,这里不见,下次用专门的方法分析,和Requestmapping和亲密</p>
+<p>我们主要看一下getHandlerInternal是如何进行处理的.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">getHandlerInternal</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);<span class="comment">//获取路径</span></span><br><span class="line">		<span class="keyword">this</span>.mappingRegistry.acquireReadLock();</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);</span><br><span class="line">			<span class="keyword">return</span> (handlerMethod != <span class="keyword">null</span> ? handlerMethod.createWithResolvedBean() : <span class="keyword">null</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">this</span>.mappingRegistry.releaseReadLock();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>通过之前设置好的urlPathHelper进行路径的处理.然后在lookupHandlerMethod找到合适的handlerMethod</p>
+<p>后面无非就是通过合适的策略将url的路径和对应的Method进行匹配.这里就不进行详细的说明了.因为这里面有各种通配符等策略的实现,说起来可能比较的复杂.</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>到此我们知道RequestMappingHandlerMapping的作用就是为了将请求的路径和对应的controller方法进行绑定,然后我们在通过url获取到合适的method.如果找不到这挑选下一个合适的handlerMapping处理类,不过目前默认的处理都是通过RequestMappingHandlerMapping进行处理的.并件插件设置到handlerMethod中,用于后续真正处理作前置和后置的方法拦截.</p>
+<p>通过本文让我们更加清除了Controller的注解是如何被加载以及和路径进行配对的,当然关于参数的解析我们在这里并没有细讲.</p>
+<p>不过我们在这里应该要知道这几大重要功能:</p>
+<p>1.RequestMappingHandlerMapping可以决定那个url使用哪个method,</p>
+<p>2.RequestMappingHandlerMapping还能对CORS进行处理.</p>
+<p>3.RequestMappingHandlerMapping还能和spring mvc插件作集成处理,并包装成HandlerExecutionChain.</p>
+<h3 id="下期预告"><a href="#下期预告" class="headerlink" title="下期预告"></a>下期预告</h3><p>CORS的解析</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/" title="springMVC-HandlerMapping初探" target="_blank" rel="external">http://www.eumji025.com/2018/06/15/springmvc-handlermapping/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>人生坎坎坷坷，跌跌撞撞那是在所难免。但是，不论跌了多少次，你都要坚强地再次站起来。任何时候，无论你面临着生命的何等困惑，抑或经受着多少挫折，无论道路如何的艰难，无论希望变得如何渺茫，请你不要绝望，再试一次!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/06/15/springmvc-handlermapping/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/06/02/cors-second/" title="CORS注解扩展配置的理解">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>
