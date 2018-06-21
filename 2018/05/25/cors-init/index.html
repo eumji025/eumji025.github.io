@@ -23,17 +23,17 @@
 <meta name="keywords" content="CORS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CORS在spring mvc中的使用">
-<meta property="og:url" content="http://www.eumji025.com/2018/05/28/cors-init/index.html">
+<meta property="og:url" content="http://www.eumji025.com/2018/05/25/cors-init/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-17T15:26:08.236Z">
+<meta property="og:updated_time" content="2018-06-21T00:23:57.888Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CORS在spring mvc中的使用">
 <meta name="twitter:description" content="ORS全称Cross-Origin Resource Sharing，表示跨源资源共享。表示一种允许当前域的资源被其他域直接访问。通俗的例子就是localhost：8081使用httpclient调用localhost：8082. 两个是在不同的web服务下。此时就存在跨域域进行访问的情况。我想在很久以前，那时候由于同域安全策略（the same-origin security policy）浏览">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/05/28/cors-init/index.html">
+  <link rel="canonical" href="http://www.eumji025.com/2018/05/25/cors-init/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -280,7 +280,7 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/06/02/cors-second/" class="title">cors-second</a>
+                <a href="/2018/06/02/cors-second/" class="title">CORS注解扩展配置的理解</a>
               </p>
               <p class="item-date">
                 <time datetime="2018-06-02T13:25:08.000Z" itemprop="datePublished">2018-06-02</time>
@@ -293,10 +293,10 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/05/28/cors-init/" class="title">CORS在spring mvc中的使用</a>
+                <a href="/2018/05/25/cors-init/" class="title">CORS在spring mvc中的使用</a>
               </p>
               <p class="item-date">
-                <time datetime="2018-05-28T04:45:00.000Z" itemprop="datePublished">2018-05-28</time>
+                <time datetime="2018-05-25T04:45:00.000Z" itemprop="datePublished">2018-05-25</time>
               </p>
             </div>
           </li>
@@ -306,10 +306,10 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/05/27/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
+                <a href="/2018/05/15/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
               </p>
               <p class="item-date">
-                <time datetime="2018-05-27T00:45:00.000Z" itemprop="datePublished">2018-05-27</time>
+                <time datetime="2018-05-15T00:45:00.000Z" itemprop="datePublished">2018-05-15</time>
               </p>
             </div>
           </li>
@@ -378,8 +378,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="fa fa-calendar-check-o"></i>
-	<a href="/2018/05/28/cors-init/" class="article-date">
-	  <time datetime="2018-05-28T04:45:00.000Z" itemprop="datePublished">2018-05-28</time>
+	<a href="/2018/05/25/cors-init/" class="article-date">
+	  <time datetime="2018-05-25T04:45:00.000Z" itemprop="datePublished">2018-05-25</time>
 	</a>
 </span>
         
@@ -397,7 +397,7 @@
 
         
 
-        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/05/28/cors-init/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/05/25/cors-init/#comments" class="article-comment-link">评论</a></span>
         
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4,315(字)</span>
@@ -499,7 +499,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/05/28/cors-init/" title="CORS在spring mvc中的使用" target="_blank" rel="external">http://www.eumji025.com/2018/05/28/cors-init/</a>
+      <a href="http://www.eumji025.com/2018/05/25/cors-init/" title="CORS在spring mvc中的使用" target="_blank" rel="external">http://www.eumji025.com/2018/05/25/cors-init/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -532,7 +532,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/05/28/cors-init/' ></div>
+       <div id="SOHUCS" sid='http://www.eumji025.com/2018/05/25/cors-init/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
@@ -553,12 +553,12 @@ conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2018/06/02/cors-second/" title="cors-second"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
+      <a href="/2018/06/02/cors-second/" title="CORS注解扩展配置的理解"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;&nbsp;上一篇</a>
     </li>
     
     
     <li class="next">
-      <a href="/2018/05/27/springmvc-review/" title="springMVC-DispatcherServlet源码初探">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+      <a href="/2018/05/15/springmvc-review/" title="springMVC-DispatcherServlet源码初探">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
     </li>
     
   </ul>

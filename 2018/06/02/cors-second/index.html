@@ -18,18 +18,18 @@
   <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
   
   
-  <title>cors-second | EumJi Talk</title>
+  <title>CORS注解扩展配置的理解 | EumJi Talk</title>
   <meta name="description" content="在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现CORS跨域访问，当然你也可以理解为本篇是个性化配置的一篇。这篇 主要是介绍@CrossOrigin的使用和原理解析。@CrossOrigin的作用方法非常类似@RequestMapping注解。所以@CrossOrigin注解主要作用于当前类和当前方法的一种">
 <meta name="keywords" content="CORS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cors-second">
+<meta property="og:title" content="CORS注解扩展配置的理解">
 <meta property="og:url" content="http://www.eumji025.com/2018/06/02/cors-second/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现CORS跨域访问，当然你也可以理解为本篇是个性化配置的一篇。这篇 主要是介绍@CrossOrigin的使用和原理解析。@CrossOrigin的作用方法非常类似@RequestMapping注解。所以@CrossOrigin注解主要作用于当前类和当前方法的一种">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-17T15:27:37.352Z">
+<meta property="og:updated_time" content="2018-06-21T00:21:34.775Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cors-second">
+<meta name="twitter:title" content="CORS注解扩展配置的理解">
 <meta name="twitter:description" content="在上一篇我们分析了spring MVC中如何通过配置全局的CORS配置，使我们的浏览器支持跨域的访问。这一篇我们将介绍另外通过注解的方式实现CORS跨域访问，当然你也可以理解为本篇是个性化配置的一篇。这篇 主要是介绍@CrossOrigin的使用和原理解析。@CrossOrigin的作用方法非常类似@RequestMapping注解。所以@CrossOrigin注解主要作用于当前类和当前方法的一种">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
@@ -280,7 +280,7 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/06/02/cors-second/" class="title">cors-second</a>
+                <a href="/2018/06/02/cors-second/" class="title">CORS注解扩展配置的理解</a>
               </p>
               <p class="item-date">
                 <time datetime="2018-06-02T13:25:08.000Z" itemprop="datePublished">2018-06-02</time>
@@ -293,10 +293,10 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/05/28/cors-init/" class="title">CORS在spring mvc中的使用</a>
+                <a href="/2018/05/25/cors-init/" class="title">CORS在spring mvc中的使用</a>
               </p>
               <p class="item-date">
-                <time datetime="2018-05-28T04:45:00.000Z" itemprop="datePublished">2018-05-28</time>
+                <time datetime="2018-05-25T04:45:00.000Z" itemprop="datePublished">2018-05-25</time>
               </p>
             </div>
           </li>
@@ -306,10 +306,10 @@
             <div class="item-inner">
 
               <p class="item-title">
-                <a href="/2018/05/27/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
+                <a href="/2018/05/15/springmvc-review/" class="title">springMVC-DispatcherServlet源码初探</a>
               </p>
               <p class="item-date">
-                <time datetime="2018-05-27T00:45:00.000Z" itemprop="datePublished">2018-05-27</time>
+                <time datetime="2018-05-15T00:45:00.000Z" itemprop="datePublished">2018-05-15</time>
               </p>
             </div>
           </li>
@@ -370,7 +370,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      cors-second
+      CORS注解扩展配置的理解
     </h1>
   
 
@@ -463,7 +463,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/06/02/cors-second/" title="cors-second" target="_blank" rel="external">http://www.eumji025.com/2018/06/02/cors-second/</a>
+      <a href="http://www.eumji025.com/2018/06/02/cors-second/" title="CORS注解扩展配置的理解" target="_blank" rel="external">http://www.eumji025.com/2018/06/02/cors-second/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -518,7 +518,7 @@ conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
     
     
     <li class="next">
-      <a href="/2018/05/28/cors-init/" title="CORS在spring mvc中的使用">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+      <a href="/2018/05/25/cors-init/" title="CORS在spring mvc中的使用">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
     </li>
     
   </ul>
