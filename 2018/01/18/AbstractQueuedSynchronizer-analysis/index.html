@@ -23,8 +23,8 @@
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AbstractQueuedSynchronizer源码分析">
-<meta property="og:url" content="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/01/10/5a55745ab0df7.png">
@@ -35,9 +35,9 @@
 <meta name="twitter:image" content="https://i.loli.net/2018/01/10/5a55745ab0df7.png">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -222,8 +222,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -489,7 +488,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/" title="AbstractQueuedSynchronizer源码分析" target="_blank" rel="external">http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/</a>
+      <a href="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/" title="AbstractQueuedSynchronizer源码分析" target="_blank" rel="external">http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -522,7 +521,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({

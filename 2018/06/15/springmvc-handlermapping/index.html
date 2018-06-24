@@ -23,8 +23,8 @@
 <meta name="keywords" content="Spring MVC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="springMVC-HandlerMapping初探">
-<meta property="og:url" content="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="在之前的文章里，已经简单分析完了spring MVC的整体流程,但是并没有对Spring MVC的9大组件进行细节的分析。本文的主要目的就是去分析handlerMapping在Spring的加载和使用流程。当然本文主要还是以RequestMappingHandlerMapping为主要目标进行分析，因为他的优先级最高且绝大多数情况下我们使用的都是RequestMappingHandlerMappi">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg">
@@ -35,9 +35,9 @@
 <meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-10/89886672.jpg">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -222,8 +222,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -512,7 +511,7 @@ RequestMappingInfo相关操作方法
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/" title="springMVC-HandlerMapping初探" target="_blank" rel="external">http://www.eumji025.com/2018/06/15/springmvc-handlermapping/</a>
+      <a href="http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/" title="springMVC-HandlerMapping初探" target="_blank" rel="external">http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -545,7 +544,7 @@ RequestMappingInfo相关操作方法
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/06/15/springmvc-handlermapping/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({

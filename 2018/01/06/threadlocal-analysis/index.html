@@ -23,8 +23,8 @@
 <meta name="keywords" content="ThreadLocal">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java基础 - ThreadLocal分析篇">
-<meta property="og:url" content="http://www.eumji025.com/2018/01/06/threadlocal-analysis/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/01/06/threadlocal-analysis/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="ThreadLocal是一种可以将变量线程间隔离，但是线程内又可以共享的一个工具类，非常有利于解决一些希望在线程间复用的变量而又不知道如何存放的问题。当然使用ThreadLocal是有需要的，因为滥用可能会造成内存移除等问题，具体请看本文">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com//2017/05/15/threadlocal-tructure.png">
@@ -35,9 +35,9 @@
 <meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com//2017/05/15/threadlocal-tructure.png">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/01/06/threadlocal-analysis/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/01/06/threadlocal-analysis/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -222,8 +222,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -424,7 +423,7 @@
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p><img src="http://of8rkrh1w.bkt.clouddn.com//2017/05/15/threadlocal-tructure.png" alt="threadLocal类的结构图"></p>
 <p>现在介绍一下ThreadLocalMap类,这个类是用来以键值对的方式存储我们的变量的，key为threadLocal对象，value为对应的存储的值，看一下具体的代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalMap</span> </span>&#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INITIAL_CAPACITY = <span class="number">16</span>; <span class="comment">//初始化大小</span></span><br><span class="line">       <span class="keyword">private</span> ThreadLocal.ThreadLocalMap.Entry[] table; <span class="comment">//内部数组</span></span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">int</span> size; <span class="comment">//大小</span></span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">int</span> threshold; <span class="comment">//阈值</span></span><br><span class="line">  		<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">           Object value;</span><br><span class="line">           Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">               <span class="keyword">super</span>(k);</span><br><span class="line">               value = v;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从上面的信息我们可以看出ThreadLocalMap这个内部类的结构很像HashMap,在ThreadLocalMap也有一个存放数据的entry类.如果有兴趣大家可以去看看HashMap的源码,本人之前也做过<a href="http://www.eumji025.com/2018/01/06/hashmap-analysis/">HashMap源码分析</a>的解读.</p>
+<p>从上面的信息我们可以看出ThreadLocalMap这个内部类的结构很像HashMap,在ThreadLocalMap也有一个存放数据的entry类.如果有兴趣大家可以去看看HashMap的源码,本人之前也做过<a href="http://www.eumji025.com/2018/01/06/hashmap-analysis/" target="_blank" rel="noopener">HashMap源码分析</a>的解读.</p>
 <p><strong>补充</strong>: 为什么要创建一个数组来存放值,自己刚开始看源码的时候有过这个疑惑,所以记录一下,这是因为ThreadLocalMap是和thread绑定的,每一个thread的可以使用多个theadLocal对象存储值,每一个threadLocal对象只能存放一个值,每个threadLocal的hashCode值都是在原有的基础上加0x61c88647,所以这样设计是为了更好的使用局部变量和扩充,如果不理解请继续往下看,看完再梳理一次.</p>
 <p>在这里总结一下:</p>
 <blockquote>
@@ -477,7 +476,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/01/06/threadlocal-analysis/" title="Java基础 - ThreadLocal分析篇" target="_blank" rel="external">http://www.eumji025.com/2018/01/06/threadlocal-analysis/</a>
+      <a href="http://blog.eumji.cn/2018/01/06/threadlocal-analysis/" title="Java基础 - ThreadLocal分析篇" target="_blank" rel="external">http://blog.eumji.cn/2018/01/06/threadlocal-analysis/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -510,7 +509,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/01/06/threadlocal-analysis/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/01/06/threadlocal-analysis/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({

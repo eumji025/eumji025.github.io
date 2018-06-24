@@ -23,8 +23,8 @@
 <meta name="keywords" content="ThreadLocal">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ThreadLocal扩展 - InheritableThreadLocal的原理">
-<meta property="og:url" content="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-03-18T02:18:58.934Z">
@@ -33,9 +33,9 @@
 <meta name="twitter:description" content="本文是在ThreadLocal的基础上，分析其子类InheritableThreadLocal。从名称应该也可以看出，其作用是为了继承ThreadLocal里的东西。简单来说就是为了在子线程中继承父线程中设置的值。举个很简单的例子，如果我想传递父线程的某个对象，我不用为每个子线程都设置构造函数，而子线程的任何地方都可以获取。不过需要注意的是，一旦子线程初始化，父线程再更换对象，子线程将不受影响">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -220,8 +220,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -442,7 +441,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/" title="ThreadLocal扩展 - InheritableThreadLocal的原理" target="_blank" rel="external">http://www.eumji025.com/2018/03/18/inheritableThreadLocal/</a>
+      <a href="http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/" title="ThreadLocal扩展 - InheritableThreadLocal的原理" target="_blank" rel="external">http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -475,7 +474,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/03/18/inheritableThreadLocal/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({

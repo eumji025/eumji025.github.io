@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>EumJi Talk</title>
   
-  
+  <subtitle>just write some tech blog</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://www.eumji025.com/"/>
+  <link href="http://blog.eumji.cn/"/>
   <updated>2018-06-21T00:35:59.883Z</updated>
-  <id>http://www.eumji025.com/</id>
+  <id>http://blog.eumji.cn/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>EumJi</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>springMVC-HandlerMapping初探</title>
-    <link href="http://www.eumji025.com/2018/06/15/springmvc-handlermapping/"/>
-    <id>http://www.eumji025.com/2018/06/15/springmvc-handlermapping/</id>
+    <link href="http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/"/>
+    <id>http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/</id>
     <published>2018-06-15T00:45:00.000Z</published>
     <updated>2018-06-21T00:35:59.883Z</updated>
     
@@ -29,17 +29,17 @@
     
     </summary>
     
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
+      <category term="Spring MVC" scheme="http://blog.eumji.cn/tags/Spring-MVC/"/>
     
   </entry>
   
   <entry>
     <title>CORS注解扩展配置的理解</title>
-    <link href="http://www.eumji025.com/2018/06/02/cors-second/"/>
-    <id>http://www.eumji025.com/2018/06/02/cors-second/</id>
+    <link href="http://blog.eumji.cn/2018/06/02/cors-second/"/>
+    <id>http://blog.eumji.cn/2018/06/02/cors-second/</id>
     <published>2018-06-02T13:25:08.000Z</published>
     <updated>2018-06-21T00:21:34.775Z</updated>
     
@@ -49,17 +49,17 @@
     
     </summary>
     
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="CORS" scheme="http://www.eumji025.com/tags/CORS/"/>
+      <category term="CORS" scheme="http://blog.eumji.cn/tags/CORS/"/>
     
   </entry>
   
   <entry>
     <title>CORS在spring mvc中的使用</title>
-    <link href="http://www.eumji025.com/2018/05/25/cors-init/"/>
-    <id>http://www.eumji025.com/2018/05/25/cors-init/</id>
+    <link href="http://blog.eumji.cn/2018/05/25/cors-init/"/>
+    <id>http://blog.eumji.cn/2018/05/25/cors-init/</id>
     <published>2018-05-25T04:45:00.000Z</published>
     <updated>2018-06-21T00:23:57.888Z</updated>
     
@@ -69,17 +69,17 @@
     
     </summary>
     
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="CORS" scheme="http://www.eumji025.com/tags/CORS/"/>
+      <category term="CORS" scheme="http://blog.eumji.cn/tags/CORS/"/>
     
   </entry>
   
   <entry>
     <title>springMVC-DispatcherServlet源码初探</title>
-    <link href="http://www.eumji025.com/2018/05/15/springmvc-review/"/>
-    <id>http://www.eumji025.com/2018/05/15/springmvc-review/</id>
+    <link href="http://blog.eumji.cn/2018/05/15/springmvc-review/"/>
+    <id>http://blog.eumji.cn/2018/05/15/springmvc-review/</id>
     <published>2018-05-15T00:45:00.000Z</published>
     <updated>2018-06-21T00:24:34.823Z</updated>
     
@@ -89,17 +89,17 @@
     
     </summary>
     
-      <category term="Spring专栏" scheme="http://www.eumji025.com/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Spring MVC" scheme="http://www.eumji025.com/tags/Spring-MVC/"/>
+      <category term="Spring MVC" scheme="http://blog.eumji.cn/tags/Spring-MVC/"/>
     
   </entry>
   
   <entry>
     <title>mysql8.0解压版本安装和配置</title>
-    <link href="http://www.eumji025.com/2018/05/01/mysql-8-install/"/>
-    <id>http://www.eumji025.com/2018/05/01/mysql-8-install/</id>
+    <link href="http://blog.eumji.cn/2018/05/01/mysql-8-install/"/>
+    <id>http://blog.eumji.cn/2018/05/01/mysql-8-install/</id>
     <published>2018-05-01T04:28:14.000Z</published>
     <updated>2018-05-27T01:50:47.944Z</updated>
     
@@ -109,17 +109,17 @@
     
     </summary>
     
-      <category term="数据库" scheme="http://www.eumji025.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <category term="数据库" scheme="http://blog.eumji.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-      <category term="mysql" scheme="http://www.eumji025.com/tags/mysql/"/>
+      <category term="mysql" scheme="http://blog.eumji.cn/tags/mysql/"/>
     
   </entry>
   
   <entry>
     <title>Java8 - 时间API记录</title>
-    <link href="http://www.eumji025.com/2018/03/19/localdatetime-api/"/>
-    <id>http://www.eumji025.com/2018/03/19/localdatetime-api/</id>
+    <link href="http://blog.eumji.cn/2018/03/19/localdatetime-api/"/>
+    <id>http://blog.eumji.cn/2018/03/19/localdatetime-api/</id>
     <published>2018-03-19T11:15:51.000Z</published>
     <updated>2018-03-21T14:38:26.800Z</updated>
     
@@ -129,17 +129,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="LocalDateTime" scheme="http://www.eumji025.com/tags/LocalDateTime/"/>
+      <category term="LocalDateTime" scheme="http://blog.eumji.cn/tags/LocalDateTime/"/>
     
   </entry>
   
   <entry>
     <title>ThreadLocal扩展 - InheritableThreadLocal的原理</title>
-    <link href="http://www.eumji025.com/2018/03/18/inheritableThreadLocal/"/>
-    <id>http://www.eumji025.com/2018/03/18/inheritableThreadLocal/</id>
+    <link href="http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/"/>
+    <id>http://blog.eumji.cn/2018/03/18/inheritableThreadLocal/</id>
     <published>2018-03-18T02:15:35.000Z</published>
     <updated>2018-03-18T02:18:58.934Z</updated>
     
@@ -149,17 +149,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="ThreadLocal" scheme="http://www.eumji025.com/tags/ThreadLocal/"/>
+      <category term="ThreadLocal" scheme="http://blog.eumji.cn/tags/ThreadLocal/"/>
     
   </entry>
   
   <entry>
     <title>MyBatis分析 - SQL参数绑定【初稿】</title>
-    <link href="http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/"/>
-    <id>http://www.eumji025.com/2018/03/08/mybatis-paramter-binder/</id>
+    <link href="http://blog.eumji.cn/2018/03/08/mybatis-paramter-binder/"/>
+    <id>http://blog.eumji.cn/2018/03/08/mybatis-paramter-binder/</id>
     <published>2018-03-08T14:49:12.000Z</published>
     <updated>2018-03-13T12:25:39.064Z</updated>
     
@@ -169,17 +169,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis参数" scheme="http://www.eumji025.com/tags/Mybatis%E5%8F%82%E6%95%B0/"/>
+      <category term="Mybatis参数" scheme="http://blog.eumji.cn/tags/Mybatis%E5%8F%82%E6%95%B0/"/>
     
   </entry>
   
   <entry>
     <title>Mybatis分析 - 插件的加载和使用</title>
-    <link href="http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/"/>
-    <id>http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/"/>
+    <id>http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/</id>
     <published>2018-03-02T12:17:43.000Z</published>
     <updated>2018-03-02T12:24:15.444Z</updated>
     
@@ -189,17 +189,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis 插件" scheme="http://www.eumji025.com/tags/Mybatis-%E6%8F%92%E4%BB%B6/"/>
+      <category term="Mybatis 插件" scheme="http://blog.eumji.cn/tags/Mybatis-%E6%8F%92%E4%BB%B6/"/>
     
   </entry>
   
   <entry>
     <title>聊聊cglib动态代理的实现</title>
-    <link href="http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/"/>
-    <id>http://www.eumji025.com/2018/02/23/cglib-proxy-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/02/23/cglib-proxy-analysis/"/>
+    <id>http://blog.eumji.cn/2018/02/23/cglib-proxy-analysis/</id>
     <published>2018-02-23T02:18:22.000Z</published>
     <updated>2018-03-17T02:47:22.771Z</updated>
     
@@ -209,17 +209,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="proxy" scheme="http://www.eumji025.com/tags/proxy/"/>
+      <category term="proxy" scheme="http://blog.eumji.cn/tags/proxy/"/>
     
   </entry>
   
   <entry>
     <title>Mybatis分析 - Mapper加载使用分析</title>
-    <link href="http://www.eumji025.com/2018/02/21/mybatis-mapper-info/"/>
-    <id>http://www.eumji025.com/2018/02/21/mybatis-mapper-info/</id>
+    <link href="http://blog.eumji.cn/2018/02/21/mybatis-mapper-info/"/>
+    <id>http://blog.eumji.cn/2018/02/21/mybatis-mapper-info/</id>
     <published>2018-02-21T07:01:30.000Z</published>
     <updated>2018-03-05T23:43:43.684Z</updated>
     
@@ -229,17 +229,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis Mapper加载" scheme="http://www.eumji025.com/tags/Mybatis-Mapper%E5%8A%A0%E8%BD%BD/"/>
+      <category term="Mybatis Mapper加载" scheme="http://blog.eumji.cn/tags/Mybatis-Mapper%E5%8A%A0%E8%BD%BD/"/>
     
   </entry>
   
   <entry>
     <title>Mybatis分析 - 二级缓存</title>
-    <link href="http://www.eumji025.com/2018/02/16/mybatis-second-cache/"/>
-    <id>http://www.eumji025.com/2018/02/16/mybatis-second-cache/</id>
+    <link href="http://blog.eumji.cn/2018/02/16/mybatis-second-cache/"/>
+    <id>http://blog.eumji.cn/2018/02/16/mybatis-second-cache/</id>
     <published>2018-02-16T03:29:18.000Z</published>
     <updated>2018-03-02T12:35:03.424Z</updated>
     
@@ -249,17 +249,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis缓存" scheme="http://www.eumji025.com/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
+      <category term="Mybatis缓存" scheme="http://blog.eumji.cn/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
     
   </entry>
   
   <entry>
     <title>独占锁ReentrantLock分析</title>
-    <link href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/"/>
-    <id>http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/"/>
+    <id>http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/</id>
     <published>2018-02-11T11:58:18.000Z</published>
     <updated>2018-02-16T03:43:15.461Z</updated>
     
@@ -269,17 +269,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>Mybatis分析 - 一级缓存</title>
-    <link href="http://www.eumji025.com/2018/02/10/mybatis-first-cache/"/>
-    <id>http://www.eumji025.com/2018/02/10/mybatis-first-cache/</id>
+    <link href="http://blog.eumji.cn/2018/02/10/mybatis-first-cache/"/>
+    <id>http://blog.eumji.cn/2018/02/10/mybatis-first-cache/</id>
     <published>2018-02-10T15:30:30.000Z</published>
     <updated>2018-03-11T02:26:57.622Z</updated>
     
@@ -289,17 +289,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis缓存" scheme="http://www.eumji025.com/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
+      <category term="Mybatis缓存" scheme="http://blog.eumji.cn/tags/Mybatis%E7%BC%93%E5%AD%98/"/>
     
   </entry>
   
   <entry>
     <title>FutureTask源码实现</title>
-    <link href="http://www.eumji025.com/2018/02/06/futureTask-analysis/"/>
-    <id>http://www.eumji025.com/2018/02/06/futureTask-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/02/06/futureTask-analysis/"/>
+    <id>http://blog.eumji.cn/2018/02/06/futureTask-analysis/</id>
     <published>2018-02-06T05:23:46.000Z</published>
     <updated>2018-02-16T03:43:19.573Z</updated>
     
@@ -309,17 +309,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>不得不懂的线程池 - ThreadPoolExecutor</title>
-    <link href="http://www.eumji025.com/2018/02/01/threadPool-analysis/"/>
-    <id>http://www.eumji025.com/2018/02/01/threadPool-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/02/01/threadPool-analysis/"/>
+    <id>http://blog.eumji.cn/2018/02/01/threadPool-analysis/</id>
     <published>2018-02-01T00:41:37.000Z</published>
     <updated>2018-03-02T12:36:20.776Z</updated>
     
@@ -329,17 +329,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>MyBatis专栏 - 总体流程回顾</title>
-    <link href="http://www.eumji025.com/2018/01/21/mybatis-epitome/"/>
-    <id>http://www.eumji025.com/2018/01/21/mybatis-epitome/</id>
+    <link href="http://blog.eumji.cn/2018/01/21/mybatis-epitome/"/>
+    <id>http://blog.eumji.cn/2018/01/21/mybatis-epitome/</id>
     <published>2018-01-21T01:35:17.000Z</published>
     <updated>2018-03-11T02:31:05.769Z</updated>
     
@@ -349,17 +349,17 @@
     
     </summary>
     
-      <category term="Mybatis解析专栏" scheme="http://www.eumji025.com/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
+      <category term="Mybatis解析专栏" scheme="http://blog.eumji.cn/categories/Mybatis%E8%A7%A3%E6%9E%90%E4%B8%93%E6%A0%8F/"/>
     
     
-      <category term="Mybatis概括" scheme="http://www.eumji025.com/tags/Mybatis%E6%A6%82%E6%8B%AC/"/>
+      <category term="Mybatis概括" scheme="http://blog.eumji.cn/tags/Mybatis%E6%A6%82%E6%8B%AC/"/>
     
   </entry>
   
   <entry>
     <title>AbstractQueuedSynchronizer源码分析</title>
-    <link href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
-    <id>http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
+    <id>http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
     <published>2018-01-18T13:56:36.000Z</published>
     <updated>2018-02-16T03:43:22.161Z</updated>
     
@@ -369,17 +369,17 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>Go 初学者成长之路</title>
-    <link href="http://www.eumji025.com/2018/01/12/go-learn-material/"/>
-    <id>http://www.eumji025.com/2018/01/12/go-learn-material/</id>
+    <link href="http://blog.eumji.cn/2018/01/12/go-learn-material/"/>
+    <id>http://blog.eumji.cn/2018/01/12/go-learn-material/</id>
     <published>2018-01-12T05:36:18.000Z</published>
     <updated>2018-02-16T03:43:18.973Z</updated>
     
@@ -389,17 +389,17 @@
     
     </summary>
     
-      <category term="Golang基础" scheme="http://www.eumji025.com/categories/Golang%E5%9F%BA%E7%A1%80/"/>
+      <category term="Golang基础" scheme="http://blog.eumji.cn/categories/Golang%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="golang" scheme="http://www.eumji025.com/tags/golang/"/>
+      <category term="golang" scheme="http://blog.eumji.cn/tags/golang/"/>
     
   </entry>
   
   <entry>
     <title>HashMap源码分析</title>
-    <link href="http://www.eumji025.com/2018/01/06/hashmap-analysis/"/>
-    <id>http://www.eumji025.com/2018/01/06/hashmap-analysis/</id>
+    <link href="http://blog.eumji.cn/2018/01/06/hashmap-analysis/"/>
+    <id>http://blog.eumji.cn/2018/01/06/hashmap-analysis/</id>
     <published>2018-01-06T03:06:50.000Z</published>
     <updated>2018-03-13T11:11:17.002Z</updated>
     
@@ -409,10 +409,10 @@
     
     </summary>
     
-      <category term="Java基础" scheme="http://www.eumji025.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
     
     
-      <category term="java" scheme="http://www.eumji025.com/tags/java/"/>
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   

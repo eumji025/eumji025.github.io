@@ -23,8 +23,8 @@
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="独占锁ReentrantLock分析">
-<meta property="og:url" content="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="为什么会诞生lock,我想我们也是很容理解的,因为JDK6之前的synchronized关键字不够高效,而且synchronized不够灵活(比如无法使用尝试在规定时间内获取锁)等,所以就诞生了lock. lock改善了很多同步上的性能问题,而且有非常灵活的API">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/2018/1/9%E9%80%89%E5%8C%BA_007.png">
@@ -35,9 +35,9 @@
 <meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/2018/1/9%E9%80%89%E5%8C%BA_007.png">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -222,8 +222,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -443,7 +442,7 @@
 <p>然后我们在看一下公平锁的内部实现有什么不同</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">    <span class="keyword">int</span> c = getState();</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">            compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...省略</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其实公平锁差不多,只是在判断时多加了<code>hasQueuedPredecessors方法</code>判断当前线程是否为列表头,不为列表头且也不是表头的下一个元素，则不能获得了锁。</p>
-<h3 id="入队自旋"><a href="#入队自旋" class="headerlink" title="入队自旋"></a>入队自旋</h3><p>当上面都没有成功的情况下,说明已经有线程获得了锁,那么我们需要把当前的线程加入到等待的队列中.具体的就不赘述了,已经在我的另外一篇文章<a href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/">并发 - AbstractQueuedSynchronizer分析</a>中有讲到底是如何进入等待队列和进行自旋的,本文主要讲述ReentrantLock的相关部分.</p>
+<h3 id="入队自旋"><a href="#入队自旋" class="headerlink" title="入队自旋"></a>入队自旋</h3><p>当上面都没有成功的情况下,说明已经有线程获得了锁,那么我们需要把当前的线程加入到等待的队列中.具体的就不赘述了,已经在我的另外一篇文章<a href="http://www.eumji025.com/2018/01/18/AbstractQueuedSynchronizer-analysis/" target="_blank" rel="noopener">并发 - AbstractQueuedSynchronizer分析</a>中有讲到底是如何进入等待队列和进行自旋的,本文主要讲述ReentrantLock的相关部分.</p>
 <p>###　unlock方法</p>
 <p>unlock是当前线程释放锁的方法,是通过调用release方法实现的</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sync.release(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tryRelease(arg)) &#123; <span class="comment">//尝试释放锁</span></span><br><span class="line">        Node h = head;</span><br><span class="line">        <span class="keyword">if</span> (h != <span class="keyword">null</span> &amp;&amp; h.waitStatus != <span class="number">0</span>)</span><br><span class="line">          unparkSuccessor(h);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -484,7 +483,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/02/11/reentrantLock-analysis/" title="独占锁ReentrantLock分析" target="_blank" rel="external">http://www.eumji025.com/2018/02/11/reentrantLock-analysis/</a>
+      <a href="http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/" title="独占锁ReentrantLock分析" target="_blank" rel="external">http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -517,7 +516,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/02/11/reentrantLock-analysis/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/02/11/reentrantLock-analysis/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({

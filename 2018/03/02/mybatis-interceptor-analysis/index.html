@@ -23,8 +23,8 @@
 <meta name="keywords" content="Mybatis 插件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mybatis分析 - 插件的加载和使用">
-<meta property="og:url" content="http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/index.html">
+<meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="前面也陆陆续续的介绍了一些mybatis相关的内容，今天介绍一点mybatis里非常有用的拓展功能`插件`，我们都知道mybatis的pagehelper分页插件，可是有没有想过是怎么实现的呢，大概的我想应该就是在查询之前拦截mybatis的sql加上分页的语句。今天抱着学习的态度一起来探究一下mybatis插件原理">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-03-02T12:24:15.444Z">
@@ -33,9 +33,9 @@
 <meta name="twitter:description" content="前面也陆陆续续的介绍了一些mybatis相关的内容，今天介绍一点mybatis里非常有用的拓展功能`插件`，我们都知道mybatis的pagehelper分页插件，可是有没有想过是怎么实现的呢，大概的我想应该就是在查询之前拦截mybatis的sql加上分页的语句。今天抱着学习的态度一起来探究一下mybatis插件原理">
 <link rel="publisher" href="https://plus.google.com/101626292151729327338">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/index.html">
+  <link rel="canonical" href="http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/index.html">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -220,8 +220,7 @@
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br>
-<br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -472,7 +471,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/" title="Mybatis分析 - 插件的加载和使用" target="_blank" rel="external">http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/</a>
+      <a href="http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/" title="Mybatis分析 - 插件的加载和使用" target="_blank" rel="external">http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -505,7 +504,7 @@
     
   <section id="comments">
   	
-       <div id="SOHUCS" sid='http://www.eumji025.com/2018/03/02/mybatis-interceptor-analysis/' ></div>
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/03/02/mybatis-interceptor-analysis/' ></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
