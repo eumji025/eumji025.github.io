@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.eumji.cn/"/>
-  <updated>2018-06-21T00:35:59.883Z</updated>
+  <updated>2018-10-09T15:36:15.089Z</updated>
   <id>http://blog.eumji.cn/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>spring-beanfactory-autowired</title>
+    <link href="http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/"/>
+    <id>http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/</id>
+    <published>2018-10-09T15:32:28.000Z</published>
+    <updated>2018-10-09T15:36:15.089Z</updated>
+    
+    <summary type="html">
+    
+      本文将记录spring是如何使用Autowired进行bean的依赖注入的，目的是更加清楚和细致的了解spring bean的构造过程，加深对spring的理解
+    
+    </summary>
+    
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="spring" scheme="http://blog.eumji.cn/tags/spring/"/>
+    
+      <category term="autowired" scheme="http://blog.eumji.cn/tags/autowired/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>spring-beanfactory-getbean</title>
+    <link href="http://blog.eumji.cn/2018/10/09/spring-beanfactory-getbean/"/>
+    <id>http://blog.eumji.cn/2018/10/09/spring-beanfactory-getbean/</id>
+    <published>2018-10-09T15:02:26.000Z</published>
+    <updated>2018-10-09T15:02:26.069Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>springMVC-HandlerMapping初探</title>
@@ -366,46 +402,6 @@
     <summary type="html">
     
       AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
-    
-    </summary>
-    
-      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go 初学者成长之路</title>
-    <link href="http://blog.eumji.cn/2018/01/12/go-learn-material/"/>
-    <id>http://blog.eumji.cn/2018/01/12/go-learn-material/</id>
-    <published>2018-01-12T05:36:18.000Z</published>
-    <updated>2018-02-16T03:43:18.973Z</updated>
-    
-    <summary type="html">
-    
-      本文主要介绍一些go语言学习的相关资料,希望在学习的路上减轻大家的负担,本文是一片装在文章,看到写的非常的充实,就申请转载了）
-    
-    </summary>
-    
-      <category term="Golang基础" scheme="http://blog.eumji.cn/categories/Golang%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="golang" scheme="http://blog.eumji.cn/tags/golang/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HashMap源码分析</title>
-    <link href="http://blog.eumji.cn/2018/01/06/hashmap-analysis/"/>
-    <id>http://blog.eumji.cn/2018/01/06/hashmap-analysis/</id>
-    <published>2018-01-06T03:06:50.000Z</published>
-    <updated>2018-03-13T11:11:17.002Z</updated>
-    
-    <summary type="html">
-    
-      HashMap是基于hash表的map的实现,使用key-value形式存储键值对，并允许使用 null 值和 null 键,但是key只能有一个为null. Map不保证映射的顺序，其内部是根据hash值去模运算去排列的。HashMap内部使用entry数组作为存储的介质.）
     
     </summary>
     
