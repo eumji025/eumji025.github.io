@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.eumji.cn/"/>
-  <updated>2018-10-09T15:36:15.089Z</updated>
+  <updated>2018-10-21T15:22:48.589Z</updated>
   <id>http://blog.eumji.cn/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/"/>
     <id>http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/</id>
     <published>2018-10-09T15:32:28.000Z</published>
-    <updated>2018-10-09T15:36:15.089Z</updated>
+    <updated>2018-10-21T15:22:48.589Z</updated>
     
     <summary type="html">
     
@@ -29,12 +29,12 @@
     
     </summary>
     
-      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+      <category term="Spring源码" scheme="http://blog.eumji.cn/categories/Spring%E6%BA%90%E7%A0%81/"/>
     
     
-      <category term="spring" scheme="http://blog.eumji.cn/tags/spring/"/>
+      <category term="spring源码" scheme="http://blog.eumji.cn/tags/spring%E6%BA%90%E7%A0%81/"/>
     
-      <category term="autowired" scheme="http://blog.eumji.cn/tags/autowired/"/>
+      <category term="spring bean" scheme="http://blog.eumji.cn/tags/spring-bean/"/>
     
   </entry>
   
