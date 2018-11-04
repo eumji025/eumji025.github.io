@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.eumji.cn/2018/01/21/mybatis-epitome/</loc>
+    
+    <lastmod>2018-11-04T03:50:36.978Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/</loc>
     
-    <lastmod>2018-10-21T15:22:48.589Z</lastmod>
+    <lastmod>2018-10-21T15:23:41.986Z</lastmod>
     
   </url>
   
@@ -89,13 +96,6 @@
     <loc>http://blog.eumji.cn/2018/01/06/hashmap-analysis/</loc>
     
     <lastmod>2018-03-13T11:11:17.002Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.eumji.cn/2018/01/21/mybatis-epitome/</loc>
-    
-    <lastmod>2018-03-11T02:31:05.769Z</lastmod>
     
   </url>
   

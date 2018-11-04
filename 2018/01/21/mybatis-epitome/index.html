@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="EumJi Talk">
 <meta property="og:description" content="本文主要回顾mybatis的整体执行流程，走马观花去看一下mybatis是如何进行加载和使用的，为后续的文章分析做铺垫">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-11T02:31:05.769Z">
+<meta property="og:updated_time" content="2018-11-04T03:50:36.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MyBatis专栏 - 总体流程回顾">
 <meta name="twitter:description" content="本文主要回顾mybatis的整体执行流程，走马观花去看一下mybatis是如何进行加载和使用的，为后续的文章分析做铺垫">
@@ -215,12 +215,12 @@
   <div class="slimContent">
     
       <div class="widget">
-    <h3 class="widget-title">公告</h3>
+    <h3 class="widget-title">xxx</h3>
     <div class="widget-body windget-body-wirte">
         <div id="board">
             
             <div class="content">
-                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 菜鸟一枚 <br><br> 欢迎交流和讨论 email:eumji025@gmail.com
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 没什么好说的 <br><br> email:eumji025@gmail.com
 <br><br>
 </p> </div>
             </div>
@@ -400,7 +400,7 @@
         <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/01/21/mybatis-epitome/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,208(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,218(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
@@ -433,7 +433,7 @@
 <li><p>执行后resultHandler的结果处理，映射等。</p>
 </li>
 </ol>
-<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><p>也许上面的说明无法勾起回忆，那么直接看看我们以前的测试代码也许更明了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">InputStream resourceAsStream = LocalDemo.class.getClassLoader().getResourceAsStream(<span class="string">"mybatis-conf.xml"</span>);</span><br><span class="line"></span><br><span class="line">  SqlSessionFactory build = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(resourceAsStream);</span><br><span class="line">  SqlSession sqlSession = build.openSession(<span class="keyword">false</span>);</span><br><span class="line">  User user = <span class="keyword">new</span> User(<span class="string">"zhangsan"</span>,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> count = sqlSession.insert(<span class="string">"com.eumji.mybatis.mapper.UserMapper.insertUser"</span>, user);</span><br><span class="line">  <span class="keyword">if</span> (count &gt; <span class="number">0</span> )&#123;</span><br><span class="line">      System.out.println(<span class="string">"ok"</span>);</span><br><span class="line">      sqlSession.commit();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><p>也许上面的说明介绍并不能让你想起很多基础的东西，那么直接看看我们以前的测试代码也许更明了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">InputStream resourceAsStream = LocalDemo.class.getClassLoader().getResourceAsStream(<span class="string">"mybatis-conf.xml"</span>);</span><br><span class="line"></span><br><span class="line">  SqlSessionFactory build = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(resourceAsStream);</span><br><span class="line">  SqlSession sqlSession = build.openSession(<span class="keyword">false</span>);</span><br><span class="line">  User user = <span class="keyword">new</span> User(<span class="string">"zhangsan"</span>,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> count = sqlSession.insert(<span class="string">"com.eumji.mybatis.mapper.UserMapper.insertUser"</span>, user);</span><br><span class="line">  <span class="keyword">if</span> (count &gt; <span class="number">0</span> )&#123;</span><br><span class="line">      System.out.println(<span class="string">"ok"</span>);</span><br><span class="line">      sqlSession.commit();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>我们就以上面这个方法为例结合之前的总结的步骤去追溯一下整个流程。但是本文不会详细介绍，每一个步骤都只会点到为止，目的就是理清大致流程。</p>
 <h3 id="SqlSessionFactory和configuration加载"><a href="#SqlSessionFactory和configuration加载" class="headerlink" title="SqlSessionFactory和configuration加载"></a>SqlSessionFactory和configuration加载</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(InputStream inputStream)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> build(inputStream, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(InputStream inputStream, String environment, Properties properties)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    XMLConfigBuilder parser = <span class="keyword">new</span> XMLConfigBuilder(inputStream, environment, properties);<span class="comment">//xmlParser用来解析xml</span></span><br><span class="line">    <span class="keyword">return</span> build(parser.parse()); <span class="comment">//通过configuration构建sqlSessionFactory</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">"Error building SqlSession."</span>, e);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    ErrorContext.instance().reset();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      inputStream.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      <span class="comment">// Intentionally ignore. Prefer previous error.</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的这一段代码主要做的事情就是：<br>1.从mybatis-conf.xml中加载所有的配置<br>2.构建SQLSessionFactory对象</p>
