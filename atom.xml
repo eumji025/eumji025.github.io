@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.eumji.cn/"/>
-  <updated>2018-10-21T15:23:41.986Z</updated>
+  <updated>2018-11-09T00:53:09.754Z</updated>
   <id>http://blog.eumji.cn/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://blog.eumji.cn/2018/11/09/springmvc-exceptionhandler/"/>
+    <id>http://blog.eumji.cn/2018/11/09/springmvc-exceptionhandler/</id>
+    <published>2018-11-09T00:53:09.754Z</published>
+    <updated>2018-11-09T00:53:09.754Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;p&gt;title: springMVC-HandlerExceptionResolver初探&lt;br&gt;date: 2018-11-15 08:45:00&lt;br&gt;tags:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring MVC&lt;br&gt;categories: Spring专栏&lt;br
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>spring-beanfactory-autowired</title>
@@ -389,26 +411,6 @@
     
     
       <category term="Mybatis概括" scheme="http://blog.eumji.cn/tags/Mybatis%E6%A6%82%E6%8B%AC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AbstractQueuedSynchronizer源码分析</title>
-    <link href="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
-    <id>http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
-    <published>2018-01-18T13:56:36.000Z</published>
-    <updated>2018-02-16T03:43:22.161Z</updated>
-    
-    <summary type="html">
-    
-      AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
-    
-    </summary>
-    
-      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
