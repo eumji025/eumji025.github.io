@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  <meta name="google-site-verification" content="fF2Rfe38_E7FGSt0ok_ldKWxirrea7xMSBn-HXUL8gY" />
+  
+  
+  <title>Spring MVC-HandlerExceptionResolver初探 | EumJi Talk</title>
+  <meta name="description" content="在之前的几篇文章中已经介绍了Spring mvc中几个重要组件的加载和使用过程。通过关键几个组件我们应该从大体上已经知道了Spring MVC是否如何拦截请求，映射和处理，已经最终的视图处理或者消息体的处理，但是本篇则从非正常的角度去讲述一些Spring MVC异常情况下的处理，所以本篇的主要是HandlerExceptionResolver的分析。">
+<meta name="keywords" content="Spring MVC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring MVC-HandlerExceptionResolver初探">
+<meta property="og:url" content="http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/index.html">
+<meta property="og:site_name" content="EumJi Talk">
+<meta property="og:description" content="在之前的几篇文章中已经介绍了Spring mvc中几个重要组件的加载和使用过程。通过关键几个组件我们应该从大体上已经知道了Spring MVC是否如何拦截请求，映射和处理，已经最终的视图处理或者消息体的处理，但是本篇则从非正常的角度去讲述一些Spring MVC异常情况下的处理，所以本篇的主要是HandlerExceptionResolver的分析。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-25/85479549.jpg">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-25/19164639.jpg">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-25/20066615.jpg">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-29/10021469.jpg">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-30/65821800.jpg">
+<meta property="og:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-30/47191404.jpg">
+<meta property="og:updated_time" content="2019-05-29T08:16:30.027Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring MVC-HandlerExceptionResolver初探">
+<meta name="twitter:description" content="在之前的几篇文章中已经介绍了Spring mvc中几个重要组件的加载和使用过程。通过关键几个组件我们应该从大体上已经知道了Spring MVC是否如何拦截请求，映射和处理，已经最终的视图处理或者消息体的处理，但是本篇则从非正常的角度去讲述一些Spring MVC异常情况下的处理，所以本篇的主要是HandlerExceptionResolver的分析。">
+<meta name="twitter:image" content="http://of8rkrh1w.bkt.clouddn.com/18-6-25/85479549.jpg">
+<link rel="publisher" href="https://plus.google.com/101626292151729327338">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="EumJi Talk" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <!-- font-awesome CSS -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/solarized-light.css">
+  
+    
+    
+
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/eumji025" target="_blank">
+          <img class="thumb-xl img-circle img-rotate" src="/images/me.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">EumJi</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Web Developer &amp; Linux Amateur</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="fa fa-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+            <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <!-- <span class="ins-close ins-selectable"><i class="fa fa-times"></i></span> -->
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav">
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="fa fa-fw fa-dashboard"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="fa fa-fw fa-delicious"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="fa fa-fw fa-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="fa fa-fw fa-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="fa fa-fw fa-code"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="fa fa-fw fa-leanpub"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="fa fa-fw fa-gg"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="fa fa-fw fa-coffee"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">xxx</h3>
+    <div class="widget-body windget-body-wirte">
+        <div id="board">
+            
+            <div class="content">
+                <div class="card-front animated col s12 m12 l8 offset-l2 fadeInUp"> <p> <br><br> <br><br> 没什么好说的 <br><br> email:eumji025@gmail.com
+<br><br>
+</p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang基础/">Golang基础</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mybatis解析专栏/">Mybatis解析专栏</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-cloud-专栏/">Spring cloud 专栏</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring专栏/">Spring专栏</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring源码/">Spring源码</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具专栏/">工具专栏</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      <!-- 
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intellij-Idea/">Intellij Idea</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LocalDateTime/">LocalDateTime</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-Mapper加载/">Mybatis Mapper加载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis-插件/">Mybatis 插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis参数/">Mybatis参数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis概括/">Mybatis概括</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis缓存/">Mybatis缓存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-MVC/">Spring MVC</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-bean/">spring bean</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-cloud-config/">spring-cloud config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring源码/">spring源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/写作/">写作</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+ -->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CORS/" style="font-size: 14.5px;">CORS</a> <a href="/tags/Intellij-Idea/" style="font-size: 14.5px;">Intellij Idea</a> <a href="/tags/LocalDateTime/" style="font-size: 14px;">LocalDateTime</a> <a href="/tags/Mybatis-Mapper加载/" style="font-size: 14px;">Mybatis Mapper加载</a> <a href="/tags/Mybatis-插件/" style="font-size: 14px;">Mybatis 插件</a> <a href="/tags/Mybatis参数/" style="font-size: 14px;">Mybatis参数</a> <a href="/tags/Mybatis概括/" style="font-size: 14px;">Mybatis概括</a> <a href="/tags/Mybatis缓存/" style="font-size: 14.5px;">Mybatis缓存</a> <a href="/tags/Spring-MVC/" style="font-size: 15.5px;">Spring MVC</a> <a href="/tags/ThreadLocal/" style="font-size: 14.5px;">ThreadLocal</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/golang/" style="font-size: 14px;">golang</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/mysql/" style="font-size: 14px;">mysql</a> <a href="/tags/proxy/" style="font-size: 14.5px;">proxy</a> <a href="/tags/spring-bean/" style="font-size: 14px;">spring bean</a> <a href="/tags/spring-boot/" style="font-size: 15px;">spring-boot</a> <a href="/tags/spring-cloud-config/" style="font-size: 14px;">spring-cloud config</a> <a href="/tags/spring源码/" style="font-size: 14px;">spring源码</a> <a href="/tags/tools/" style="font-size: 14px;">tools</a> <a href="/tags/写作/" style="font-size: 14px;">写作</a>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body widget-category windget-body-wirte">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body windget-body-wirte">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/11/15/springmvc-exceptionhandler/" class="title">Spring MVC-HandlerExceptionResolver初探</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-15T00:45:00.000Z" itemprop="datePublished">2018-11-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/10/09/spring-beanfactory-autowired/" class="title">bean的创建和获取过程探索</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-09T15:32:28.000Z" itemprop="datePublished">2018-10-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/06/15/springmvc-handlermapping/" class="title">Spring MVC-HandlerMapping初探</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-06-15T00:45:00.000Z" itemprop="datePublished">2018-06-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/06/02/cors-second/" class="title">CORS注解扩展配置的理解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-06-02T13:25:08.000Z" itemprop="datePublished">2018-06-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+
+              <p class="item-title">
+                <a href="/2018/05/25/cors-init/" class="title">CORS在Spring MVC中的使用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-05-25T04:45:00.000Z" itemprop="datePublished">2018-05-25</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整体结构"><span class="toc-number">2.</span> <span class="toc-text">整体结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HandlerExceptionResolver加载"><span class="toc-number">3.</span> <span class="toc-text">HandlerExceptionResolver加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">4.</span> <span class="toc-text">异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#404验证"><span class="toc-number">4.0.1.</span> <span class="toc-text">404验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">4.1.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方法类型不匹配"><span class="toc-number">4.1.1.</span> <span class="toc-text">方法类型不匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数不匹配"><span class="toc-number">4.1.2.</span> <span class="toc-text">参数不匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#视图不存在"><span class="toc-number">4.1.3.</span> <span class="toc-text">视图不存在</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#handlerExceptionResolver解析"><span class="toc-number">4.2.</span> <span class="toc-text">handlerExceptionResolver解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#调用定位"><span class="toc-number">4.2.1.</span> <span class="toc-text">调用定位</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#各种HandlerExceptionResolver介绍"><span class="toc-number">4.2.2.</span> <span class="toc-text">各种HandlerExceptionResolver介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ExceptionHandlerExceptionResolver解析"><span class="toc-number">4.2.3.</span> <span class="toc-text">ExceptionHandlerExceptionResolver解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ResponseStatusExceptionResolver解析"><span class="toc-number">4.2.4.</span> <span class="toc-text">ResponseStatusExceptionResolver解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DefaultHandlerExceptionResolver解析"><span class="toc-number">4.2.5.</span> <span class="toc-text">DefaultHandlerExceptionResolver解析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">4.3.</span> <span class="toc-text">小结</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-springmvc-exceptionhandler" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spring MVC-HandlerExceptionResolver初探
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="fa fa-calendar-check-o"></i>
+	<a href="/2018/11/15/springmvc-exceptionhandler/" class="article-date">
+	  <time datetime="2018-11-15T00:45:00.000Z" itemprop="datePublished">2018-11-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/Spring专栏/">Spring专栏</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="fa fa-tag"></i>
+	<a class="article-tag-link" href="/tags/Spring-MVC/">Spring MVC</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="fa fa-commenting-o"></i> <a href="/2018/11/15/springmvc-exceptionhandler/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 6,956(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 31(分)</span>
+	
+
+
+      </div>
+      
+    </div>
+    <div class="article-entry markdown-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的几篇文章中已经介绍了Spring mvc中几个重要组件的加载和使用过程。通过关键几个组件我们应该从大体上已经知道了Spring MVC是否如何拦截请求，映射和处理，已经最终的视图处理或者消息体的处理，但是本篇则从非正常的角度去讲述一些Spring MVC异常情况下的处理，所以本篇的主要是HandlerExceptionResolver的分析。</p>
+<p>不过在正式讲解HandlerExceptionResolver之前，我们应该回忆下到底在哪里会用到HandlerExceptionResolver，或者说那些场景下需要HandlerExceptionResolver的支持。</p>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><p>在聊HandlerExceptionResolver之前，我们还是先要看看其整体的结构图是怎样的。</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-25/85479549.jpg" alt=""></p>
+<p>从上图就可以看出整体上HandlerExceptionResolver还是比较简单的，没有各种复杂的继承关系。</p>
+<p>首先简单介绍一下各个实现类的作用。</p>
+<p>SimpleMappingExceptionResolver：可以理解为解决简单的view路径错误。</p>
+<p>ResponseStatusExceptionResolver：主要解决包含ResponseStatus注解的异常情况</p>
+<p>ExceptionHandlerExceptionResolver： 常规异常情况下调用的resolver</p>
+<p>DefaultHandlerExceptionResolver： 应该最常用的一种，主要正常流程产生的异常，如mediaTypeNoSUpport，MissingPathVariable， MethodArgumentNotValid等等情况下</p>
+<h2 id="HandlerExceptionResolver加载"><a href="#HandlerExceptionResolver加载" class="headerlink" title="HandlerExceptionResolver加载"></a>HandlerExceptionResolver加载</h2><p>上面简单的介绍了HandlerExceptionResolver的几个实现类作用，那么接下来我们必然会好奇具体的是怎么匹配或者优先级的情况。</p>
+<p>那么首先我们就从加载的代码中看看优先级的情况，当然加载的过程和其他组件没有多少的差别。</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-25/19164639.jpg" alt=""></p>
+<p>从上图中可以看到分为两层，最外层是两个包装的handlerExceptionResolver实现类，这里补充介绍这两个类</p>
+<p>DefaultErrorAttributes：主要是将异常信息放在requestHeader中，并且可以用于BasicErrorController中</p>
+<p>HandlerExceptionResolverComposite： 用于组合各个handlerExceptionResolver。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> HandlerExceptionResolver <span class="title">handlerExceptionResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;HandlerExceptionResolver&gt; exceptionResolvers = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    configureHandlerExceptionResolvers(exceptionResolvers);</span><br><span class="line">    <span class="keyword">if</span> (exceptionResolvers.isEmpty()) &#123;<span class="comment">//为空加载各个HandlerExceptionResolver</span></span><br><span class="line">        addDefaultHandlerExceptionResolvers(exceptionResolvers);</span><br><span class="line">    &#125;</span><br><span class="line">    extendHandlerExceptionResolvers(exceptionResolvers);</span><br><span class="line">    HandlerExceptionResolverComposite composite = <span class="keyword">new</span> HandlerExceptionResolverComposite();</span><br><span class="line">    composite.setOrder(<span class="number">0</span>);<span class="comment">//设置优先级</span></span><br><span class="line">    composite.setExceptionResolvers(exceptionResolvers);</span><br><span class="line">    <span class="keyword">return</span> composite;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述初始HandlerExceptionResolverComposite的时候，先构建其他实际处理异常的HandlerExceptionResolver，然后被包在composite中，我们继续看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">addDefaultHandlerExceptionResolvers</span><span class="params">(List&lt;HandlerExceptionResolver&gt; exceptionResolvers)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//第一个</span></span><br><span class="line">    ExceptionHandlerExceptionResolver exceptionHandlerResolver = createExceptionHandlerExceptionResolver();</span><br><span class="line">    exceptionHandlerResolver.setContentNegotiationManager(mvcContentNegotiationManager());</span><br><span class="line">    exceptionHandlerResolver.setMessageConverters(getMessageConverters());</span><br><span class="line">    exceptionHandlerResolver.setCustomArgumentResolvers(getArgumentResolvers());</span><br><span class="line">    exceptionHandlerResolver.setCustomReturnValueHandlers(getReturnValueHandlers());</span><br><span class="line">    <span class="keyword">if</span> (jackson2Present) &#123;</span><br><span class="line">        exceptionHandlerResolver.setResponseBodyAdvice(</span><br><span class="line">                Collections.singletonList(<span class="keyword">new</span> JsonViewResponseBodyAdvice()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.applicationContext != <span class="keyword">null</span>) &#123;</span><br><span class="line">        exceptionHandlerResolver.setApplicationContext(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">    &#125;</span><br><span class="line">    exceptionHandlerResolver.afterPropertiesSet();</span><br><span class="line">    exceptionResolvers.add(exceptionHandlerResolver);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//响应状态异常处理</span></span><br><span class="line">    ResponseStatusExceptionResolver responseStatusResolver = <span class="keyword">new</span> ResponseStatusExceptionResolver();</span><br><span class="line">    responseStatusResolver.setMessageSource(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">    exceptionResolvers.add(responseStatusResolver);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//默认处理</span></span><br><span class="line">    exceptionResolvers.add(<span class="keyword">new</span> DefaultHandlerExceptionResolver());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们应该也解开了疑惑为什么外层只加载了两个bean，其实主要其他的并没有使用@Bean注入，而是在composite中进行初始化的。</p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>现在我们应该考虑那些情况下会产生异常，我的第一印象就是如果请求的URL不匹配是不是应该来一个404，</p>
+<h4 id="404验证"><a href="#404验证" class="headerlink" title="404验证"></a>404验证</h4><p>于是我就验证了一下。发现了新东西。</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-25/20066615.jpg" alt=""></p>
+<p>在通常的情况下，我们的请求应该命中第二个handlerMapping，可是我们现在的URL应该是没有正确的映射的，所以应该继续往下走。通过BeanName那就更不可能了，于是发现下一个又是SimpleURLHandlerMapping。</p>
+<p>很奇怪啊，按道理来说应该只有一个Bean的呀，于是我就重新看了一下SimpleURLHandlerMapping是在哪里被创建的。</p>
+<p>对于第一个SimpleURLHandlerMapping而言</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//&#123;@link WebMvcAutoConfiguration#faviconHandlerMapping&#125;</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SimpleUrlHandlerMapping <span class="title">faviconHandlerMapping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    SimpleUrlHandlerMapping mapping = <span class="keyword">new</span> SimpleUrlHandlerMapping();</span><br><span class="line">    mapping.setOrder(Ordered.HIGHEST_PRECEDENCE + <span class="number">1</span>);</span><br><span class="line">    mapping.setUrlMap(Collections.singletonMap(<span class="string">"**/favicon.ico"</span>,</span><br><span class="line">            faviconRequestHandler()));</span><br><span class="line">    <span class="keyword">return</span> mapping;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面也可以看出其主要目的就是为了解析favicon.ico资源的。</p>
+<p>然后接着找第二个SimpleURLHandlerMapping构造的地方</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//&#123;@link WebMvcConfigurationSupport#resourceHandlerMapping&#125;</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> HandlerMapping <span class="title">resourceHandlerMapping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Assert.state(<span class="keyword">this</span>.applicationContext != <span class="keyword">null</span>, <span class="string">"No ApplicationContext set"</span>);</span><br><span class="line">		Assert.state(<span class="keyword">this</span>.servletContext != <span class="keyword">null</span>, <span class="string">"No ServletContext set"</span>);</span><br><span class="line"></span><br><span class="line">		ResourceHandlerRegistry registry = <span class="keyword">new</span> ResourceHandlerRegistry(<span class="keyword">this</span>.applicationContext,</span><br><span class="line">				<span class="keyword">this</span>.servletContext, mvcContentNegotiationManager(), mvcUrlPathHelper());</span><br><span class="line">		addResourceHandlers(registry);</span><br><span class="line"></span><br><span class="line">		AbstractHandlerMapping handlerMapping = registry.getHandlerMapping(); <span class="comment">//在这里面处理</span></span><br><span class="line">		<span class="keyword">if</span> (handlerMapping != <span class="keyword">null</span>) &#123;<span class="comment">//构建path匹配，插件相关属性</span></span><br><span class="line">			handlerMapping.setPathMatcher(mvcPathMatcher());</span><br><span class="line">			handlerMapping.setUrlPathHelper(mvcUrlPathHelper());</span><br><span class="line">			handlerMapping.setInterceptors(getInterceptors());</span><br><span class="line">			handlerMapping.setCorsConfigurations(getCorsConfigurations());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			handlerMapping = <span class="keyword">new</span> EmptyHandlerMapping();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> handlerMapping;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>第二个SimpleURLHandlerMapping就比较强大了，能拦截所有的/**请求，所以基本就没有后面的HandlerMapping什么事情了。这里的这一块主要使用来处理resource请求的，我想如果我们配置了拦截的路径应该就不是这样的情况了。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>由于我们现在的请求路径是没有对应的controller的，所以此时第一个simpleURLHandlerMapping是不能找到对应的HandlerMethod的，第二个也是。由于第三个我们能拦截/**,所以我们看一下他的处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//org.springframework.web.servlet.resource.ResourceHttpRequestHandler#handleRequest</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleRequest</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// For very general mappings (e.g. "/") we need to check 404 first</span></span><br><span class="line">    Resource resource = getResource(request); <span class="comment">//获取resource</span></span><br><span class="line">    <span class="keyword">if</span> (resource == <span class="keyword">null</span>) &#123;<span class="comment">//为空则404</span></span><br><span class="line">        logger.trace(<span class="string">"No matching resource found - returning 404"</span>);</span><br><span class="line">        response.sendError(HttpServletResponse.SC_NOT_FOUND);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (HttpMethod.OPTIONS.matches(request.getMethod())) &#123;<span class="comment">//如果请求为option</span></span><br><span class="line">        response.setHeader(<span class="string">"Allow"</span>, getAllowHeader());</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Supported methods and required session</span></span><br><span class="line">    checkRequest(request);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Header phase</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">new</span> ServletWebRequest(request, response).checkNotModified(resource.lastModified())) &#123;</span><br><span class="line">        logger.trace(<span class="string">"Resource not modified - returning 304"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Apply cache settings, if any</span></span><br><span class="line">    prepareResponse(response);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check the media type for the resource</span></span><br><span class="line">    MediaType mediaType = getMediaType(request, resource);</span><br><span class="line">    <span class="comment">// Content phase</span></span><br><span class="line">    <span class="keyword">if</span> (METHOD_HEAD.equals(request.getMethod())) &#123;<span class="comment">//如果是head请求</span></span><br><span class="line">        setHeaders(response, resource, mediaType);</span><br><span class="line">        logger.trace(<span class="string">"HEAD request - skipping content"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ServletServerHttpResponse outputMessage = <span class="keyword">new</span> ServletServerHttpResponse(response);</span><br><span class="line">    <span class="keyword">if</span> (request.getHeader(HttpHeaders.RANGE) == <span class="keyword">null</span>) &#123;</span><br><span class="line">        Assert.state(<span class="keyword">this</span>.resourceHttpMessageConverter != <span class="keyword">null</span>, <span class="string">"Not initialized"</span>);</span><br><span class="line">        setHeaders(response, resource, mediaType);</span><br><span class="line">        <span class="keyword">this</span>.resourceHttpMessageConverter.write(resource, mediaType, outputMessage);<span class="comment">//设置资源</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        Assert.state(<span class="keyword">this</span>.resourceRegionHttpMessageConverter != <span class="keyword">null</span>, <span class="string">"Not initialized"</span>);</span><br><span class="line">        response.setHeader(HttpHeaders.ACCEPT_RANGES, <span class="string">"bytes"</span>);</span><br><span class="line">        ServletServerHttpRequest inputMessage = <span class="keyword">new</span> ServletServerHttpRequest(request);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List&lt;HttpRange&gt; httpRanges = inputMessage.getHeaders().getRange();</span><br><span class="line">            response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);</span><br><span class="line">            <span class="keyword">this</span>.resourceRegionHttpMessageConverter.write(</span><br><span class="line">                    HttpRange.toResourceRegions(httpRanges, resource), mediaType, outputMessage);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (IllegalArgumentException ex) &#123;</span><br><span class="line">            response.setHeader(<span class="string">"Content-Range"</span>, <span class="string">"bytes */"</span> + resource.contentLength());</span><br><span class="line">            response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ResourceHttpRequestHandler就是找资源是否存在，然后请求的方法方法是否支持，resourceHttpMessageConverter进行资源的转换</p>
+<p>到此我们也补充了如果路径找不到的请求下，其实是由simpleURLHandlerMapping做的处理</p>
+<h4 id="方法类型不匹配"><a href="#方法类型不匹配" class="headerlink" title="方法类型不匹配"></a>方法类型不匹配</h4><p>比如我给RequestMapping方法上限制的为GET方式，如果我使用POST进行请求，来看一下到底是如何进行处理的，会不会到异常上去。</p>
+<p>首先我们直接在processDispatchResult方法加上断点，然后我们就可以知道我们的异常对象为HttpRequestMethodNotSupportedException。</p>
+<p>然后我们直接在HttpRequestMethodNotSupportedException的构造方法上设置断点就以检控到异常调用链为：</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-29/10021469.jpg" alt=""></p>
+<p>然后我们也可以知道是由于在lookupHandlerMethod处造成的，由于在通过url找到对应的RequestMappingInfo进行内容匹配的时候无法匹配到正确的httpMethod。</p>
+<p>首先我们需要去了解是如何查找合适的HandlerMethod的逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">lookupHandlerMethod</span><span class="params">(String lookupPath, HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    List&lt;Match&gt; matches = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    List&lt;T&gt; directPathMatches = <span class="keyword">this</span>.mappingRegistry.getMappingsByUrl(lookupPath);<span class="comment">//所以支持的</span></span><br><span class="line">    <span class="keyword">if</span> (directPathMatches != <span class="keyword">null</span>) &#123;</span><br><span class="line">        addMatchingMappings(directPathMatches, matches, request);<span class="comment">//进行适配</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (matches.isEmpty()) &#123;<span class="comment">//如果还没匹配，所以的遍历</span></span><br><span class="line">        addMatchingMappings(<span class="keyword">this</span>.mappingRegistry.getMappings().keySet(), matches, request);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!matches.isEmpty()) &#123;<span class="comment">//存在匹配的</span></span><br><span class="line">     	...</span><br><span class="line">        <span class="keyword">return</span> bestMatch.handlerMethod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> handleNoMatch(<span class="keyword">this</span>.mappingRegistry.getMappings().keySet(), lookupPath, request);<span class="comment">//不匹配的处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键的几部分，也是我们处理请求必须要考虑的部分。</p>
+<p>1.首先从我们注册的map中找到和我们当前url适配的所有method，然后调用addMatchingMappings进行匹配，</p>
+<p>2.如果前面并不满足，则遍历所有的进行匹配</p>
+<p>3.最后还是没匹配上则，使用默认的没匹配逻辑进行处理。</p>
+<p>首先在第一步的匹配过程中，无非就是根据我们每一个directPathMatche来进行匹配操作，如果匹配则记录到matches列表中，匹配的过程我们可以从下面代码去了解，看看需要满足哪些条件才可以。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#123;@link RequestMappingInfo#getMatchingCondition&#125;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RequestMappingInfo <span class="title">getMatchingCondition</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">		RequestMethodsRequestCondition methods = <span class="keyword">this</span>.methodsCondition.getMatchingCondition(request);<span class="comment">//就以httpMethod为例看一下</span></span><br><span class="line">		ParamsRequestCondition params = <span class="keyword">this</span>.paramsCondition.getMatchingCondition(request);</span><br><span class="line">		HeadersRequestCondition headers = <span class="keyword">this</span>.headersCondition.getMatchingCondition(request);</span><br><span class="line">		ConsumesRequestCondition consumes = <span class="keyword">this</span>.consumesCondition.getMatchingCondition(request);</span><br><span class="line">		ProducesRequestCondition produces = <span class="keyword">this</span>.producesCondition.getMatchingCondition(request);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (methods == <span class="keyword">null</span> || params == <span class="keyword">null</span> || headers == <span class="keyword">null</span> || consumes == <span class="keyword">null</span> || produces == <span class="keyword">null</span>) &#123;<span class="comment">//只要有一项不匹配则返回null</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">  	...</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>上述就是RequestMappingInfo和HttpServletRequest匹配的过程，这里我们看到了匹配的过程会要求多个参数同事满足才能被正确映射。我们此次演示的例子是由于get和post不匹配引起，所以我们就以methodsCondition的匹配过程来看一下其中的实现.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RequestMethodsRequestCondition <span class="title">getMatchingCondition</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (CorsUtils.isPreFlightRequest(request)) &#123;<span class="comment">//判断是否支持cors的options请求</span></span><br><span class="line">        <span class="keyword">return</span> matchPreFlight(request);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (getMethods().isEmpty()) &#123;<span class="comment">//如果为空，</span></span><br><span class="line">        <span class="keyword">if</span> (RequestMethod.OPTIONS.name().equals(request.getMethod()) &amp;&amp;</span><br><span class="line">                !DispatcherType.ERROR.equals(request.getDispatcherType())) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">// No implicit match for OPTIONS (we handle it)</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> matchRequestMethod(request.getMethod());<span class="comment">//否则进行匹配操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里是包装方法，主要用来判断方法是否要进行匹配，CORS跨域请求判断处理，我们还是继续看普通情况下的匹配逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> RequestMethodsRequestCondition <span class="title">matchRequestMethod</span><span class="params">(String httpMethodValue)</span> </span>&#123;</span><br><span class="line">    HttpMethod httpMethod = HttpMethod.resolve(httpMethodValue);</span><br><span class="line">    <span class="keyword">if</span> (httpMethod != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (RequestMethod method : getMethods()) &#123;<span class="comment">//遍历支持的method进行名称匹配</span></span><br><span class="line">            <span class="keyword">if</span> (httpMethod.matches(method.name())) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> RequestMethodsRequestCondition(method);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (httpMethod == HttpMethod.HEAD &amp;&amp; getMethods().contains(RequestMethod.GET)) &#123;<span class="comment">//head方法能被get请求匹配</span></span><br><span class="line">            <span class="keyword">return</span> GET_CONDITION;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这里就可以看到，是否能够匹配对应的方法。应该一个请求可能被多个方法匹配，所以遍历所有能映射的方法，如果都不能匹配则进行不匹配的逻辑处理。这里的getMethods是取我们requestMapping注解里的method值</p>
+<p>上述的方法正是对url和RequestMappingInfo匹配过程，如果匹配了就筛选最合适的进行后续的处理，否则则进行不匹配的处理，具体看下面的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">handleNoMatch</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        Set&lt;RequestMappingInfo&gt; infos, String lookupPath, HttpServletRequest request)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line"></span><br><span class="line">    PartialMatchHelper helper = <span class="keyword">new</span> PartialMatchHelper(infos, request);<span class="comment">//构建PartialMatchHelper对象</span></span><br><span class="line">    <span class="keyword">if</span> (helper.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (helper.hasMethodsMismatch()) &#123;<span class="comment">//没有匹配的httpMethod</span></span><br><span class="line">        Set&lt;String&gt; methods = helper.getAllowedMethods();</span><br><span class="line">        <span class="keyword">if</span> (HttpMethod.OPTIONS.matches(request.getMethod())) &#123;<span class="comment">//判断是否为options方法</span></span><br><span class="line">            HttpOptionsHandler handler = <span class="keyword">new</span> HttpOptionsHandler(methods);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> HandlerMethod(handler, HTTP_OPTIONS_HANDLE_METHOD);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpRequestMethodNotSupportedException(request.getMethod(), methods);<span class="comment">//抛方法不支持异常</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (helper.hasConsumesMismatch()) &#123;<span class="comment">//是否有合适的mediatype</span></span><br><span class="line">        Set&lt;MediaType&gt; mediaTypes = helper.getConsumableMediaTypes();</span><br><span class="line">        MediaType contentType = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(request.getContentType())) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                contentType = MediaType.parseMediaType(request.getContentType());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (InvalidMediaTypeException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> HttpMediaTypeNotSupportedException(ex.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpMediaTypeNotSupportedException(contentType, <span class="keyword">new</span> ArrayList&lt;&gt;(mediaTypes));<span class="comment">//抛mediaType不支持异常</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (helper.hasProducesMismatch()) &#123;</span><br><span class="line">        Set&lt;MediaType&gt; mediaTypes = helper.getProducibleMediaTypes();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpMediaTypeNotAcceptableException(<span class="keyword">new</span> ArrayList&lt;&gt;(mediaTypes));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (helper.hasParamsMismatch()) &#123;<span class="comment">//参数异常</span></span><br><span class="line">        List&lt;String[]&gt; conditions = helper.getParamConditions();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsatisfiedServletRequestParameterException(conditions, request.getParameterMap());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以这里的方法主要是为了验证是什么原因引起的不匹配，并抛出相应的异常信息。其中比较重要的就是PartialMatchHelper怎么构建的</p>
+<p>到这里我们知道了方法类型不匹配的异常是怎么被触发的。首先会通过url去匹配requestMappingInfo信息，，如果有任意信息不匹配则返回null。</p>
+<p>这里我们应该要知道这里主要包含了三类不支持的异常情景：1.httpMethod不支持，2、mediaType不支持。3请求参数不支持、</p>
+<h4 id="参数不匹配"><a href="#参数不匹配" class="headerlink" title="参数不匹配"></a>参数不匹配</h4><p>我想我们常发生的一种情况就是<code>Bad Request</code>问题了，发生这种问题通常就是因为我们的参数匹配出现了问题。我们就以常用的参数类型错误来演示，如果我设置一个age参数为int类型，而我传一个string类型的值，你就会发现这样的错误（常发生于json格式的转换上）。</p>
+<p>首先我们大概能猜到是发生在Adapter进行handle方法的参数解析时候发生的问题，然后我们快速定位到发生问题的地方。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readJavaType</span><span class="params">(JavaType javaType, HttpInputMessage inputMessage)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (inputMessage <span class="keyword">instanceof</span> MappingJacksonInputMessage) &#123;</span><br><span class="line">            Class&lt;?&gt; deserializationView = ((MappingJacksonInputMessage) inputMessage).getDeserializationView();</span><br><span class="line">            <span class="keyword">if</span> (deserializationView != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.objectMapper.readerWithView(deserializationView).forType(javaType).</span><br><span class="line">                        readValue(inputMessage.getBody());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.objectMapper.readValue(inputMessage.getBody(), javaType);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (InvalidDefinitionException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpMessageConversionException(<span class="string">"Type definition error: "</span> + ex.getType(), ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (JsonProcessingException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> HttpMessageNotReadableException(<span class="string">"JSON parse error: "</span> + ex.getOriginalMessage(), ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码也大概可以猜到，通过age和int类型取值进行转换的时候发生目标类型并不匹配，所以就导致无法正确的被处理。于是就抛出了异常。</p>
+<h4 id="视图不存在"><a href="#视图不存在" class="headerlink" title="视图不存在"></a>视图不存在</h4><p>前面我们分别讲解了在HandlerMapping和HandlerAdapter中可能出现异常的情况，并且我们很容易定位，那么最后我们来看看viewResolver中又可能发生异常的情况，很简单的一种情况就是找不到对应的模板。</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-30/65821800.jpg" alt=""></p>
+<p>通过上面的图就很容易定位到异常情况，具体是怎么发现的只能一步步的定位发生的大概位置，然后慢慢深入，最终找到在TemplateManager的resolveTemplate方法中发生，具体是怎么发生的我们来看一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> TemplateResolution <span class="title">resolveTemplate</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> IEngineConfiguration configuration,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String ownerTemplate,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String template,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> Map&lt;String, Object&gt; templateResolutionAttributes,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">boolean</span> failIfNotExists)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//遍历TemplateResolver</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">final</span> ITemplateResolver templateResolver : configuration.getTemplateResolvers()) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> TemplateResolution templateResolution =</span><br><span class="line">                templateResolver.resolveTemplate(configuration, ownerTemplate, template, templateResolutionAttributes);<span class="comment">//解析模板</span></span><br><span class="line">        <span class="keyword">if</span> (templateResolution != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> templateResolution;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!failIfNotExists) &#123;<span class="comment">//如果找不到，默认failIfNotExists为true</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//抛异常</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> TemplateInputException(</span><br><span class="line">            <span class="string">"Error resolving template \""</span> + LoggingUtils.loggifyTemplateName(template) + <span class="string">"\", "</span> +</span><br><span class="line">            <span class="string">"template might not exist or might not be accessible by "</span> +</span><br><span class="line">            <span class="string">"any of the configured Template Resolvers"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面我们可以看到解析模板的方法，还是和之前的那些组件的处理方式很相似，通过使用teamplateResolver进行视图解析，如果没解析到则使用其他的resolver进行解析，如果最终都没解析到，则抛异常。</p>
+<p>当然最后一个异常的展示也不是handlerExceptionResolver处理的内容，只是介绍了各个组件可能发生的异常。</p>
+<h3 id="handlerExceptionResolver解析"><a href="#handlerExceptionResolver解析" class="headerlink" title="handlerExceptionResolver解析"></a>handlerExceptionResolver解析</h3><p>前面我们都是通过各种情形演示了发生异常的几种情况。解析来我们将详细讲解handlerExceptionResolver是如何对这些异常进行处理的。</p>
+<h4 id="调用定位"><a href="#调用定位" class="headerlink" title="调用定位"></a>调用定位</h4><p>首先我们应该能想起来handlerExceptionResolver是在DispatchServlet的processDispatchResult方法中开始进行处理的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processDispatchResult</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">      @Nullable HandlerExecutionChain mappedHandler, @Nullable ModelAndView mv,</span></span></span><br><span class="line"><span class="function"><span class="params">      @Nullable Exception exception)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">boolean</span> errorView = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (exception != <span class="keyword">null</span>) &#123;<span class="comment">//存在异常情况下</span></span><br><span class="line">      <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> ModelAndViewDefiningException) &#123;<span class="comment">//如果是ModelAndViewDefiningException（直接使用失败的模板）</span></span><br><span class="line">          logger.debug(<span class="string">"ModelAndViewDefiningException encountered"</span>, exception);</span><br><span class="line">          mv = ((ModelAndViewDefiningException) exception).getModelAndView();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">          Object handler = (mappedHandler != <span class="keyword">null</span> ? mappedHandler.getHandler() : <span class="keyword">null</span>);</span><br><span class="line">          mv = processHandlerException(request, response, handler, exception);<span class="comment">//处理异常</span></span><br><span class="line">          errorView = (mv != <span class="keyword">null</span>);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  ...省略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先这里是对异常进行区分ModelAndViewDefiningException就直接获取modelAndView，目前还不知道哪里为产生这个异常，如果不是则需要进行额外的处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">processHandlerException</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">        @Nullable Object handler, Exception ex)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check registered HandlerExceptionResolvers...</span></span><br><span class="line">    ModelAndView exMv = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.handlerExceptionResolvers != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">//遍历HandlerExceptionResolver</span></span><br><span class="line">        <span class="keyword">for</span> (HandlerExceptionResolver handlerExceptionResolver : <span class="keyword">this</span>.handlerExceptionResolvers) &#123;</span><br><span class="line">            exMv = handlerExceptionResolver.resolveException(request, response, handler, ex);<span class="comment">//进行解析</span></span><br><span class="line">            <span class="keyword">if</span> (exMv != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (exMv != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (exMv.isEmpty()) &#123;<span class="comment">//如果为空，设置异常属性</span></span><br><span class="line">            request.setAttribute(EXCEPTION_ATTRIBUTE, ex);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">     </span><br><span class="line">        <span class="keyword">if</span> (!exMv.hasView()) &#123;<span class="comment">//如果没有视图，获取视图的路径</span></span><br><span class="line">            String defaultViewName = getDefaultViewName(request);</span><br><span class="line">            <span class="keyword">if</span> (defaultViewName != <span class="keyword">null</span>) &#123;</span><br><span class="line">                exMv.setViewName(defaultViewName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">            logger.debug(<span class="string">"Handler execution resulted in exception - forwarding to resolved error view: "</span> + exMv, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        WebUtils.exposeErrorRequestAttributes(request, ex, getServletName());</span><br><span class="line">        <span class="keyword">return</span> exMv;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> ex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以这里主要的事情就是循环handlerExceptioResolver然后对请求进行处理，然后处理完后再对获取的modeAndView进行后续的判断和处理。最后返回一个视图。</p>
+<p><img src="http://of8rkrh1w.bkt.clouddn.com/18-6-30/47191404.jpg" alt=""></p>
+<p>和我们上节说的viewResolver很想，最外层感觉都不是真正处理的异常的resolver，而是进行包装的。</p>
+<h4 id="各种HandlerExceptionResolver介绍"><a href="#各种HandlerExceptionResolver介绍" class="headerlink" title="各种HandlerExceptionResolver介绍"></a>各种HandlerExceptionResolver介绍</h4><p>首先我们看一下DefaultErrorAttributes所做的事情。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">resolveException</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">    HttpServletResponse response, Object handler, Exception ex)</span> </span>&#123;</span><br><span class="line">    storeErrorAttributes(request, ex);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">storeErrorAttributes</span><span class="params">(HttpServletRequest request, Exception ex)</span> </span>&#123;</span><br><span class="line">    request.setAttribute(ERROR_ATTRIBUTE, ex);<span class="comment">//设置错误的属性</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看出，主要是为了给request添加一个ERROR_ATTRIBUTE。</p>
+<p>那么我们接着看另外一个resolverComposite做的事情，其实集合没干什么事情</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">resolveException</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">        @Nullable Object handler,Exception ex)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.resolvers != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (HandlerExceptionResolver handlerExceptionResolver : <span class="keyword">this</span>.resolvers) &#123;</span><br><span class="line">            ModelAndView mav = handlerExceptionResolver.resolveException(request, response, handler, ex);</span><br><span class="line">            <span class="keyword">if</span> (mav != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> mav;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里其实和外层的处理没有什么区别，因为他还是遍历在resolverComposite中注册的handlerExceptionResolver，如果有返回ModelAndView就直接返回，所以我们后面还是要看具体的handlerExceptionResolver处理逻辑。</p>
+<p>然后我们可以大概的看一下HandlerExceptionResolverComposite的初始化，大概我猜想就是把我们想要的handlerExceptionResolver加载到HandlerExceptionResolverComposite对象中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HandlerExceptionResolver <span class="title">handlerExceptionResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;HandlerExceptionResolver&gt; exceptionResolvers = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    configureHandlerExceptionResolvers(exceptionResolvers);</span><br><span class="line">    <span class="keyword">if</span> (exceptionResolvers.isEmpty()) &#123;<span class="comment">//这里和上文的提起的注册是一样的</span></span><br><span class="line">        addDefaultHandlerExceptionResolvers(exceptionResolvers);</span><br><span class="line">    &#125;</span><br><span class="line">    extendHandlerExceptionResolvers(exceptionResolvers);<span class="comment">//关键加载resolver的逻辑</span></span><br><span class="line">    HandlerExceptionResolverComposite composite = <span class="keyword">new</span> HandlerExceptionResolverComposite();</span><br><span class="line">    composite.setOrder(<span class="number">0</span>); <span class="comment">//优先级设为0</span></span><br><span class="line">    composite.setExceptionResolvers(exceptionResolvers);<span class="comment">//加载到composite中</span></span><br><span class="line">    <span class="keyword">return</span> composite;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看是来是否和之前的viewResolver很很像，然后我们具体看一下extendHandlerExceptionResolvers中加载哪些对应的handlerExceptionResolver。addDefaultHandlerExceptionResolvers方法在之前查看HandlerExceptionResolver注册时候已经看过了。</p>
+<p>主要加载了三种HandlerExceptionResolver，这里简单描述三种HandlerExceptionResolver的应用场景。</p>
+<p>ExceptionHandlerExceptionResolver： 主要作用与@ControllerAdvice和@ExceptionHandler注解的方法。</p>
+<p>ResponseStatusExceptionResolver：解析方法包含ResponseStatus注解的情况。</p>
+<p>DefaultHandlerExceptionResolver：默认的实现，解析各种常见的异常，如MediaTypeNotSupport，RequestBindingException等情况。</p>
+<h4 id="ExceptionHandlerExceptionResolver解析"><a href="#ExceptionHandlerExceptionResolver解析" class="headerlink" title="ExceptionHandlerExceptionResolver解析"></a>ExceptionHandlerExceptionResolver解析</h4><p>接下来我们就按照顺序，看看异常是怎么一步步的进入到各个异常解析器的，首先看ExceptionHandlerExceptionResolver</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">doResolveHandlerMethodException</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">          HttpServletResponse response, @Nullable HandlerMethod handlerMethod, Exception exception)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">      ServletInvocableHandlerMethod exceptionHandlerMethod = getExceptionHandlerMethod(handlerMethod, exception);<span class="comment">//解析异常处理的handleMethod</span></span><br><span class="line">      <span class="keyword">if</span> (exceptionHandlerMethod == <span class="keyword">null</span>) &#123;<span class="comment">//如果没有合适的直接返回</span></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//设置参数信息，和HandlerMapping很相似</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.argumentResolvers != <span class="keyword">null</span>) &#123;</span><br><span class="line">          exceptionHandlerMethod.setHandlerMethodArgumentResolvers(<span class="keyword">this</span>.argumentResolvers);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.returnValueHandlers != <span class="keyword">null</span>) &#123;</span><br><span class="line">          exceptionHandlerMethod.setHandlerMethodReturnValueHandlers(<span class="keyword">this</span>.returnValueHandlers);</span><br><span class="line">      &#125;</span><br><span class="line">	 <span class="comment">//包装</span></span><br><span class="line">      ServletWebRequest webRequest = <span class="keyword">new</span> ServletWebRequest(request, response);</span><br><span class="line">      ModelAndViewContainer mavContainer = <span class="keyword">new</span> ModelAndViewContainer();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">         </span><br><span class="line">          Throwable cause = exception.getCause();</span><br><span class="line">          <span class="keyword">if</span> (cause != <span class="keyword">null</span>) &#123;<span class="comment">//有异常case情况下</span></span><br><span class="line">              exceptionHandlerMethod.invokeAndHandle(webRequest, mavContainer, exception, cause, handlerMethod);</span><br><span class="line">          &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        	<span class="comment">//直接使用exception</span></span><br><span class="line">              exceptionHandlerMethod.invokeAndHandle(webRequest, mavContainer, exception, handlerMethod);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (Throwable invocationEx) &#123;</span><br><span class="line">          <span class="comment">// Any other than the original exception is unintended here,</span></span><br><span class="line">          <span class="comment">// probably an accident (e.g. failed assertion or the like).</span></span><br><span class="line">          <span class="keyword">if</span> (invocationEx != exception &amp;&amp; logger.isWarnEnabled()) &#123;</span><br><span class="line">              logger.warn(<span class="string">"Failed to invoke @ExceptionHandler method: "</span> + exceptionHandlerMethod, invocationEx);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// Continue with default processing of the original exception...</span></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (mavContainer.isRequestHandled()) &#123;<span class="comment">//是否已经处理</span></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> ModelAndView();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          ModelMap model = mavContainer.getModel();</span><br><span class="line">          HttpStatus status = mavContainer.getStatus();</span><br><span class="line">          ModelAndView mav = <span class="keyword">new</span> ModelAndView(mavContainer.getViewName(), model, status);</span><br><span class="line">          mav.setViewName(mavContainer.getViewName());</span><br><span class="line">          <span class="keyword">if</span> (!mavContainer.isViewReference()) &#123;</span><br><span class="line">              mav.setView((View) mavContainer.getView());</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">if</span> (model <span class="keyword">instanceof</span> RedirectAttributes) &#123;</span><br><span class="line">              Map&lt;String, ?&gt; flashAttributes = ((RedirectAttributes) model).getFlashAttributes();</span><br><span class="line">              RequestContextUtils.getOutputFlashMap(request).putAll(flashAttributes);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> mav;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>从上文中可以看出，这里会首先会对异常情况解析出可执行的ServletInvocableHandlerMethod，如果没有则直接返回空，用下一个resolver进行处理，如果存在，则设置相关的参数，最后调用invokeAndHandle方法处理。然后就又回到我们解析handlerAdapter中的解析参数和执行的过程了。不过这里的请求带有case。</p>
+<p>我们还是先看一下getExceptionHandlerMethod方法做的主要逻辑，这里比较关键影响到能不能进行后面的操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ServletInvocableHandlerMethod <span class="title">getExceptionHandlerMethod</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        @Nullable HandlerMethod handlerMethod, Exception exception)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Class&lt;?&gt; handlerType = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (handlerMethod != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//根据class获取ExceptionHandlerMethodResolver</span></span><br><span class="line">        handlerType = handlerMethod.getBeanType();</span><br><span class="line">        ExceptionHandlerMethodResolver resolver = <span class="keyword">this</span>.exceptionHandlerCache.get(handlerType);<span class="comment">//判断缓存有没有</span></span><br><span class="line">        <span class="keyword">if</span> (resolver == <span class="keyword">null</span>) &#123;</span><br><span class="line">            resolver = <span class="keyword">new</span> ExceptionHandlerMethodResolver(handlerType);<span class="comment">//构建一个加入缓存</span></span><br><span class="line">            <span class="keyword">this</span>.exceptionHandlerCache.put(handlerType, resolver);</span><br><span class="line">        &#125;</span><br><span class="line">        Method method = resolver.resolveMethod(exception);<span class="comment">//然后用ExceptionHandlerMethodResolver的resolverMethod看有没有解析的方法</span></span><br><span class="line">        <span class="keyword">if</span> (method != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ServletInvocableHandlerMethod(handlerMethod.getBean(), method);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 判断是否为代理类</span></span><br><span class="line">        <span class="keyword">if</span> (Proxy.isProxyClass(handlerType)) &#123;</span><br><span class="line">            handlerType = AopUtils.getTargetClass(handlerMethod.getBean());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//然后遍历exceptionHandlerAdviceCache，看有没有能处理的exceptionHandlerAdviceCache</span></span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;ControllerAdviceBean, ExceptionHandlerMethodResolver&gt; entry : <span class="keyword">this</span>.exceptionHandlerAdviceCache.entrySet()) &#123;</span><br><span class="line">        ControllerAdviceBean advice = entry.getKey();</span><br><span class="line">        <span class="keyword">if</span> (advice.isApplicableToBeanType(handlerType)) &#123;</span><br><span class="line">            ExceptionHandlerMethodResolver resolver = entry.getValue();</span><br><span class="line">            Method method = resolver.resolveMethod(exception);</span><br><span class="line">            <span class="keyword">if</span> (method != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> ServletInvocableHandlerMethod(advice.resolveBean(), method);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看出主要做了几件事：</p>
+<p>1.首先我们会先通过handlerMethod获取class，并生成ExceptionHandlerMethodResolver且记录到缓存，然后调用resolveMethod看有没有合适的method，如果有则包装成ServletInvocableHandlerMethod返回</p>
+<p>2.如果第一条不满足则需要遍历exceptionHandlerAdviceCache来看有没有合适的ControllerAdvice来处理当前HandlerMethod，如果有则使用对应的resolveMethod找合适的method，和第一步相同。</p>
+<p>那么这里就有两个疑惑的点，1.resolveMethod是怎么进行处理的。 2.exceptionHandlerAdviceCache有哪些，是怎么注册的。</p>
+<p>那么围绕着这些问题，我们首先看一下exceptionHandlerAdviceCache是怎么注册的，其实实在构建ExceptionHandlerMethodResolver的afterPropertiesSet方法会进行cache的初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initExceptionHandlerAdviceCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (getApplicationContext() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//其实和注册组件一样，获取ControllerAdvice注解的bean</span></span><br><span class="line">    List&lt;ControllerAdviceBean&gt; adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());</span><br><span class="line">    AnnotationAwareOrderComparator.sort(adviceBeans);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (ControllerAdviceBean adviceBean : adviceBeans) &#123;</span><br><span class="line">        Class&lt;?&gt; beanType = adviceBean.getBeanType();</span><br><span class="line">        <span class="keyword">if</span> (beanType == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unresolvable type for ControllerAdviceBean: "</span> + adviceBean);</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="comment">//exceptionHandlerResolver注册</span></span><br><span class="line">        ExceptionHandlerMethodResolver resolver = <span class="keyword">new</span> ExceptionHandlerMethodResolver(beanType);</span><br><span class="line">        <span class="keyword">if</span> (resolver.hasExceptionMappings()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.exceptionHandlerAdviceCache.put(adviceBean, resolver);</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="comment">//ResponseBodyAdvice注册</span></span><br><span class="line">        <span class="keyword">if</span> (ResponseBodyAdvice.class.isAssignableFrom(beanType)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.responseBodyAdvice.add(adviceBean);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.首先是通过ControllerAdviceBean的findAnnotationBean的方法获取包含controllerAdvice的bean，并包装成ControllerAdviceBean。</p>
+<p>2.然后就是排序，构建ExceptionHandlerMethodResolver并放入到exceptionHandlerAdviceCache。</p>
+<p>3.最后还有ResponseBodyAdvice的注册。</p>
+<p>注意这里是有条件的是需要包含mappedMethods的，所以这类还要看一下这是怎么设置的，其实在构建resolver的时候就已经设置了。这里看一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ExceptionHandlerMethodResolver</span><span class="params">(Class&lt;?&gt; handlerType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Class&lt;? extends Throwable&gt; exceptionType : detectExceptionMappings(method)) &#123;</span><br><span class="line">            addExceptionMapping(exceptionType, method);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> MethodFilter EXCEPTION_HANDLER_METHODS = method -&gt;</span><br><span class="line">			(AnnotationUtils.findAnnotation(method, ExceptionHandler.class) != <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<p>解析方法是否包含ExceptionHandler注解，如果是则注册。</p>
+<p>看完了注册之后我们看一下ExceptionHandlerMethodResolver的resolveMethod方法实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Method <span class="title">resolveMethod</span><span class="params">(Exception exception)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> resolveMethodByThrowable(exception);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Method <span class="title">resolveMethodByThrowable</span><span class="params">(Throwable exception)</span> </span>&#123;</span><br><span class="line">    Method method = resolveMethodByExceptionType(exception.getClass());<span class="comment">//通过异常class去取</span></span><br><span class="line">    <span class="keyword">if</span> (method == <span class="keyword">null</span>) &#123;</span><br><span class="line">        Throwable cause = exception.getCause();<span class="comment">//取不到则使用cause的class取</span></span><br><span class="line">        <span class="keyword">if</span> (cause != <span class="keyword">null</span>) &#123;</span><br><span class="line">            method = resolveMethodByExceptionType(cause.getClass());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> method;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以从上面的代码主要是包装方法，是通过异常和异常cause的异常类去尝试获取method。</p>
+<p>具体我们再看resolveMethodByExceptionType方法做的事情。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Method <span class="title">resolveMethodByExceptionType</span><span class="params">(Class&lt;? extends Throwable&gt; exceptionType)</span> </span>&#123;</span><br><span class="line">    Method method = <span class="keyword">this</span>.exceptionLookupCache.get(exceptionType);</span><br><span class="line">    <span class="keyword">if</span> (method == <span class="keyword">null</span>) &#123;</span><br><span class="line">        method = getMappedMethod(exceptionType);</span><br><span class="line">        <span class="keyword">this</span>.exceptionLookupCache.put(exceptionType, method);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> method;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里首先是从缓存中取，如果取不到就通过调用getMappedMethod去取。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Method <span class="title">getMappedMethod</span><span class="params">(Class&lt;? extends Throwable&gt; exceptionType)</span> </span>&#123;</span><br><span class="line">    List&lt;Class&lt;? extends Throwable&gt;&gt; matches = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Class&lt;? extends Throwable&gt; mappedException : <span class="keyword">this</span>.mappedMethods.keySet()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mappedException.isAssignableFrom(exceptionType)) &#123;<span class="comment">//通过之前注册的mappedMethod匹配</span></span><br><span class="line">            matches.add(mappedException);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//如果有匹配的进行排序取最优的</span></span><br><span class="line">    <span class="keyword">if</span> (!matches.isEmpty()) &#123;</span><br><span class="line">        matches.sort(<span class="keyword">new</span> ExceptionDepthComparator(exceptionType));</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.mappedMethods.get(matches.get(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里可以看到最终的实现，是通过我们在最开始注册的@ExceptionHandler对应的method，如果有则排序取最优的，否则返回空。</p>
+<p>所以最终我们也知道getExceptionHandlerMethod方法的目的就是为了让我们自定义的ControllerAdvice和ExceptionHandler起作用。</p>
+<p>所以最终包装的会通过ServletInvocableHandlerMethod最后反射调用到我们设置的增强方法。</p>
+<p>如果对ControllerAdvice还不死很熟悉的话，可以看一下这篇文章<a href="https://www.cnblogs.com/junzi2099/p/7840294.html" target="_blank" rel="noopener">https://www.cnblogs.com/junzi2099/p/7840294.html</a></p>
+<p>后续ServletInvocableHandlerMethod方法是如何处理这里就不在这里重复的讲解的，之前在将handlerAdapter的时候都已经详细的说明了。</p>
+<h4 id="ResponseStatusExceptionResolver解析"><a href="#ResponseStatusExceptionResolver解析" class="headerlink" title="ResponseStatusExceptionResolver解析"></a>ResponseStatusExceptionResolver解析</h4><p>我们还是直接定位到doResolveException方法看看里面对应的逻辑处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">doResolveException</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//首先判断是否为ResponseStatusException，如果是直接处理</span></span><br><span class="line">        <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> ResponseStatusException) &#123;</span><br><span class="line">            <span class="keyword">return</span> resolveResponseStatusException((ResponseStatusException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ResponseStatus status = AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class);<span class="comment">//是否有ResponseStatus注解</span></span><br><span class="line">        <span class="keyword">if</span> (status != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> resolveResponseStatus(status, request, response, handler, ex);</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//异常的cause为Exception，进行处理</span></span><br><span class="line">        <span class="keyword">if</span> (ex.getCause() <span class="keyword">instanceof</span> Exception) &#123;</span><br><span class="line">            ex = (Exception) ex.getCause();</span><br><span class="line">            <span class="keyword">return</span> doResolveException(request, response, handler, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception resolveEx) &#123;</span><br><span class="line">        logger.warn(<span class="string">"ResponseStatus handling resulted in exception"</span>, resolveEx);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看到ResponseStatusExceptionResolver主要是解析三种情况下的异常，1.ResponseStatusException，2.解析ResponseStatus，3.解析异常的cause为Exception对象的情况</p>
+<p>首先看一下一种情况ResponseStatusException的处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">resolveResponseStatusException</span><span class="params">(ResponseStatusException ex,</span></span></span><br><span class="line"><span class="function"><span class="params">        HttpServletRequest request, HttpServletResponse response, @Nullable Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> statusCode = ex.getStatus().value();</span><br><span class="line">    String reason = ex.getReason();</span><br><span class="line">    <span class="keyword">return</span> applyStatusAndReason(statusCode, reason, response);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">applyStatusAndReason</span><span class="params">(<span class="keyword">int</span> statusCode, @Nullable String reason, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!StringUtils.hasLength(reason)) &#123;</span><br><span class="line">        response.sendError(statusCode);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        String resolvedReason = (<span class="keyword">this</span>.messageSource != <span class="keyword">null</span> ?</span><br><span class="line">                <span class="keyword">this</span>.messageSource.getMessage(reason, <span class="keyword">null</span>, reason, LocaleContextHolder.getLocale()) :</span><br><span class="line">                reason);</span><br><span class="line">        response.sendError(statusCode, resolvedReason);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ModelAndView();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将异常信息设置到Response里面去，并返回空的modelAndView。</p>
+<p>然后第二种为ResponseStatus注解的处理其实是一样的，只是异常信息是从注解里面取得。所以相当于是ResponseStatus强制限制错误情况下的返回信息和状态码。</p>
+<p>第三种完全就是递归的进行。</p>
+<p>如果这三种都无法满足的话，则需要到DefaultHandlerExceptionResolver中进行处理。</p>
+<h4 id="DefaultHandlerExceptionResolver解析"><a href="#DefaultHandlerExceptionResolver解析" class="headerlink" title="DefaultHandlerExceptionResolver解析"></a>DefaultHandlerExceptionResolver解析</h4><p>最后我们看一下默认的实现，这也是用的比较多的一种，因为他包含了好多中异常的解决方案</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">doResolveException</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> HttpRequestMethodNotSupportedException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleHttpRequestMethodNotSupported(</span><br><span class="line">                    (HttpRequestMethodNotSupportedException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> HttpMediaTypeNotSupportedException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleHttpMediaTypeNotSupported(</span><br><span class="line">                    (HttpMediaTypeNotSupportedException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> HttpMediaTypeNotAcceptableException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleHttpMediaTypeNotAcceptable(</span><br><span class="line">                    (HttpMediaTypeNotAcceptableException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> MissingPathVariableException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleMissingPathVariable(</span><br><span class="line">                    (MissingPathVariableException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> MissingServletRequestParameterException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleMissingServletRequestParameter(</span><br><span class="line">                    (MissingServletRequestParameterException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> ServletRequestBindingException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleServletRequestBindingException(</span><br><span class="line">                    (ServletRequestBindingException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> ConversionNotSupportedException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleConversionNotSupported(</span><br><span class="line">                    (ConversionNotSupportedException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> TypeMismatchException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleTypeMismatch(</span><br><span class="line">                    (TypeMismatchException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> HttpMessageNotReadableException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleHttpMessageNotReadable(</span><br><span class="line">                    (HttpMessageNotReadableException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> HttpMessageNotWritableException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleHttpMessageNotWritable(</span><br><span class="line">                    (HttpMessageNotWritableException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> MethodArgumentNotValidException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleMethodArgumentNotValidException(</span><br><span class="line">                    (MethodArgumentNotValidException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> MissingServletRequestPartException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleMissingServletRequestPartException(</span><br><span class="line">                    (MissingServletRequestPartException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BindException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleBindException((BindException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> NoHandlerFoundException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleNoHandlerFoundException(</span><br><span class="line">                    (NoHandlerFoundException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ex <span class="keyword">instanceof</span> AsyncRequestTimeoutException) &#123;</span><br><span class="line">            <span class="keyword">return</span> handleAsyncRequestTimeoutException(</span><br><span class="line">                    (AsyncRequestTimeoutException) ex, request, response, handler);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception handlerException) &#123;</span><br><span class="line">        <span class="keyword">if</span> (logger.isWarnEnabled()) &#123;</span><br><span class="line">            logger.warn(<span class="string">"Handling of ["</span> + ex.getClass().getName() + <span class="string">"] resulted in exception"</span>, handlerException);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码很长，其实做的事情都差不多，只是根据每一种异常的特点设置不同的信息，我们就拿第一种情况看一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ModelAndView <span class="title">handleHttpRequestMethodNotSupported</span><span class="params">(HttpRequestMethodNotSupportedException ex,</span></span></span><br><span class="line"><span class="function"><span class="params">        HttpServletRequest request, HttpServletResponse response, @Nullable Object handler)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    pageNotFoundLogger.warn(ex.getMessage());</span><br><span class="line">    String[] supportedMethods = ex.getSupportedMethods();</span><br><span class="line">    <span class="keyword">if</span> (supportedMethods != <span class="keyword">null</span>) &#123;</span><br><span class="line">        response.setHeader(<span class="string">"Allow"</span>, StringUtils.arrayToDelimitedString(supportedMethods, <span class="string">", "</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, ex.getMessage());</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ModelAndView();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实和我们之前的resolver处理的比较相似，无非就是把异常信息和状态码设置到Response对应的属性中。最后返回一个空的modelAndView对象。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>到这里我们也算把handlerExceptionResolver介绍完了，当然还在最开始因为404异常找到了HandlerMapping中，我们没有注意到的地方，所以重新认识了一下SImpleURLHandlerMapping，</p>
+<p>后面我们对handlerExceptionResolver的调用过程和常用到的几种handlerExceptionResolver的作用进行了分析。</p>
+<p>通过本节我们同时也对ControllerAdvice，ExceptionHandler，ResponseStatus的原理和实现有了更深的认识和理解。对我们对我们开发设计有很大的指导意义。</p>
+<p>最后还是得说一点就是要多看多用多看源码，然后就会对各个组件有更深的理解。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/" title="Spring MVC-HandlerExceptionResolver初探" target="_blank" rel="external">http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/eumji025" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/me.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/eumji025" target="_blank"><span class="text-dark">EumJi</span><small class="ml-1x">Java Web Developer &amp; Linux Amateur</small></a></h3>
+        <div>人生坎坎坷坷，跌跌撞撞那是在所难免。但是，不论跌了多少次，你都要坚强地再次站起来。任何时候，无论你面临着生命的何等困惑，抑或经受着多少挫折，无论道路如何的艰难，无论希望变得如何渺茫，请你不要绝望，再试一次!</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+       <div id="SOHUCS" sid='http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/' ></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cysYcQMdM',
+conf: 'prod_12b546d584c5e5927876d7c322ee1e03'
+});
+</script>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2018/10/09/spring-beanfactory-autowired/" title="bean的创建和获取过程探索">下一篇&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+  </div>
+  
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/eumji025" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="fa fa-github"></i></a></li>
+        
+        <li><a href="https://plus.google.com/101626292151729327338" target="_blank" title="Google-Plus-Official" data-toggle=tooltip data-placement=top><i class="fa fa-google-plus-official"></i></a></li>
+        
+        <li><a href="https://t.me/joinchat/FdMurg0kpbaQvO2dfVNngg" target="_blank" title="Telegram" data-toggle=tooltip data-placement=top><i class="fa fa-telegram"></i></a></li>
+        
+        <li><a href="https://mail.google.com" target="_blank" title="Envelope" data-toggle=tooltip data-placement=top><i class="fa fa-envelope"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="fa fa-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.js"></script>
+<script src="/js/application.js"></script>
+  
+    
+    
+    
+        <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    
+        
+
+
+    
+    
+        
+    
+    
+
+    <script defer>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+</body>
+</html>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.eumji.cn/"/>
-  <updated>2018-11-09T00:53:09.754Z</updated>
+  <updated>2019-05-29T08:16:30.027Z</updated>
   <id>http://blog.eumji.cn/</id>
   
   <author>
@@ -17,33 +17,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://blog.eumji.cn/2018/11/09/springmvc-exceptionhandler/"/>
-    <id>http://blog.eumji.cn/2018/11/09/springmvc-exceptionhandler/</id>
-    <published>2018-11-09T00:53:09.754Z</published>
-    <updated>2018-11-09T00:53:09.754Z</updated>
+    <title>Spring MVC-HandlerExceptionResolver初探</title>
+    <link href="http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/"/>
+    <id>http://blog.eumji.cn/2018/11/15/springmvc-exceptionhandler/</id>
+    <published>2018-11-15T00:45:00.000Z</published>
+    <updated>2019-05-29T08:16:30.027Z</updated>
     
     <summary type="html">
     
-      
-      
-        &lt;hr&gt;
-&lt;p&gt;title: springMVC-HandlerExceptionResolver初探&lt;br&gt;date: 2018-11-15 08:45:00&lt;br&gt;tags:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Spring MVC&lt;br&gt;categories: Spring专栏&lt;br
-      
+      在之前的几篇文章中已经介绍了Spring mvc中几个重要组件的加载和使用过程。通过关键几个组件我们应该从大体上已经知道了Spring MVC是否如何拦截请求，映射和处理，已经最终的视图处理或者消息体的处理，但是本篇则从非正常的角度去讲述一些Spring MVC异常情况下的处理，所以本篇的主要是HandlerExceptionResolver的分析。
     
     </summary>
     
+      <category term="Spring专栏" scheme="http://blog.eumji.cn/categories/Spring%E4%B8%93%E6%A0%8F/"/>
+    
+    
+      <category term="Spring MVC" scheme="http://blog.eumji.cn/tags/Spring-MVC/"/>
     
   </entry>
   
   <entry>
-    <title>spring-beanfactory-autowired</title>
+    <title>bean的创建和获取过程探索</title>
     <link href="http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/"/>
     <id>http://blog.eumji.cn/2018/10/09/spring-beanfactory-autowired/</id>
     <published>2018-10-09T15:32:28.000Z</published>
-    <updated>2018-10-21T15:23:41.986Z</updated>
+    <updated>2019-05-29T08:13:25.489Z</updated>
     
     <summary type="html">
     
@@ -61,25 +59,11 @@
   </entry>
   
   <entry>
-    <title>spring-beanfactory-getbean</title>
-    <link href="http://blog.eumji.cn/2018/10/09/spring-beanfactory-getbean/"/>
-    <id>http://blog.eumji.cn/2018/10/09/spring-beanfactory-getbean/</id>
-    <published>2018-10-09T15:02:26.000Z</published>
-    <updated>2018-10-09T15:02:26.069Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>springMVC-HandlerMapping初探</title>
+    <title>Spring MVC-HandlerMapping初探</title>
     <link href="http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/"/>
     <id>http://blog.eumji.cn/2018/06/15/springmvc-handlermapping/</id>
     <published>2018-06-15T00:45:00.000Z</published>
-    <updated>2018-06-21T00:35:59.883Z</updated>
+    <updated>2019-05-29T08:16:36.716Z</updated>
     
     <summary type="html">
     
@@ -115,11 +99,11 @@
   </entry>
   
   <entry>
-    <title>CORS在spring mvc中的使用</title>
+    <title>CORS在Spring MVC中的使用</title>
     <link href="http://blog.eumji.cn/2018/05/25/cors-init/"/>
     <id>http://blog.eumji.cn/2018/05/25/cors-init/</id>
     <published>2018-05-25T04:45:00.000Z</published>
-    <updated>2018-06-21T00:23:57.888Z</updated>
+    <updated>2019-05-29T08:18:49.095Z</updated>
     
     <summary type="html">
     
@@ -135,11 +119,11 @@
   </entry>
   
   <entry>
-    <title>springMVC-DispatcherServlet源码初探</title>
+    <title>Spring MVC-DispatcherServlet源码初探</title>
     <link href="http://blog.eumji.cn/2018/05/15/springmvc-review/"/>
     <id>http://blog.eumji.cn/2018/05/15/springmvc-review/</id>
     <published>2018-05-15T00:45:00.000Z</published>
-    <updated>2018-06-21T00:24:34.823Z</updated>
+    <updated>2019-05-29T08:16:53.841Z</updated>
     
     <summary type="html">
     
@@ -275,11 +259,11 @@
   </entry>
   
   <entry>
-    <title>Mybatis分析 - Mapper加载使用分析</title>
+    <title>MyBatis分析 - Mapper加载使用分析</title>
     <link href="http://blog.eumji.cn/2018/02/21/mybatis-mapper-info/"/>
     <id>http://blog.eumji.cn/2018/02/21/mybatis-mapper-info/</id>
     <published>2018-02-21T07:01:30.000Z</published>
-    <updated>2018-03-05T23:43:43.684Z</updated>
+    <updated>2019-05-29T08:18:20.779Z</updated>
     
     <summary type="html">
     
@@ -295,11 +279,11 @@
   </entry>
   
   <entry>
-    <title>Mybatis分析 - 二级缓存</title>
+    <title>MyBatis分析 - 二级缓存</title>
     <link href="http://blog.eumji.cn/2018/02/16/mybatis-second-cache/"/>
     <id>http://blog.eumji.cn/2018/02/16/mybatis-second-cache/</id>
     <published>2018-02-16T03:29:18.000Z</published>
-    <updated>2018-03-02T12:35:03.424Z</updated>
+    <updated>2019-05-29T08:18:20.335Z</updated>
     
     <summary type="html">
     
@@ -335,11 +319,11 @@
   </entry>
   
   <entry>
-    <title>Mybatis分析 - 一级缓存</title>
+    <title>MyBatis分析 - 一级缓存</title>
     <link href="http://blog.eumji.cn/2018/02/10/mybatis-first-cache/"/>
     <id>http://blog.eumji.cn/2018/02/10/mybatis-first-cache/</id>
     <published>2018-02-10T15:30:30.000Z</published>
-    <updated>2018-03-11T02:26:57.622Z</updated>
+    <updated>2019-05-29T08:18:31.500Z</updated>
     
     <summary type="html">
     
@@ -411,6 +395,26 @@
     
     
       <category term="Mybatis概括" scheme="http://blog.eumji.cn/tags/Mybatis%E6%A6%82%E6%8B%AC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>AbstractQueuedSynchronizer源码分析</title>
+    <link href="http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/"/>
+    <id>http://blog.eumji.cn/2018/01/18/AbstractQueuedSynchronizer-analysis/</id>
+    <published>2018-01-18T13:56:36.000Z</published>
+    <updated>2018-02-16T03:43:22.161Z</updated>
+    
+    <summary type="html">
+    
+      AbstractQueuedSynchronizer是一个基于first-in-first-out (FIFO)队列实现阻塞锁和同步器功能的框架。此类的设计目标是成为依靠单个原子 int 值来表示状态。子类必须定义更改此状态的受保护方法（如tryReleaseShared），并定义哪种状态对于此对象意味着被获取或被释放
+    
+    </summary>
+    
+      <category term="Java基础" scheme="http://blog.eumji.cn/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="http://blog.eumji.cn/tags/java/"/>
     
   </entry>
   
